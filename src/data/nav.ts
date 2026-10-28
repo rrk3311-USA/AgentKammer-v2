@@ -2,7 +2,8 @@
 // these links are rebuilt one at a time; until then they land on the 404.
 
 export const primaryNav = [
-  { label: "Start Here", href: "/situations" },
+  { label: "Home", href: "/" },
+  { label: "Guides", href: "/guides" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -36,3 +37,70 @@ export const footerNav = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
 ];
+
+// Phone and tablet menu, matching the live field menu (MobileFieldMenu on v1).
+// Sections with children open as an accordion; Neighborhoods nests one level deeper.
+const titleCase = (s: string) => s.replace(/\b\w/g, (c) => c.toUpperCase());
+
+export const neighborhoods = [
+  { label: "Upper West Side", href: "/situations/upper-west-side-buyers-nyc" },
+  { label: "Upper East Side", href: "/situations/upper-east-side-buyers-nyc" },
+  { label: "Tribeca", href: "/situations/tribeca-buyers-nyc" },
+  { label: "Chelsea", href: "/situations/chelsea-buyers-nyc" },
+  { label: "Hudson Yards", href: "/situations/hudson-yards-buyers-nyc" },
+  { label: "Financial District", href: "/situations/financial-district-buyers-nyc" },
+];
+
+export const mobileNav = [
+  { id: "home", label: "Home", href: "/" },
+  {
+    id: "start",
+    label: "Start Here",
+    children: [
+      { label: "All situations", href: "/situations" },
+      ...whatsChanging.map((c) => ({ ...c, label: titleCase(c.label) })),
+    ],
+  },
+  {
+    id: "guides",
+    label: "Guides",
+    children: [
+      { label: "All Guides", href: "/guides" },
+      { label: "Resource Hub", href: "/resources" },
+      { label: "Field Guides", href: "/resources#field-guides" },
+      { label: "Property Assessments", href: "/resources#assessments" },
+      { label: "Neighborhoods", href: "/guides#neighborhoods", children: neighborhoods },
+      { label: "How Real Estate Ownership Works", href: "/guides/real-estate-ownership" },
+      { label: "Condo vs Co-op", href: "/situations/condo-vs-coop" },
+      { label: "Co-op, Condo & Condop Terms", href: "/situations/coop-condo-condop-terms" },
+      { label: "How Real Estate Deeds Work", href: "/guides/real-estate-deeds" },
+      { label: "How Mortgages Work", href: "/guides/how-mortgages-work" },
+      { label: "Fixed-Rate Mortgage", href: "/guides/fixed-rate-mortgage" },
+      { label: "ARM & Fixed vs ARM", href: "/guides/adjustable-rate-mortgage" },
+      { label: "Mortgage Clauses & Key Terms", href: "/guides/mortgage-clauses" },
+      { label: "Manhattan Explained", href: "/guides/manhattan-explained" },
+      { label: "Liens, Easements & Related Concepts", href: "/guides/liens-easements" },
+      { label: "How to buy in NYC", href: "/guides/how-to-buy-in-nyc.html" },
+      { label: "How wealth is held", href: "/guides/how-wealth-is-held.html" },
+      { label: "International Buyer Hub Guide", href: "/guides/international-buyer-hub.html" },
+      { label: "The Grammar of a Building", href: "/guides/building-terms" },
+    ],
+  },
+  {
+    id: "tools",
+    label: "Interactive Tools",
+    children: [
+      { label: "Calculator", href: "/calculator" },
+      { label: "Wheel of Life", href: "/tools/wheel-of-life/" },
+    ],
+  },
+  { id: "contact", label: "Contact", href: "/contact" },
+];
+
+// Which section starts open, like v1's defaultOpenSectionId.
+export function openSectionFor(path: string) {
+  if (/^\/(calculator|tools)(\/|$)/.test(path)) return "tools";
+  if (/^\/(guides|resources)(\/|$)|^\/building-reports/.test(path)) return "guides";
+  if (/^\/(situations|belonging|international)(\/|$)/.test(path)) return "start";
+  return null;
+}
