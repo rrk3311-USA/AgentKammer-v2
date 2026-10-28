@@ -1,12 +1,12 @@
 ---
 import Base from "../layouts/Base.astro";
-import { whatsChanging, closeCtas } from "../data/nav";
+import { whatsChangingGroups, closeCtas } from "../data/nav";
 
 const pillars = [
-  { icon: "i-grid", title: "Clarity", text: "We cut through noise to identify what truly matters." },
-  { icon: "i-focus", title: "Intelligence", text: "Deep market knowledge and off-market insight." },
-  { icon: "i-bars", title: "Strategy", text: "Every move is intentional. Every detail considered." },
-  { icon: "i-lock", title: "Discretion", text: "Your goals are personal. Your process should be too." },
+  { icon: "clarity", title: "Clarity", text: "We cut through noise to identify what truly matters" },
+  { icon: "intelligence", title: "Intelligence", text: "Deep market knowledge and off-market insight" },
+  { icon: "strategy", title: "Strategy", text: "Every move is intentional. Every detail considered" },
+  { icon: "discretion", title: "Discretion", text: "Your goals are personal. Your process should be too" },
 ];
 
 const howWeDecide = [
@@ -25,7 +25,7 @@ const howWeDecide = [
     <div class="ph" role="img" aria-label="Statue of Liberty torch and crown against a navy sky"></div>
     <div class="wrap">
       <div class="in">
-        <h1>Live where<br />you <em>belong.</em></h1>
+        <h1>Live where<br />you <em>belong</em></h1>
         <p class="lede">Private housing guidance before the market gets loud.</p>
         <p class="sub">People do not wake up wanting to tour apartments. They wake up because life changed.</p>
         <a class="btn" href="#start">What’s changing <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
@@ -35,11 +35,11 @@ const howWeDecide = [
 
   <section class="pillars" aria-labelledby="pt">
     <div class="wrap">
-      <h2 id="pt">Strategy over transactions.</h2>
+      <h2 id="pt">Strategy over transactions</h2>
       <ul>
         {pillars.map((p) => (
           <li>
-            <svg class="ic" aria-hidden="true"><use href={`#${p.icon}`} /></svg>
+            <span class="pi" aria-hidden="true" style={`--m:url(/icons/${p.icon}.svg)`}></span>
             <h3>{p.title}</h3>
             <p>{p.text}</p>
           </li>
@@ -65,16 +65,21 @@ const howWeDecide = [
       </ol>
     </section>
 
-    <section class="block split" id="start">
-      <div class="sticky">
-        <div class="eyebrow">What’s changing</div>
-        <h2>Start from what changed.</h2>
-      </div>
-      <nav class="chips" aria-label="What’s changing">
-        {whatsChanging.map((c) => (
-          <a href={c.href}>{c.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+    <section class="block" id="start">
+      <div class="eyebrow">What’s changing</div>
+      <h2>Start from what changed.</h2>
+      <div class="cols">
+        {whatsChangingGroups.map((g) => (
+          <nav class="grp" aria-label={g.title}>
+            <h3>{g.title}</h3>
+            <ul>
+              {g.items.map((c) => (
+                <li><a href={c.href}>{c.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
+              ))}
+            </ul>
+          </nav>
         ))}
-      </nav>
+      </div>
     </section>
 
     <section class="block cta" id="contact">

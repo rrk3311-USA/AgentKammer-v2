@@ -25,6 +25,14 @@ export const whatsChanging = [
   { label: "International move", href: "/international" },
 ];
 
+// The twelve situations sorted into three life areas for the homepage section.
+const byLabel = (label: string) => whatsChanging.find((c) => c.label === label)!;
+export const whatsChangingGroups = [
+  { title: "Home and family", items: ["First home", "Marriage", "Growing family", "Empty nest"].map(byLabel) },
+  { title: "Work and money", items: ["Executive relocation", "Job change", "Remote work", "Inheritance"].map(byLabel) },
+  { title: "Later life and change", items: ["Retirement", "Aging parents", "Divorce", "International move"].map(byLabel) },
+];
+
 export const closeCtas = [
   { label: "Calculate", href: "/calculator" },
   { label: "Contact", href: "/contact" },
