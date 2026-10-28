@@ -1,0 +1,93 @@
+---
+import Base from "../layouts/Base.astro";
+import { whatsChanging, closeCtas } from "../data/nav";
+
+const pillars = [
+  { icon: "i-grid", title: "Clarity", text: "We cut through noise to identify what truly matters." },
+  { icon: "i-focus", title: "Intelligence", text: "Deep market knowledge and off-market insight." },
+  { icon: "i-bars", title: "Strategy", text: "Every move is intentional. Every detail considered." },
+  { icon: "i-lock", title: "Discretion", text: "Your goals are personal. Your process should be too." },
+];
+
+const howWeDecide = [
+  { n: "01", title: "What’s changing?", text: "Name the life event, pressure, or uncertainty. Neighborhoods and inventory come later." },
+  { n: "02", title: "Should anything change?", text: "Sometimes the highest-value recommendation is to do nothing." },
+  { n: "03", title: "Where do you belong?", text: "Even if you stay, is the environment still serving the life you want?" },
+];
+---
+<Base
+  title="Agent Kammer | Private Housing Advisory"
+  description="Private housing guidance before the market gets loud. Stay, renovate, rent, buy, sell, or wait."
+>
+  <link slot="head" rel="preload" as="image" href="/images/hero-liberty.jpg" fetchpriority="high" />
+
+  <section class="hero">
+    <div class="ph" role="img" aria-label="Statue of Liberty torch and crown against a navy sky"></div>
+    <div class="wrap">
+      <div class="in">
+        <div class="rl"></div>
+        <h1>Live where<br />you <em>belong.</em></h1>
+        <p class="lede">Private housing guidance before the market gets loud.</p>
+        <p class="sub">People do not wake up wanting to tour apartments. They wake up because life changed.</p>
+        <a class="btn" href="#start">What’s changing <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillars" aria-labelledby="pt">
+    <div class="wrap">
+      <h2 id="pt">Strategy over transactions.</h2>
+      <div class="rl"></div>
+      <ul>
+        {pillars.map((p) => (
+          <li>
+            <svg class="ic" aria-hidden="true"><use href={`#${p.icon}`} /></svg>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="block" id="how">
+      <div class="eyebrow">How we decide</div>
+      <h2>Three questions. Then judgment.</h2>
+      <ol class="steps">
+        {howWeDecide.map((s) => (
+          <li>
+            <span class="n">{s.n}</span>
+            <div>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block split" id="start">
+      <div class="sticky">
+        <div class="eyebrow">What’s changing</div>
+        <h2>Start from what changed.</h2>
+      </div>
+      <nav class="chips" aria-label="What’s changing">
+        {whatsChanging.map((c) => (
+          <a href={c.href}>{c.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+        ))}
+      </nav>
+    </section>
+
+    <section class="block cta" id="contact">
+      <p>Work through the steps, starting with your Situation, for a clear recommendation, or write to us directly.</p>
+      <div class="btns">
+        {closeCtas.map((c, i) => (
+          <a class={i === 0 ? "btn" : "btn ghost"} href={c.href}>
+            {c.label} <svg class="ic" aria-hidden="true"><use href="#ar" /></svg>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>

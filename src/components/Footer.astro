@@ -1,0 +1,15 @@
+---
+import { footerNav } from "../data/nav";
+---
+<footer class="bar foot">
+  <div class="wrap fw">
+    <div>
+      <svg class="mk lg" aria-hidden="true"><use href="#ak" /></svg>
+      <div class="name">Agent Kammer</div>
+      <div class="tag">Private Housing Advisory</div>
+    </div>
+    <nav class="fl" aria-label="Footer">
+      {footerNav.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+  </div>
+</footer>

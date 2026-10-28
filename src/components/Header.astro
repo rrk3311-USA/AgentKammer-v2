@@ -1,0 +1,29 @@
+---
+import { primaryNav, guidance } from "../data/nav";
+
+const path = Astro.url.pathname;
+const isOn = (href: string) => path === href || path.startsWith(href + "/");
+---
+<header class="bar head">
+  <div class="wrap hd">
+    <a class="brand" href="/" aria-label="Agent Kammer home">
+      <svg class="mk" aria-hidden="true"><use href="#ak" /></svg>
+      <span>Agent Kammer</span>
+    </a>
+    <nav class="pill" aria-label="Primary">
+      {primaryNav.map((l) => <a href={l.href} class={isOn(l.href) ? "on" : undefined}>{l.label}</a>)}
+    </nav>
+    <a class="gbtn" href={guidance.href}>{guidance.label}</a>
+    <!-- Phone menu: <details> opens and closes without JavaScript. -->
+    <details class="mnav">
+      <summary aria-label="Menu">
+        <svg class="ic open" aria-hidden="true"><use href="#menu" /></svg>
+        <svg class="ic shut" aria-hidden="true"><use href="#close" /></svg>
+      </summary>
+      <nav aria-label="Mobile">
+        {primaryNav.map((l) => <a href={l.href}>{l.label}</a>)}
+        <a href={guidance.href}>{guidance.label}</a>
+      </nav>
+    </details>
+  </div>
+</header>
