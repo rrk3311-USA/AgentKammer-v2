@@ -54,32 +54,32 @@ const howWeDecide = [
       <h2>Three questions. Then judgment.</h2>
       <ol class="steps">
         {howWeDecide.map((s) => (
-          <li>
+          <li id={s.n === "01" ? "start" : undefined}>
             <span class="n">{s.n}</span>
             <div>
               <h3>{s.title}</h3>
               <p>{s.text}</p>
+              {s.n === "01" && (
+                <>
+                  <div class="pick">Start from what changed.</div>
+                  <div class="cols">
+                    {whatsChangingGroups.map((g) => (
+                      <nav class="grp" aria-label={g.title}>
+                        <h4>{g.title}</h4>
+                        <ul>
+                          {g.items.map((c) => (
+                            <li><a href={c.href}>{c.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
+                          ))}
+                        </ul>
+                      </nav>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </li>
         ))}
       </ol>
-    </section>
-
-    <section class="block" id="start">
-      <div class="eyebrow">What’s changing</div>
-      <h2>Start from what changed.</h2>
-      <div class="cols">
-        {whatsChangingGroups.map((g) => (
-          <nav class="grp" aria-label={g.title}>
-            <h3>{g.title}</h3>
-            <ul>
-              {g.items.map((c) => (
-                <li><a href={c.href}>{c.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
-              ))}
-            </ul>
-          </nav>
-        ))}
-      </div>
     </section>
 
     <section class="block cta" id="contact">

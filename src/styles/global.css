@@ -112,13 +112,14 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--stone-blu
 .block h2 { font-size: clamp(34px, 4.6vw, 60px); margin-top: 22px; }
 #how h2 { font-size: clamp(28px, 3.4vw, 44px); }
 .steps { margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--stone-blue); }
-.steps li { display: grid; grid-template-columns: 56px 1fr; gap: 8px 16px; padding: 28px 0; border-bottom: 1px solid var(--limestone); }
+.steps > li { display: grid; grid-template-columns: 56px 1fr; gap: 8px 16px; padding: 28px 0; border-bottom: 1px solid var(--limestone); }
 .steps .n { font: 500 11px/2.6 var(--sans); letter-spacing: 0.2em; color: var(--titanium); }
 .steps h3 { font-size: clamp(26px, 3vw, 38px); margin-bottom: 8px; }
 .steps p { margin: 0; max-width: 44ch; }
 
-.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); margin-top: clamp(28px, 4vw, 48px); }
-.grp h3 { font: 500 11px/1.4 var(--sans); letter-spacing: 0.22em; text-transform: uppercase; color: var(--titanium); margin: 0 0 14px; padding-bottom: 12px; border-bottom: 1px solid var(--stone-blue); }
+.steps .pick { margin: clamp(28px, 4vw, 44px) 0 0; font: 400 clamp(22px, 2.4vw, 30px)/1.2 var(--serif); color: var(--stone-blue); }
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); margin-top: clamp(18px, 2.4vw, 28px); }
+.grp h4 { margin: 0; font: 500 11px/1.4 var(--sans); letter-spacing: 0.22em; text-transform: uppercase; color: var(--titanium); margin: 0 0 14px; padding-bottom: 12px; border-bottom: 1px solid var(--stone-blue); }
 .grp ul { margin: 0; padding: 0; list-style: none; }
 .grp a { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--limestone); font: 400 clamp(20px, 2vw, 26px)/1.2 var(--serif); color: var(--stone-blue); transition: background 0.25s; }
 .grp a:hover { background: rgba(115, 123, 131, 0.1); }
@@ -170,4 +171,9 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--stone-blu
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; scroll-behavior: auto !important; }
+}
+
+@media (max-width: 560px) {
+  .steps > li { grid-template-columns: 1fr; gap: 4px; }
+  .steps .n { line-height: 1.6; }
 }
