@@ -1,0 +1,89 @@
+---
+import Base from "../layouts/Base.astro";
+import "../styles/platinum-paper.css";
+
+const fields = [
+  { id: "price", label: "Purchase price", value: "3,500,000", pre: "$" },
+  { id: "down", label: "Down payment", value: "40", post: "%" },
+  { id: "rate", label: "Rate", value: "6.5", post: "%" },
+  { id: "term", label: "Term", value: "30", post: "years" },
+  { id: "tax", label: "Property tax", value: "2,800", pre: "$", post: "/ mo" },
+  { id: "cc", label: "Common charges", value: "3,200", pre: "$", post: "/ mo" },
+];
+---
+<Base mainClass="pp" title="Calculator | Agent Kammer" description="What does this home cost each month? Mortgage, tax and common charges. Educational, not a pre-approval.">
+  <div class="wrap calc">
+    <section class="top">
+      <div>
+        <div class="eyebrow">Calculator</div>
+        <output class="big" id="carry" aria-live="polite">$19,273</output>
+        <h1>What does this home cost each month?</h1>
+      </div>
+      <aside class="aside">
+        <p id="lead">On a $3,500,000 purchase with 40% down. Cash to close begins near $1,400,000.</p>
+        <p>Carry first. Listings later. Mortgage, tax, and common charges. Educational, not a pre-approval.</p>
+      </aside>
+    </section>
+
+    <div class="grid">
+      <section aria-labelledby="ci">
+        <h2 id="ci">Change one number. The month moves.</h2>
+        <div class="inlay">
+          {fields.map((f) => (
+            <label class="fld">
+              <span>{f.label}</span>
+              <span class="val">{f.pre && <i>{f.pre}</i>}<input id={f.id} inputmode="decimal" autocomplete="off" value={f.value} />{f.post && <i>{f.post}</i>}</span>
+            </label>
+          ))}
+          <label class="fld earnest">
+            <span>Earnest money deposit<small>Often 1% to 3% of the price. NYC contracts can ask for 10%. Varies.</small></span>
+            <span class="val"><input id="earn" inputmode="decimal" autocomplete="off" value="2" /><i>%</i><b id="earnAmt">$70,000</b></span>
+          </label>
+        </div>
+      </section>
+
+      <section aria-labelledby="cm">
+        <h2 id="cm">The month</h2>
+        <dl class="inlay rows">
+          <div><dt>Mortgage</dt><dd id="mort">$13,273</dd></div>
+          <div><dt>Property tax</dt><dd id="otax">$2,800</dd></div>
+          <div><dt>Common charges</dt><dd id="occ">$3,200</dd></div>
+          <div class="sum"><dt>Monthly carry</dt><dd id="carry2">$19,273</dd></div>
+          <div><dt>Cash to close</dt><dd id="cash">$1,400,000</dd></div>
+        </dl>
+        <div class="btns">
+          <button class="btn" type="button" id="pdf">Save as PDF <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></button>
+          <a class="btn ghost" href="/#start">What's changing <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+          <a class="btn ghost" href="/contact">Contact <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+        </div>
+      </section>
+    </div>
+    <p class="fine">Educational only. Insurance, assessments, and closing costs sit outside this page. Judgment still comes after the number.</p>
+  </div>
+  <script is:inline>
+    (function () {
+      var $ = function (id) { return document.getElementById(id); };
+      var num = function (id) { return parseFloat(($(id).value || "").replace(/[^0-9.]/g, "")) || 0; };
+      var usd = function (n) { return "$" + Math.round(n).toLocaleString("en-US"); };
+      function run() {
+        var price = num("price"), down = Math.min(num("down"), 100) / 100, rate = num("rate") / 1200, n = Math.max(num("term"), 1) * 12;
+        var loan = price * (1 - down);
+        var mort = rate ? loan * rate / (1 - Math.pow(1 + rate, -n)) : loan / n;
+        var carry = mort + num("tax") + num("cc"), cash = price * down;
+        $("carry").textContent = $("carry2").textContent = usd(carry);
+        $("mort").textContent = usd(mort);
+        $("otax").textContent = usd(num("tax"));
+        $("occ").textContent = usd(num("cc"));
+        $("cash").textContent = usd(cash);
+        $("earnAmt").textContent = usd(price * num("earn") / 100);
+        $("lead").textContent = "On a " + usd(price) + " purchase with " + Math.round(down * 1000) / 10 + "% down. Cash to close begins near " + usd(cash) + ".";
+      }
+      ["price", "down", "rate", "term", "tax", "cc", "earn"].forEach(function (id) {
+        $(id).addEventListener("input", run);
+        if (id === "price" || id === "tax" || id === "cc") $(id).addEventListener("blur", function () { this.value = num(id).toLocaleString("en-US"); });
+      });
+      $("pdf").addEventListener("click", function () { window.print(); });
+      run();
+    })();
+  </script>
+</Base>

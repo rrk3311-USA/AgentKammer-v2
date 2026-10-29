@@ -1,0 +1,32 @@
+---
+import Base from "../layouts/Base.astro";
+import "../styles/platinum-paper.css";
+
+interface Props {
+  title: string;
+  intro: string;
+  updated: string;
+  sections: { heading: string; body: string }[];
+  see: { label: string; href: string }[];
+}
+const { title, intro, updated, sections, see } = Astro.props;
+---
+<Base mainClass="pp" title={`${title} | Agent Kammer`} description={intro}>
+  <article class="wrap legal-page">
+    <header>
+      <div class="eyebrow">Legal</div>
+      <h1>{title}</h1>
+      <p class="lede">{intro}</p>
+      <p class="upd">Last updated: {updated}</p>
+    </header>
+    <div class="body">
+      {sections.map((s) => (
+        <section>
+          <h2>{s.heading}</h2>
+          <p set:html={s.body} />
+        </section>
+      ))}
+      <p class="see">See also {see.map((l, i) => <><a href={l.href}>{l.label}</a>{i < see.length - 2 ? ", " : i === see.length - 2 ? " and " : ""}</>)}.</p>
+    </div>
+  </article>
+</Base>

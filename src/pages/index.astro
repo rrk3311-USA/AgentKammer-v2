@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import { whatsChangingGroups, closeCtas } from "../data/nav";
+import { whatsChangingGroups } from "../data/nav";
 
 const pillars = [
   { icon: "clarity", title: "Clarity", text: "We cut through noise to identify what truly matters" },
@@ -48,49 +48,52 @@ const howWeDecide = [
     </div>
   </section>
 
-  <div class="wrap">
-    <section class="block" id="how">
+  <div class="photo">
+    <img src="/images/band-harbor.webp" width="1200" height="800" alt="" loading="lazy" decoding="async" />
+  </div>
+
+  <div class="hw">
+    <div class="wrap">
       <div class="eyebrow">How we decide</div>
       <h2>Three questions. Then judgment.</h2>
-      <ol class="steps">
+      <div class="hw-list">
         {howWeDecide.map((s) => (
-          <li id={s.n === "01" ? "start" : undefined}>
+          <div class={s.n === "01" ? "hw-step mid" : "hw-step"} id={s.n === "01" ? "start" : undefined}>
             <span class="n">{s.n}</span>
             <div>
               <h3>{s.title}</h3>
               <p>{s.text}</p>
               {s.n === "01" && (
                 <>
-                  <div class="pick">Start from what changed.</div>
-                  <div class="cols">
+                  <div class="og" aria-label="Start from what changed">
                     {whatsChangingGroups.map((g) => (
-                      <nav class="grp" aria-label={g.title}>
-                        <h4>{g.title}</h4>
+                      <details name="og">
+                        <summary><span class="t">{g.title}</span><span class="open" aria-hidden="true"></span></summary>
                         <ul>
                           {g.items.map((c) => (
                             <li><a href={c.href}>{c.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
                           ))}
                         </ul>
-                      </nav>
+                      </details>
                     ))}
                   </div>
                 </>
               )}
             </div>
-          </li>
-        ))}
-      </ol>
-    </section>
-
-    <section class="block cta" id="contact">
-      <p>Work through the steps, starting with your Situation, for a clear recommendation, or write to us directly.</p>
-      <div class="btns">
-        {closeCtas.map((c, i) => (
-          <a class={i === 0 ? "btn" : "btn ghost"} href={c.href}>
-            {c.label} <svg class="ic" aria-hidden="true"><use href="#ar" /></svg>
-          </a>
+          </div>
         ))}
       </div>
-    </section>
+    </div>
+  </div>
+
+  <div class="below">
+    <div class="wrap diag">
+      <div>
+        <div class="eyebrow">Contact us</div>
+        <h2>Not sure where to start? Tell us what changed.</h2>
+        <p>Staying or moving is where you end up. Our Situation Assessment is how you get there: share what changed, and we send back a personal profile of where you stand, not a real estate quiz.</p>
+      </div>
+      <a class="btn ghost" href="/contact">Contact us <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+    </div>
   </div>
 </Base>

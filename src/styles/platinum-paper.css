@@ -1,0 +1,18 @@
+/* Platinum Paper, web version. Opt in with class="pp" on the page body (main), not the header or footer.
+   Tokens and look from the live /chrome/platinum-paper.css (print sheets). */
+.pp {
+  --pp-paper: #CFCCC6; --pp-deep: #161C28; --pp-navy: #2A3447; --pp-label: #4A5058; --pp-meta: #5F6672;
+  --pp-sep: rgba(22, 28, 40, 0.26); --pp-hair: rgba(126, 133, 140, 0.30);
+  --pp-gradient: linear-gradient(135deg, #7E858C 0%, #C9CED3 26%, #EEF0F2 46%, #9AA1A8 68%, #7E858C 84%, #C9CED3 100%);
+  --pp-pinstripe: repeating-linear-gradient(90deg, rgba(42, 52, 71, 0.22) 0 1px, transparent 1px 7px);
+  --limestone: var(--pp-sep); --charcoal: var(--pp-deep); --titanium: var(--pp-meta);
+  position: relative; background: var(--pp-paper) url(/chrome/stone-bg.png) center / cover; color: var(--pp-deep);
+}
+.pp h1, .pp h2, .pp h3 { color: var(--pp-deep); font-weight: 400; }
+.pp .eyebrow { color: var(--pp-label); font-weight: 600; letter-spacing: 0.32em; }
+.pp .eyebrow::before { height: 2px; background: linear-gradient(90deg, #7E858C, #9AA1A8 50%, #7E858C); }
+.pp .btn { border-color: var(--pp-deep); background: var(--pp-deep); color: #F5F2EB; }
+.pp .alt, .pp .alt li { border-color: var(--pp-sep); }
+.pp .alt a { color: var(--pp-deep); }
+.pp .formcol { background: linear-gradient(180deg, #FCFCFB, #F0F1F1) padding-box, var(--pp-gradient) border-box; border: 2px solid transparent; box-shadow: 0 8px 24px rgba(22, 28, 40, 0.10); }
+.pp .formcol input, .pp .formcol select, .pp .formcol textarea { background: linear-gradient(180deg, #FCFCFB, #F0F1F1); border-color: var(--pp-hair); }

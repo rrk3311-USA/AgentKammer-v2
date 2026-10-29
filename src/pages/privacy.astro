@@ -1,0 +1,20 @@
+---
+import LegalPage from "../components/LegalPage.astro";
+
+const mail = '<a href="mailto:info@agentkammer.com">info@agentkammer.com</a>';
+const sections = [
+  { heading: "What we collect", body: "When you use the site, Guidance Advisor, Situation Assessment, or contact forms, we may collect: name, email, phone, messages, decision-profile answers, pages viewed, approximate location derived from request metadata, and anonymous visitor identifiers stored in cookies." },
+  { heading: "How we use it", body: "We use this information to provide decision guidance, prepare Decision Profiles and briefs, respond to inquiries, improve the product, prevent abuse, and, when you ask, save and restore your Decision Hub. We do not sell personal information." },
+  { heading: "Cookies and sessions", body: "We use httpOnly cookies for anonymous visitor continuity (<code>ak_visitor_id</code>) and, after email verification, member sessions (<code>ak_member_token</code>). Chat may also store a local session id so your conversation can resume on the same device." },
+  { heading: "Email verification", body: "Saving or recovering a Decision Hub requires email plus a one-time PIN. We do not open member access from an email address alone." },
+  { heading: "Sharing", body: "We may share information with infrastructure providers (hosting, email delivery, analytics) under contract, or with selected local professionals when you authorize a referral. We may disclose information if required by law." },
+  { heading: "Retention and rights", body: `We retain advisory records as long as needed for the relationship and legitimate business purposes. To access, correct, or delete personal data, email ${mail}.` },
+];
+---
+<LegalPage
+  title="Privacy"
+  intro="Agent Kammer is a private advisory practice. We collect only what we need to diagnose housing decisions and follow up with care."
+  updated="July 2026"
+  sections={sections}
+  see={[{ label: "Terms", href: "/terms" }, { label: "Licenses", href: "/licenses" }]}
+/>

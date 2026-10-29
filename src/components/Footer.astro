@@ -1,15 +1,36 @@
 ---
-import { footerNav } from "../data/nav";
+import { closeCtas, exploreNav, footerNav, languages } from "../data/nav";
 ---
 <footer class="bar foot">
   <div class="wrap fw">
-    <div>
+    <div class="brand">
       <svg class="mk lg" aria-hidden="true"><use href="#ak" /></svg>
-      <div class="name">Agent Kammer</div>
-      <div class="tag">Private Housing Advisory</div>
+      <div>
+        <div class="name">Agent Kammer</div>
+        <div class="tag">Private Housing Advisory</div>
+      </div>
     </div>
-    <nav class="fl" aria-label="Footer">
-      {footerNav.map((l) => <a href={l.href}>{l.label}</a>)}
+    <nav class="flinks" aria-label="Explore">
+      {exploreNav.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <nav class="fcta" aria-label="Start">
+      {closeCtas.map((c, i) => <a class={i === 0 ? "on" : ""} href={c.href}>{c.label}</a>)}
     </nav>
   </div>
 </footer>
+<div class="legal">
+  <div class="lw">
+    <nav class="ln" aria-label="Footer links">
+      {footerNav.map((l, i) => (
+        <span><a href={l.href}>{l.label}</a>{i < footerNav.length - 1 && <i aria-hidden="true">·</i>}</span>
+      ))}
+    </nav>
+    <details class="lang">
+      <summary><span>Languages</span><span class="pm" aria-hidden="true"></span></summary>
+      <nav aria-label="Languages">
+        {languages.map((l) => <a href={l.href} title={`${l.name}: open guide and set chat language`}>{l.label}</a>)}
+        <a href="/international">All →</a>
+      </nav>
+    </details>
+  </div>
+</div>

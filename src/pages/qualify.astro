@@ -1,0 +1,50 @@
+---
+import Base from "../layouts/Base.astro";
+import "../styles/platinum-paper.css";
+
+const lanes = ["Under $5 million", "$5 million and above", "Prefer not to say yet"];
+const purposes = ["Clarity on whether to move", "A second opinion", "Ready to search", "Pre-approval is the next step"];
+const steps = ["Situation clarified", "Strategy Session held", "Financing posture set", "Target band chosen", "Shortlist ready", "Search in motion"];
+---
+<Base mainClass="pp" title="Get Qualified | Agent Kammer" description="Name, email, budget lane, and what you want from the hour.">
+  <div class="wrap contact">
+    <section class="intro">
+      <div class="eyebrow">Get Qualified</div>
+      <h1>A couple of details so we use the call well.</h1>
+      <p class="lede">Name, email, budget lane, and what you want from the hour.</p>
+      <div class="qtxt">
+        <div class="k">Before the hour</div>
+        <h2>We read this before we put time on the calendar.</h2>
+        <p>That is enough to know whether a Strategy Session is the right next hour.</p>
+        <p>A Strategy Session is one conversation about a real housing decision. You leave with a written next step.</p>
+        <p>If the question is still forming, stay with Guidance. The calendar can wait.</p>
+      </div>
+      <div class="qtxt">
+        <div class="k">How the process works</div>
+        <h2>Six steps we show.</h2>
+        <p>Get Qualified is how you arrive at a Strategy Session.</p>
+        <ol class="six">{steps.map((s, i) => <li><span>{String(i + 1).padStart(2, "0")}</span>{s}</li>)}</ol>
+        <p>You may already be mid-path. We book a live session when the question is ready for an hour.</p>
+        <p>Rather keep reading? <a href="/#guide">Stay in Guidance</a>.</p>
+      </div>
+    </section>
+
+    <section class="formcol" aria-labelledby="qd">
+      <div class="eyebrow">A few details</div>
+      <h2 id="qd">Your details.</h2>
+      <form method="post">
+        <label>Name<input name="name" autocomplete="name" required /></label>
+        <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+        <label>Phone (optional)<input name="phone" type="tel" autocomplete="tel" /></label>
+        <label>Budget lane
+          <select name="lane" required><option value="">Choose one</option>{lanes.map((d) => <option>{d}</option>)}</select>
+        </label>
+        <label>What the call is for
+          <select name="purpose" required><option value="">Choose one</option>{purposes.map((d) => <option>{d}</option>)}</select>
+        </label>
+        <label>Notes (optional)<textarea name="notes" rows="3"></textarea></label>
+        <button class="btn" type="submit">Save these details <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></button>
+      </form>
+    </section>
+  </div>
+</Base>

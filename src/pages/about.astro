@@ -1,0 +1,60 @@
+---
+import Base from "../layouts/Base.astro";
+import "../styles/platinum-paper.css";
+
+const principles = [
+  { n: "01", t: "Advisory first", d: "Judgment and positioning before volume or velocity. Doing nothing can be the win." },
+  { n: "02", t: "Building-led perspective", d: "Building, block, and buyer brief together, before floor plans dominate attention." },
+  { n: "03", t: "Quiet execution", d: "Measured, private, precise. Urgency is never manufactured." },
+];
+---
+<Base mainClass="pp" title="About | Agent Kammer" description="Private housing guidance before the market gets loud.">
+  <article class="wrap legal-page about">
+    <header class="ahead">
+      <div>
+        <div class="eyebrow">About</div>
+        <h1>Private housing guidance before the market gets loud.</h1>
+        <p class="lede">Raphael Kammer built Agent Kammer for clients who want judgment, not a louder search. The practice diagnoses what changed, whether anything should change, and whether this is still where you belong.</p>
+      </div>
+      <figure class="portrait">
+        <img src="/images/raphael-kammer.webp" width="886" height="886" alt="Raphael Kammer" decoding="async" />
+        <figcaption>Raphael Kammer</figcaption>
+      </figure>
+    </header>
+    <div class="body">
+      <section>
+        <div><div class="k">Practice</div><h2>Manhattan decisions need more than a listing feed.</h2></div>
+        <div class="txt">
+          <p>Agent Kammer is an independent housing advisory practice. The work starts with life change, uncertainty, and trade-offs, then building-level literacy, before apartments or urgency take over.</p>
+          <p>First purchase, relocation, a stay-or-go question, or a portfolio of homes: the process begins with clarity, not listings.</p>
+          <p>A recommendation can be to wait, rent first, renovate, sell, buy, or do nothing. When a transaction is right, Agent Kammer remains the advisory layer and introduces the right local professionals for execution.</p>
+          <p>Some clients work together for weeks. Others for years. Decisions evolve, and the guidance evolves with them.</p>
+          <p>Buildings before listings. Helping people make better housing decisions throughout life, not just real estate transactions. Live Where You Belong, whether that means stay or move.</p>
+        </div>
+      </section>
+      <section>
+        <div><div class="k">Credentials that matter</div><h2>Building literacy changes the quality of advice.</h2></div>
+        <div class="txt">
+          <p>We read buildings as assets: structure, operations, and how they actually work for the people who live in them. That literacy informs judgment. It is not a pitch for inspections.</p>
+          <p>That literacy sits behind Situation pages and Building Reports, used after the decision frame is clear, never as a substitute for asking whether anything should change.</p>
+        </div>
+      </section>
+      <section>
+        <div><div class="k">Principles</div><h2>Three ideas organize the work.</h2></div>
+        <div class="txt">
+          <p>Judgment first. Buildings next. Quiet execution throughout.</p>
+          <ol class="pr">
+            {principles.map((p) => <li><span>{p.n}</span><div><b>{p.t}</b><p>{p.d}</p></div></li>)}
+          </ol>
+        </div>
+      </section>
+      <section>
+        <div><div class="k">Assessment</div><h2>Figure out your situation.</h2></div>
+        <div class="txt">
+          <p>The Situation Assessment is how most relationships begin. A profile first. A written next step when the picture is clear.</p>
+          <div class="btns"><a class="btn" href="/contact">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></div>
+        </div>
+      </section>
+    </div>
+  </article>
+</Base>
