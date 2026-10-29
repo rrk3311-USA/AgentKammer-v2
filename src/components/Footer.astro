@@ -1,5 +1,5 @@
 ---
-import { closeCtas, exploreNav, footerNav } from "../data/nav";
+import { closeCtas, footerNav } from "../data/nav";
 ---
 <footer class="bar foot">
   <div class="wrap fw">
@@ -10,9 +10,6 @@ import { closeCtas, exploreNav, footerNav } from "../data/nav";
         <div class="tag">Private Housing Advisory</div>
       </div>
     </div>
-    <nav class="flinks" aria-label="Explore">
-      {exploreNav.map((l) => <a href={l.href}>{l.label}</a>)}
-    </nav>
     <nav class="fcta" aria-label="Start">
       {closeCtas.map((c, i) => <a class={i === 1 ? "on" : ""} href={c.href}>{c.label}</a>)}
     </nav>
@@ -26,6 +23,5 @@ import { closeCtas, exploreNav, footerNav } from "../data/nav";
       ))}
     </nav>
     <p class="copy">© {new Date().getFullYear()} Agent Kammer</p>
-    <a class="fgl" href="/guides#field-guides">Field Guides <span aria-hidden="true">→</span></a>
   </div>
 </div>

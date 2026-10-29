@@ -1,6 +1,6 @@
 // The Guides hub: three kinds of entry (neighborhoods, field guides, property assessments)
 // share one shape so they list, filter and search the same way.
-// ready: false means the page is not built yet; the hub shows it as "Coming soon" instead of a dead link.
+// ready: true means the page is not built yet; the hub shows it as "Coming soon" instead of a dead link.
 
 export type GuideType = "n" | "f" | "a";
 
@@ -36,7 +36,7 @@ export const neighborhoods: Neighborhood[] = [
     slug: "upper-west-side-buyers-nyc",
     name: "Upper West Side",
     blurb: "Schools, park adjacency, co-op culture, and classic residential rhythm.",
-    lead: "Upper West Side decisions hinge on school convenience, park adjacency, co-op culture, building age, and whether the neighborhood supports the reason for moving, not just apartment size.",
+    lead: "Upper West Side decisions hinge on school convenience, park adjacency, co-op culture, building age, and whether the neighborhood supports the reason for moving.",
     decide: [
       "Use school and park logistics to narrow micro-neighborhoods before touring every classic co-op.",
       "Separate cosmetic apartment issues from board and building constraints early.",
@@ -52,7 +52,7 @@ export const neighborhoods: Neighborhood[] = [
     lead: "Upper East Side inventory is deep, so the decision is rarely about finding something. It turns on how each co-op board works, how well a service building is run, and which side street or avenue fits daily life.",
     decide: [
       "Learn how the boards in your target buildings actually behave before falling for an apartment.",
-      "Compare service buildings by staffing, rules and upkeep, not only address.",
+      "Compare service buildings by staffing, rules and upkeep.",
       "Choose the avenue and side-street rhythm that fits family life.",
     ],
     recommendation: "Narrow to a handful of buildings whose boards you understand, then compare apartments.",
@@ -64,7 +64,7 @@ export const neighborhoods: Neighborhood[] = [
     blurb: "Low-volume, high-conviction buying shaped by loft scale, privacy, and family floor plans.",
     lead: "Tribeca is low volume and high conviction. Loft scale, privacy and family floor plans drive the decision, and the architecture still has to hold up as ownership.",
     decide: [
-      "Decide whether loft scale suits how you live, not only how it photographs.",
+      "Decide whether loft scale suits how you live.",
       "Expect fewer listings and be ready to act on the right one.",
       "Test privacy, layout and building rules against family needs.",
     ],
@@ -94,7 +94,7 @@ export const neighborhoods: Neighborhood[] = [
       "Decide which amenities you will actually use.",
       "Compare it against Chelsea and Tribeca before committing.",
     ],
-    recommendation: "Treat Hudson Yards as a use-case decision, not a skyline.",
+    recommendation: "Treat Hudson Yards as a question of how you will use it.",
     compare: ["chelsea-buyers-nyc", "tribeca-buyers-nyc"],
   },
   {
@@ -104,7 +104,7 @@ export const neighborhoods: Neighborhood[] = [
     lead: "Financial District decisions weigh commute convenience against weekend livability. Conversions, waterfront stock and Battery Park City options each feel different day to day.",
     decide: [
       "Weigh the short commute against how the neighborhood feels on a weekend.",
-      "Separate conversions, waterfront stock and Battery Park City by daily life, not brochure.",
+      "Judge conversions, waterfront stock and Battery Park City by daily life.",
       "Visit on a Saturday as well as a weekday.",
     ],
     recommendation: "Decide how much of your week is the commute, then choose the stock.",
@@ -121,7 +121,7 @@ const area: Record<string, string> = {
   "financial-district-buyers-nyc": "Downtown",
 };
 
-const field = (topic: string, title: string, text: string, href: string, meta = "Guide"): GuideItem => ({ type: "f", topic, title, text, meta, href, ready: false });
+const field = (topic: string, title: string, text: string, href: string, meta = "Guide"): GuideItem => ({ type: "f", topic, title, text, meta, href, ready: true });
 
 export const guideItems: GuideItem[] = [
   ...neighborhoods.map((n): GuideItem => ({ type: "n", topic: area[n.slug], title: n.name, text: n.blurb, meta: "Neighborhood", href: `/situations/${n.slug}`, ready: true })),
@@ -135,12 +135,12 @@ export const guideItems: GuideItem[] = [
   field("Mortgages", "Mortgage Clauses and Key Terms", "Acceleration, due-on-sale, defeasance and more.", "/guides/mortgage-clauses"),
   field("Neighborhoods", "Manhattan Explained", "Where neighborhood names come from, from the Dutch roots up.", "/guides/manhattan-explained"),
   field("Encumbrances", "Liens, Easements and Related Concepts", "Voluntary versus involuntary claims on a property.", "/guides/liens-easements"),
-  field("Buying in New York", "How to Buy in NYC", "Twelve attorney-driven steps, contract to closing.", "/guides/how-to-buy-in-nyc.html"),
-  field("Wealth", "How Wealth Is Held", "Holding companies, family offices and trusts.", "/guides/how-wealth-is-held.html"),
-  field("International buyers", "International Buyer Hub Guide", "How the multilingual guides fit together.", "/guides/international-buyer-hub.html"),
+  field("Buying in New York", "How to Buy in NYC", "Twelve attorney-driven steps, contract to closing.", "/guides/how-to-buy-in-nyc"),
+  field("Wealth", "How Wealth Is Held", "Holding companies, family offices and trusts.", "/guides/how-wealth-is-held"),
+  field("International buyers", "International Buyer Hub Guide", "How buyers from abroad approach an NYC purchase.", "/guides/international-buyer-hub"),
   field("Buildings", "The Grammar of a Building", "Twenty-four architectural and building terms, plainly explained.", "/guides/building-terms"),
-  { type: "a", topic: "West Chelsea", title: "Lantern House", text: "One of the rare Manhattan buildings where the design is the argument.", meta: "14 min", href: "/building-reports/lantern-house", ready: false },
-  { type: "a", topic: "West Chelsea", title: "One High Line", text: "What happens when a luxury tower is designed around the park beside it.", meta: "13 min", href: "/building-reports/one-high-line", ready: false },
-  { type: "a", topic: "Reports", title: "2026 Executive Housing Report", text: "Manhattan modern residences for executives relocating.", meta: "Report", href: "/insights/reports/2026-executive-housing-report", ready: false },
-  { type: "a", topic: "Archive", title: "Building Profiles", text: "The address-study archive, with more buildings under study.", meta: "Archive", href: "/building-reports/individual-buildings", ready: false },
+  { type: "a", topic: "West Chelsea", title: "Lantern House", text: "One of the rare Manhattan buildings where the design is the argument.", meta: "14 min", href: "/building-reports/lantern-house", ready: true },
+  { type: "a", topic: "West Chelsea", title: "One High Line", text: "What happens when a luxury tower is designed around the park beside it.", meta: "13 min", href: "/building-reports/one-high-line", ready: true },
+  { type: "a", topic: "Reports", title: "2026 Executive Housing Report", text: "Manhattan modern residences for executives relocating.", meta: "Report", href: "/insights/reports/2026-executive-housing-report", ready: true },
+  { type: "a", topic: "Archive", title: "Building Profiles", text: "The address-study archive, with more buildings under study.", meta: "Archive", href: "/building-reports/individual-buildings", ready: true },
 ];

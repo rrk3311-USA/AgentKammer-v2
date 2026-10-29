@@ -21,7 +21,7 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
 <Base title={title} description={description}>
   {kind === "n" ? (
     <article class="wrap nb">
-      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#neighborhoods">Guides</a><i aria-hidden="true">/</i><a href="/guides#neighborhoods">Neighborhoods</a></nav>
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#neighborhoods">Resource Hub</a><i aria-hidden="true">/</i><a href="/guides#neighborhoods">Neighborhoods</a></nav>
       <header>
         <div class="eyebrow">NYC neighborhood</div>
         <h1>{n.name}</h1>
@@ -59,7 +59,7 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
     </article>
   ) : kind === "g" ? (
     <article class="wrap nb gd">
-      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#field-guides">Guides</a><i aria-hidden="true">/</i><a href="/guides#field-guides">Field Guides</a></nav>
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#field-guides">Resource Hub</a><i aria-hidden="true">/</i><a href="/guides#field-guides">Field Guides</a></nav>
       <header>
         <div class="eyebrow">Field guide</div>
         <h1>{g.title}</h1>

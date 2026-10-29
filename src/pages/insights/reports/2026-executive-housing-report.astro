@@ -1,0 +1,12 @@
+---
+import Base from "../../../layouts/Base.astro";
+import GuideBody from "../../../components/GuideBody.astro";
+import { propertyAssessments } from "../../../data/propertyAssessments";
+const g = propertyAssessments["2026-executive-housing-report"];
+---
+<Base title={`${g.title} | Agent Kammer`} description={g.blurb}>
+  <GuideBody
+    crumbs={[{ label: "Resource Hub", href: "/guides" }, { label: "Reports", href: "/guides#field-guides" }, { label: g.title }]}
+    eyebrow={g.eyebrow} title={g.title} lead={g.lead} decide={g.decide} recommendation={g.recommendation}
+    cta={{ href: "/contact?intent=property", label: "Request a Property Assessment" }} />
+</Base>

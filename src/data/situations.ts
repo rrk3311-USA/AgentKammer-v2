@@ -25,8 +25,8 @@ export const situations: Situation[] = [
     blurb: "What you can carry, how long you will stay, and which building type fits.", ready: true,
     lead: "Buying a first home in New York is less about the apartment than about the next five years. The decision is how much you can carry, how long you will stay, and what you are willing to trade.",
     matters: [
-      "Decide the monthly number you are comfortable carrying before you look, not after you fall for a place.",
-      "Weigh co-op, condo and condop on rules and flexibility, not only price.",
+      "Set the monthly number you can comfortably carry before you start looking.",
+      "Weigh co-op, condo and condop on rules and flexibility as well as price.",
       "Plan for the costs people miss: board packages, closing costs and reserves.",
     ],
     recommendation: "Set your ceiling and your timeline first. Then let the building type narrow the search.",
@@ -41,7 +41,7 @@ export const situations: Situation[] = [
       "Decide whether to merge, rent, or keep one place while you plan.",
       "Check with your attorney how title, mortgage and board rules treat a couple.",
     ],
-    recommendation: "Agree on the next three years, not the forever home. Choose the place that fits that stretch.",
+    recommendation: "Agree on the next three years first. Choose the place that fits that stretch.",
     related: ["first-home-buyers-nyc", "new-baby-growing-family-nyc"],
   },
   {
@@ -63,7 +63,7 @@ export const situations: Situation[] = [
     matters: [
       "Separate the emotional value of the home from the monthly cost of keeping it.",
       "Consider the full range: stay, renovate, rent part of it, or downsize.",
-      "Look at taxes, maintenance and stairs, not only the sale price.",
+      "Look at taxes, maintenance and stairs alongside the sale price.",
     ],
     recommendation: "Decide the life you want first, then see which home fits it, whether that is this one or another.",
     related: ["new-baby-growing-family-nyc"],
@@ -71,7 +71,7 @@ export const situations: Situation[] = [
   {
     slug: "executive-relocation-nyc", name: "Executive relocation", title: "Executive relocation",
     blurb: "A fast move for work, with limited time to decide.", ready: true,
-    lead: "A relocation for work compresses the timeline. You may have weeks, not months, to choose a neighborhood and a lease or a purchase, and the company's package changes the math.",
+    lead: "A relocation for work compresses the timeline. You may have only weeks to choose a neighborhood and a lease or a purchase, and the company's package changes the math.",
     matters: [
       "Separate what the employer is paying for from what you are committing to.",
       "Decide between renting first and buying now by how sure you are of the role and the city.",

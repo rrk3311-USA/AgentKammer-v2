@@ -21,8 +21,8 @@ export const condoVsCoop = {
   ] as CompareRow[],
   decide: [
     "Decide how long you plan to stay and whether you may need to rent the apartment out.",
-    "Compare the full monthly cost, not only the headline price.",
-    "Read the building's financials and house rules before you bid, not after.",
+    "Add up the full monthly cost, including what the headline price leaves out.",
+    "Read the building's financials and house rules before you bid.",
   ],
   recommendation: "Choose the building type that fits how long you will stay and how much flexibility you may need. Then compare buildings on their rules and finances.",
 };

@@ -3,7 +3,7 @@
 
 export const primaryNav = [
   { label: "Home", href: "/" },
-  { label: "Guides", href: "/guides" },
+  { label: "Resource Hub", href: "/guides" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -39,12 +39,6 @@ export const closeCtas = [
   { label: "Live Chat", href: "/contact" },
 ];
 
-// Links in the blue footer. Live Chat (a pill with Calculate and Contact) goes to Contact until the chat is rebuilt.
-export const exploreNav = [
-  { label: "Guides", href: "/guides" },
-  { label: "Interactive Tools", href: "/calculator" },
-];
-
 export const footerNav = [
   { label: "About", href: "/about" },
   { label: "Get Qualified", href: "/qualify" },
@@ -52,23 +46,6 @@ export const footerNav = [
   { label: "Terms", href: "/terms" },
 ];
 
-// Language guides in the lowest footer strip, as on the live site.
-export const languages = [
-  { label: "English", name: "English", href: "/international" },
-  { label: "中文", name: "Chinese", href: "/international/china" },
-  { label: "繁體中文", name: "Chinese (Traditional)", href: "/international/taiwan" },
-  { label: "日本語", name: "Japanese", href: "/international/japan" },
-  { label: "한국어", name: "Korean", href: "/international/korea" },
-  { label: "Deutsch", name: "German", href: "/international/germany" },
-  { label: "Français", name: "French", href: "/international/france" },
-  { label: "Español", name: "Spanish", href: "/international/spain" },
-  { label: "Português", name: "Portuguese", href: "/international/brazil" },
-  { label: "Italiano", name: "Italian", href: "/international/italy" },
-  { label: "العربية", name: "Arabic", href: "/international/uae" },
-  { label: "Русский", name: "Russian", href: "/international/russia" },
-  { label: "עברית", name: "Hebrew", href: "/international/israel" },
-  { label: "हिन्दी", name: "Hindi / English", href: "/international/india" },
-];
 
 // Phone and tablet menu, matching the live field menu (MobileFieldMenu on v1).
 // Sections with children open as an accordion; Neighborhoods nests one level deeper.
@@ -95,9 +72,9 @@ export const mobileNav = [
   },
   {
     id: "guides",
-    label: "Guides",
+    label: "Resource Hub",
     children: [
-      { label: "All Guides", href: "/guides" },
+      { label: "All resources", href: "/guides" },
       { label: "Resource Hub", href: "/resources" },
       { label: "Field Guides", href: "/resources#field-guides" },
       { label: "Property Assessments", href: "/resources#assessments" },

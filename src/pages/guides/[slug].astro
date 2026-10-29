@@ -1,0 +1,16 @@
+---
+import Base from "../../layouts/Base.astro";
+import GuideBody from "../../components/GuideBody.astro";
+import { fieldGuides } from "../../data/fieldGuides";
+
+export function getStaticPaths() {
+  return Object.entries(fieldGuides).map(([slug, g]) => ({ params: { slug }, props: { g } }));
+}
+const { g } = Astro.props as any;
+---
+<Base title={`${g.title} | Agent Kammer`} description={g.blurb}>
+  <GuideBody
+    crumbs={[{ label: "Resource Hub", href: "/guides" }, { label: "Field guides", href: "/guides#field-guides" }, { label: g.title }]}
+    eyebrow={g.eyebrow} title={g.title} lead={g.lead} decide={g.decide} recommendation={g.recommendation}
+    cta={{ href: "/contact?decision=Situation%20Assessment", label: "Request a Situation Assessment" }} />
+</Base>

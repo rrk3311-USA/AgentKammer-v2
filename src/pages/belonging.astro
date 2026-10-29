@@ -1,0 +1,14 @@
+---
+import Base from "../layouts/Base.astro";
+import GuideBody from "../components/GuideBody.astro";
+---
+<Base title="Situation Assessment | Agent Kammer" description="Figure out your situation. Tell us what changed, and we send back a personal profile of where you stand.">
+  <GuideBody
+    crumbs={[{ label: "Home", href: "/" }, { label: "Situation Assessment" }]}
+    eyebrow="Situation Assessment"
+    title="Figure out your situation."
+    lead="The Situation Assessment is the diagnostic that gets you to a decision. Tell us what changed, and we send back a personal profile of where you stand."
+    decide={["Tell us what changed and which decision is on the table.", "We read the situation before we recommend a next step.", "You get a profile you can act on, with the next step named."]}
+    recommendation="Start with what changed. The profile shows whether to stay, move or wait."
+    cta={{ href: "/contact?intent=situation", label: "Request a Situation Assessment" }} />
+</Base>
