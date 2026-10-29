@@ -36,13 +36,13 @@ export const whatsChangingGroups = [
 export const closeCtas = [
   { label: "Calculate", href: "/calculator" },
   { label: "Contact", href: "/contact" },
+  { label: "Live Chat", href: "/contact" },
 ];
 
-// Links in the blue footer. Live Chat goes to Contact until the chat is rebuilt.
+// Links in the blue footer. Live Chat (a pill with Calculate and Contact) goes to Contact until the chat is rebuilt.
 export const exploreNav = [
   { label: "Guides", href: "/guides" },
   { label: "Interactive Tools", href: "/calculator" },
-  { label: "Live Chat", href: "/contact" },
 ];
 
 export const footerNav = [

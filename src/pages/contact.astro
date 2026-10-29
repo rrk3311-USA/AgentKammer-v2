@@ -44,3 +44,21 @@ const nexts = ["Guidance", "Situation Assessment", "Property Assessment", "Livab
     </section>
   </div>
 </Base>
+
+<script is:inline>
+  // Arriving from a situation page: fill in what changed and the decision, so nobody retypes it.
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var sit = q.get("situation"), dec = q.get("decision");
+    var form = document.querySelector("form");
+    if (!form) return;
+    if (dec) {
+      var sel = form.querySelector('select[name="decision"]');
+      if (sel) [].forEach.call(sel.options, function (o) { if (o.text === dec) sel.value = o.value || o.text; });
+    }
+    if (sit) {
+      var ta = form.querySelector('textarea[name="changed"]');
+      if (ta && !ta.value) ta.value = sit + ": ";
+    }
+  })();
+</script>

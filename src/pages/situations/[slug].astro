@@ -1,0 +1,166 @@
+---
+import Base from "../../layouts/Base.astro";
+import { neighborhoods } from "../../data/guides";
+import { situations, decisionChoices } from "../../data/situations";
+import { condoVsCoop, coopTerms } from "../../data/guidePages";
+
+export function getStaticPaths() {
+  return [
+    ...neighborhoods.map((n) => ({ params: { slug: n.slug }, props: { kind: "n", n } })),
+    ...situations.filter((s) => s.ready).map((s) => ({ params: { slug: s.slug }, props: { kind: "s", s } })),
+    { params: { slug: condoVsCoop.slug }, props: { kind: "g", g: condoVsCoop } },
+    { params: { slug: coopTerms.slug }, props: { kind: "g", g: coopTerms } },
+  ];
+}
+const { kind, n, s, g } = Astro.props as any;
+const others = kind === "n" ? n.compare.map((x: string) => neighborhoods.find((y) => y.slug === x)!) : [];
+const related = kind === "s" ? s.related.map((x: string) => situations.find((y) => y.slug === x)!) : [];
+const title = kind === "n" ? `${n.name} | Agent Kammer` : kind === "g" ? `${g.title} | Agent Kammer` : `${s.title} | Agent Kammer`;
+const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
+---
+<Base title={title} description={description}>
+  {kind === "n" ? (
+    <article class="wrap nb">
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#neighborhoods">Guides</a><i aria-hidden="true">/</i><a href="/guides#neighborhoods">Neighborhoods</a></nav>
+      <header>
+        <div class="eyebrow">NYC neighborhood</div>
+        <h1>{n.name}</h1>
+        <p class="lede">{n.lead}</p>
+      </header>
+
+      <section class="nb-decide" aria-labelledby="nd">
+        <h2 id="nd">Decide first</h2>
+        <ol>
+          {n.decide.map((d: string) => <li>{d}</li>)}
+        </ol>
+      </section>
+
+      <section class="nb-rec" aria-labelledby="nr">
+        <div class="k" id="nr">Recommendation</div>
+        <p>{n.recommendation}</p>
+      </section>
+
+      {others.length > 0 && (
+        <section class="nb-compare" aria-labelledby="nc">
+          <h2 id="nc">Compare with</h2>
+          <ul>
+            {others.map((o: any) => <li><a href={`/situations/${o.slug}`}><b>{o.name}</b><span>{o.blurb}</span></a></li>)}
+          </ul>
+        </section>
+      )}
+
+      <div class="gcta">
+        <p>Ready for a read on your own situation?</p>
+        <div class="btns">
+          <a class="btn" href="/contact">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+          <a class="btn ghost" href="/guides#neighborhoods">All neighborhoods <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+        </div>
+      </div>
+    </article>
+  ) : kind === "g" ? (
+    <article class="wrap nb gd">
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#field-guides">Guides</a><i aria-hidden="true">/</i><a href="/guides#field-guides">Field Guides</a></nav>
+      <header>
+        <div class="eyebrow">Field guide</div>
+        <h1>{g.title}</h1>
+        <p class="lede">{g.lead}</p>
+      </header>
+
+      {g.rows && (
+        <section class="gd-table" aria-labelledby="gt">
+          <h2 id="gt">Side by side</h2>
+          <div class="gd-scroll">
+            <table>
+              <thead><tr><th scope="col"></th><th scope="col">Co-op</th><th scope="col">Condo</th></tr></thead>
+              <tbody>
+                {g.rows.map((r: any) => <tr><th scope="row">{r.label}</th><td>{r.coop}</td><td>{r.condo}</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {g.decide && (
+        <section class="nb-decide" aria-labelledby="gd1">
+          <h2 id="gd1">Decide first</h2>
+          <ol>{g.decide.map((d: string) => <li>{d}</li>)}</ol>
+        </section>
+      )}
+
+      {g.recommendation && (
+        <section class="nb-rec" aria-labelledby="gr">
+          <div class="k" id="gr">Recommendation</div>
+          <p>{g.recommendation}</p>
+        </section>
+      )}
+
+      {g.terms && (
+        <section class="gd-terms" aria-labelledby="gtm">
+          <h2 id="gtm">The terms</h2>
+          <dl>
+            {g.terms.map((t: any) => <><dt>{t.term}</dt><dd>{t.text}</dd></>)}
+          </dl>
+        </section>
+      )}
+
+      <p class="gd-note">General information, not legal, tax or financial advice. Confirm details with your attorney.</p>
+
+      <div class="gcta">
+        <p>Want a read on your own building?</p>
+        <div class="btns">
+          <a class="btn" href="/contact?decision=Situation%20Assessment">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+          <a class="btn ghost" href="/guides#field-guides">All field guides <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+        </div>
+      </div>
+    </article>
+  ) : (
+    <article class="wrap nb sit">
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/situations">What's changing</a><i aria-hidden="true">/</i><span>{s.name}</span></nav>
+      <header>
+        <div class="eyebrow">What's changing</div>
+        <h1>{s.title}</h1>
+        <p class="lede">{s.lead}</p>
+      </header>
+
+      <section class="nb-decide" aria-labelledby="sm">
+        <h2 id="sm">What usually matters</h2>
+        <ol>
+          {s.matters.map((d: string) => <li>{d}</li>)}
+        </ol>
+      </section>
+
+      <section class="nb-rec" aria-labelledby="sr">
+        <div class="k" id="sr">Recommendation</div>
+        <p>{s.recommendation}</p>
+      </section>
+
+      <section class="sit-pick" aria-labelledby="sp">
+        <h2 id="sp">What decision are you facing?</h2>
+        <ul>
+          {decisionChoices.map((d) => (
+            <li><a href={`/contact?situation=${encodeURIComponent(s.name)}&decision=${encodeURIComponent(d.value)}`}>{d.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
+          ))}
+        </ul>
+      </section>
+
+      {related.length > 0 && (
+        <section class="nb-compare" aria-labelledby="sx">
+          <h2 id="sx">Often read together</h2>
+          <ul>
+            {related.map((o: any) => <li><a href={`/situations/${o.slug}`}><b>{o.name}</b><span>{o.blurb}</span></a></li>)}
+          </ul>
+        </section>
+      )}
+
+      <p class="gd-note">General information, not legal, tax or financial advice.</p>
+
+      <div class="gcta">
+        <p>Ready for a read on your own situation?</p>
+        <div class="btns">
+          <a class="btn" href={`/contact?situation=${encodeURIComponent(s.name)}&decision=${encodeURIComponent("Situation Assessment")}`}>Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+          <a class="btn ghost" href="/situations">All situations <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+        </div>
+      </div>
+    </article>
+  )}
+</Base>

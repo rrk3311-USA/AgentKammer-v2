@@ -1,0 +1,43 @@
+---
+import Base from "../../layouts/Base.astro";
+import { situations, situationGroups } from "../../data/situations";
+
+const bySlug = (slug: string) => situations.find((s) => s.slug === slug)!;
+---
+<Base title="What's changing | Agent Kammer" description="Start from what changed. Pick the life event closest to yours.">
+  <div class="wrap gh sh">
+    <header class="gh-head">
+      <div class="eyebrow">What's changing</div>
+      <h1>Start from what changed.</h1>
+      <p class="lede">Name the life event, pressure, or uncertainty. Neighborhoods and inventory come later.</p>
+    </header>
+
+    {situationGroups.map((g) => (
+      <section class="sh-group" aria-labelledby={`g-${g.title.replace(/\W+/g, "-").toLowerCase()}`}>
+        <h2 id={`g-${g.title.replace(/\W+/g, "-").toLowerCase()}`}>{g.title}</h2>
+        <div class="glist">
+          {g.slugs.map((slug) => {
+            const s = bySlug(slug);
+            const inner = (
+              <>
+                <span class="k">Situation</span>
+                <span class="t">{s.name}</span>
+                <span class="m">{s.ready ? "Read" : "Coming soon"}</span>
+                <span class="d">{s.blurb}</span>
+              </>
+            );
+            return s.ready
+              ? <a class="grow" href={`/situations/${s.slug}`}>{inner}</a>
+              : <div class="grow soon">{inner}</div>;
+          })}
+        </div>
+      </section>
+    ))}
+
+    <div class="gcta">
+      <h2>Not sure which one is yours?</h2>
+      <p>Share what changed, and we send back a personal profile of where you stand.</p>
+      <a class="btn" href="/contact?decision=Situation%20Assessment">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+    </div>
+  </div>
+</Base>

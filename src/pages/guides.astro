@@ -1,41 +1,128 @@
 ---
 import Base from "../layouts/Base.astro";
-import "../styles/platinum-paper.css";
+import { guideItems, guideTabs } from "../data/guides";
 
-const areas = [
-  { name: "Upper West Side", href: "/situations/upper-west-side-buyers-nyc", d: "Schools, park adjacency, co-op culture, and classic residential rhythm. Strong for families who want daily life west of the park before chasing inventory." },
-  { name: "Upper East Side", href: "/situations/upper-east-side-buyers-nyc", d: "Deep inventory with nuanced co-op boards, service buildings, and family-oriented tradeoffs across quieter side streets and avenues." },
-  { name: "Tribeca", href: "/situations/tribeca-buyers-nyc", d: "Low-volume, high-conviction buying shaped by loft scale, privacy, and family floor plans. Architecture appeal must still survive ownership practicality." },
-  { name: "Chelsea", href: "/situations/chelsea-buyers-nyc", d: "Gallery adjacency, West Chelsea new product, High Line access, and design-forward towers that still need lifestyle filters." },
-  { name: "Hudson Yards", href: "/situations/hudson-yards-buyers-nyc", d: "Amenity-heavy new development that still needs commute, carrying-cost, and use-case pressure testing against Chelsea and Tribeca alternatives." },
-  { name: "Financial District", href: "/situations/financial-district-buyers-nyc", d: "Commute convenience versus weekend livability across conversions, waterfront stock, and Battery Park City options." },
-];
+const topics = (type: string) => [...new Set(guideItems.filter((g) => g.type === type).map((g) => g.topic))];
+const count = (type: string) => guideItems.filter((g) => g.type === type).length;
 ---
-<Base mainClass="pp" title="Guides | Agent Kammer" description="Neighborhoods first. Then a Situation Assessment if you want a structured read.">
-  <article class="wrap legal-page about">
-    <header>
-      <div class="eyebrow">Guides</div>
-      <h1>Decide the frame before the listing.</h1>
-      <p class="lede">Neighborhoods first. Then a Situation Assessment if you want a structured read. Field guides and Property Assessments sit on the Resource Hub.</p>
-      <p class="upd"><a href="#neighborhoods">Neighborhoods</a> &nbsp;·&nbsp; <a href="/resources#field-guides">Field guides</a> &nbsp;·&nbsp; <a href="/resources#assessments">Property Assessments</a></p>
-    </header>
-    <div class="body">
-      <section id="neighborhoods">
-        <div><div class="k">Neighborhoods</div><h2>Geography before inventory.</h2></div>
-        <div class="txt">
-          <p>Tribeca, Chelsea, Hudson Yards, the Upper West Side, and the other Manhattan Situations. Lock one or two districts before comparing buildings.</p>
-          <ul class="areas">
-            {areas.map((a) => <li><a href={a.href}><b>{a.name}</b><span>{a.d}</span></a></li>)}
-          </ul>
+<Base title="Guides | Agent Kammer" description="Neighborhoods, field guides and property assessments in one place. Search all of it.">
+  <div class="wrap gh">
+    <h1 class="gh-sr">Guides</h1>
+    <figure class="gh-banner">
+      <img src="/images/guides-banner.webp" width="2000" height="588" alt="Curved glass tower against a clear teal sky" fetchpriority="high" decoding="async" />
+      <div class="gtabs" role="tablist" aria-label="Guide types">
+        {guideTabs.map((t, i) => (
+          <button class="gtab" role="tab" type="button" data-t={t.type} data-hash={t.hash} aria-selected={i === 0 ? "true" : "false"}>
+            {t.label}<span class="n">{count(t.type)}</span>
+          </button>
+        ))}
+      </div>
+    </figure>
+
+    <div class="gdark"><div class="gdark-in">
+    <div class="gbody">
+      <aside class="grail" aria-label="Topics">
+        {guideTabs.map((t, i) => (
+          <nav class="gtopics" data-for={t.type} hidden={i !== 0}>
+            <h2>Topic</h2>
+            <button type="button" class="gf" data-f="All" aria-pressed="true">All</button>
+            {topics(t.type).map((tp) => <button type="button" class="gf" data-f={tp} aria-pressed="false">{tp}</button>)}
+          </nav>
+        ))}
+      </aside>
+
+      <div class="gmain">
+        <label class="gsearch">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>
+          <input id="gq" type="search" placeholder="Search all guides: co-op, mortgage, Chelsea" aria-label="Search all guides" autocomplete="off" />
+        </label>
+        <p class="gcount" id="gcount" aria-live="polite"></p>
+        <div class="glist" id="glist">
+          {guideItems.map((g) => {
+            const inner = (
+              <>
+                <span class="k">{g.topic}</span>
+                <span class="t">{g.title}</span>
+                <span class="m">{g.ready ? g.meta : "Coming soon"}</span>
+                <span class="d">{g.text}</span>
+              </>
+            );
+            const search = `${g.topic} ${g.title} ${g.text} ${g.meta}`.toLowerCase();
+            return g.ready
+              ? <a class="grow" href={g.href} data-type={g.type} data-topic={g.topic} data-s={search}>{inner}</a>
+              : <div class="grow soon" data-type={g.type} data-topic={g.topic} data-s={search}>{inner}</div>;
+          })}
         </div>
-      </section>
-      <section>
-        <div><div class="k">Assessment</div><h2>If you want a structured answer.</h2></div>
-        <div class="txt">
-          <p>Guides stay the research library. The Situation Assessment is how you figure out your situation.</p>
-          <div class="btns"><a class="btn" href="/contact">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></div>
-        </div>
-      </section>
+        <p class="gnone" id="gnone" hidden>Nothing matches that. Try co-op, mortgage or Chelsea.</p>
+      </div>
     </div>
-  </article>
+
+    </div></div>
+
+    <div class="gcta">
+      <h2>Want a structured read on your own situation?</h2>
+      <p>Share what changed, and we send back a personal profile of where you stand.</p>
+      <a class="btn" href="/contact">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+    </div>
+  </div>
 </Base>
+
+<script is:inline>
+  (function () {
+    var root = document.querySelector(".gh");
+    root.classList.add("js");
+    var tabs = [].slice.call(root.querySelectorAll(".gtab"));
+    var rows = [].slice.call(root.querySelectorAll(".grow"));
+    var groups = [].slice.call(root.querySelectorAll(".gtopics"));
+    var input = document.getElementById("gq");
+    var count = document.getElementById("gcount");
+    var none = document.getElementById("gnone");
+    var names = { n: "neighborhoods", f: "field guides", a: "property assessments" };
+    var st = { t: tabs[0].getAttribute("data-t"), f: "All", q: "" };
+    var byHash = { neighborhoods: "n", "field-guides": "f", assessments: "a" };
+    var h = (location.hash || "").slice(1);
+    if (byHash[h]) st.t = byHash[h];
+
+    function render() {
+      var q = st.q.trim().toLowerCase();
+      var shown = 0;
+      var perType = { n: 0, f: 0, a: 0 };
+      rows.forEach(function (r) {
+        var match = !q || r.getAttribute("data-s").indexOf(q) > -1;
+        if (match) perType[r.getAttribute("data-type")]++;
+        var vis = q ? match : r.getAttribute("data-type") === st.t && (st.f === "All" || r.getAttribute("data-topic") === st.f);
+        r.hidden = !vis;
+        if (vis) shown++;
+        // show the type name on each row while searching across everything
+        var k = r.querySelector(".k");
+        if (!k.getAttribute("data-topic-text")) k.setAttribute("data-topic-text", k.textContent);
+        k.textContent = q ? names[r.getAttribute("data-type")].replace(/s$/, "") + " · " + k.getAttribute("data-topic-text") : k.getAttribute("data-topic-text");
+      });
+      tabs.forEach(function (b) {
+        var on = b.getAttribute("data-t") === st.t && !q;
+        b.setAttribute("aria-selected", on ? "true" : "false");
+        b.querySelector(".n").textContent = q ? perType[b.getAttribute("data-t")] : rows.filter(function (r) { return r.getAttribute("data-type") === b.getAttribute("data-t"); }).length;
+      });
+      groups.forEach(function (g) { g.hidden = !!q || g.getAttribute("data-for") !== st.t; });
+      [].slice.call(root.querySelectorAll(".gf")).forEach(function (b) {
+        b.setAttribute("aria-pressed", b.getAttribute("data-f") === st.f ? "true" : "false");
+      });
+      none.hidden = shown > 0;
+      count.textContent = q ? shown + " result" + (shown === 1 ? "" : "s") + " across everything" : "";
+    }
+
+    tabs.forEach(function (b) {
+      b.addEventListener("click", function () {
+        st.t = b.getAttribute("data-t"); st.f = "All"; st.q = ""; input.value = "";
+        try { history.replaceState(null, "", "#" + b.getAttribute("data-hash")); } catch (e) {}
+        render();
+      });
+    });
+    root.addEventListener("click", function (e) {
+      var b = e.target.closest(".gf");
+      if (b) { st.f = b.getAttribute("data-f"); render(); }
+    });
+    input.addEventListener("input", function () { st.q = input.value; render(); });
+    render();
+  })();
+</script>
