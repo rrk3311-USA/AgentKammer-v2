@@ -1,14 +1,63 @@
 ---
 import Base from "../layouts/Base.astro";
-import GuideBody from "../components/GuideBody.astro";
 ---
 <Base title="Situation Assessment | Agent Kammer" description="Figure out your situation. Tell us what changed, and we send back a personal profile of where you stand.">
-  <GuideBody
-    crumbs={[{ label: "Home", href: "/" }, { label: "Situation Assessment" }]}
-    eyebrow="Situation Assessment"
-    title="Figure out your situation."
-    lead="The Situation Assessment is the diagnostic that gets you to a decision. Tell us what changed, and we send back a personal profile of where you stand."
-    decide={["Tell us what changed and which decision is on the table.", "We read the situation before we recommend a next step.", "You get a profile you can act on, with the next step named."]}
-    recommendation="Start with what changed. The profile shows whether to stay, move or wait."
-    cta={{ href: "/contact?intent=situation", label: "Request a Situation Assessment" }} />
+  <section class="sa">
+    <div class="col">
+      <div class="sa-head">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="1.2" stroke-linecap="round">
+          <defs>
+            <linearGradient id="platIcon" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#868D94" />
+              <stop offset=".3" stop-color="#AEB3B9" />
+              <stop offset=".5" stop-color="#DEE1E4" />
+              <stop offset=".7" stop-color="#AEB3B9" />
+              <stop offset="1" stop-color="#868D94" />
+            </linearGradient>
+          </defs>
+          <path stroke="url(#platIcon)" d="M4 5h6m3 0h7m-4 4v6M10 2v6m2 8v6m4-10h4M4 12h9m-1 7h8M4 19h5" />
+        </svg>
+        <h1>Figure out your situation.</h1>
+      </div>
+      <p class="lede">The Situation Assessment is the diagnostic that gets you to a decision. Tell us what changed, and we send back a personal profile of where you stand.</p>
+      <ol class="steps">
+        <li><b>01</b>What changed. The life event, the pressure, and the decision on the table.</li>
+        <li><b>02</b>Where you stand. We read the situation before we recommend a next step.</li>
+        <li><b>03</b>Your next step. A profile you can act on, with the next step named.</li>
+      </ol>
+      <section class="stamp" aria-labelledby="sa-ask">
+        <h2 id="sa-ask">Tell us what changed.</h2>
+        <form method="post">
+          <label>Name<input name="name" autocomplete="name" required /></label>
+          <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+          <label class="full">What changed<textarea name="changed" rows="3"></textarea></label>
+          <button class="go" type="submit">Request a Situation Assessment</button>
+        </form>
+      </section>
+      <p class="small">General information, not legal, tax or financial advice.</p>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .sa { background: var(--stone-blue); color: var(--ivory); padding: clamp(56px, 8vw, 96px) 0; }
+  .col { box-sizing: border-box; max-width: 880px; margin: 0 auto; padding: 0 clamp(16px, 6vw, 72px); display: flex; flex-direction: column; gap: 28px; text-align: left; }
+  .sa-head { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
+  .icon { display: block; flex: 0 0 auto; width: 56px; height: 56px; }
+  h1 { margin: 0; font: 500 clamp(40px, 5.2vw, 64px)/1 var(--serif); color: var(--ivory); white-space: nowrap; }
+  .lede { margin: 0; font-size: 19px; line-height: 1.55; color: var(--ivory); max-width: 56ch; }
+  .steps { margin: 0; padding: 0; list-style: none; }
+  .steps li { padding: 14px 0; font-size: 17px; line-height: 1.5; color: var(--ivory); border-bottom: 1px solid rgba(184, 187, 192, 0.35); }
+  .steps li:last-child { border-bottom: 0; }
+  .steps b { font: 600 13px/1 var(--sans); letter-spacing: 0.12em; color: var(--champagne); margin-right: 14px; }
+  .stamp { box-sizing: border-box; width: 100%; padding: 72px 64px; background: linear-gradient(180deg, #F7F8F9, #DDE0E4); border: 1px solid #8E949B; box-shadow: inset 0 0 0 12px #E9EBEE, inset 0 0 0 13px #9AA0A7, 0 18px 40px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; gap: 22px; color: var(--charcoal); }
+  .stamp h2 { margin: 0; font: 500 38px/1.08 var(--serif); color: var(--stone-blue); }
+  form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 18px; }
+  label { display: flex; flex-direction: column; gap: 6px; font: 600 12px/1.4 var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: #4A5058; }
+  label.full { grid-column: 1 / -1; }
+  input, textarea { font: 400 15px/1.4 var(--sans); padding: 12px 14px; border: 1px solid #8E949B; background: #fff; color: var(--charcoal); border-radius: 0; text-transform: none; letter-spacing: 0; }
+  .go { grid-column: 1 / -1; justify-self: start; border: 0; cursor: pointer; display: inline-flex; align-items: center; height: 52px; padding: 0 28px; background: var(--stone-blue); color: var(--ivory); font: 500 14px/1 var(--sans); }
+  .go:hover { opacity: 0.88; }
+  .small { margin: 0; font-size: 14px; line-height: 1.5; color: #E4E6E9; }
+  @media (max-width: 600px) { .stamp { padding: 44px 22px; } .icon { width: 44px; height: 44px; } form { grid-template-columns: 1fr; } h1 { white-space: normal; } }
+</style>
