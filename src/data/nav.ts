@@ -3,12 +3,12 @@
 
 export const primaryNav = [
   { label: "Home", href: "/" },
+  { label: "Start Here", href: "/situations" },
   { label: "Resource Hub", href: "/guides" },
-  { label: "Contact", href: "/contact" },
 ];
 
 // v1 opened the Guidance chat here. v2 is front end only, so it goes to Contact for now.
-export const guidance = { label: "Guidance", href: "/contact" };
+export const guidance = { label: "Contact", href: "/contact" };
 
 export const whatsChanging = [
   { label: "Executive relocation", href: "/situations/executive-relocation-nyc" },
@@ -41,7 +41,6 @@ export const closeCtas = [
 
 export const footerNav = [
   { label: "About", href: "/about" },
-  { label: "Get Qualified", href: "/qualify" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
 ];
@@ -49,8 +48,6 @@ export const footerNav = [
 
 // Phone and tablet menu, matching the live field menu (MobileFieldMenu on v1).
 // Sections with children open as an accordion; Neighborhoods nests one level deeper.
-const titleCase = (s: string) => s.replace(/\b\w/g, (c) => c.toUpperCase());
-
 export const neighborhoods = [
   { label: "Upper West Side", href: "/situations/upper-west-side-buyers-nyc" },
   { label: "Upper East Side", href: "/situations/upper-east-side-buyers-nyc" },
@@ -62,14 +59,7 @@ export const neighborhoods = [
 
 export const mobileNav = [
   { id: "home", label: "Home", href: "/" },
-  {
-    id: "start",
-    label: "Start Here",
-    children: [
-      { label: "All situations", href: "/situations" },
-      ...whatsChanging.map((c) => ({ ...c, label: titleCase(c.label) })),
-    ],
-  },
+  { id: "start", label: "Start Here", href: "/situations" },
   {
     id: "guides",
     label: "Resource Hub",
