@@ -40,11 +40,14 @@ import Base from "../layouts/Base.astro";
 </Base>
 
 <script is:inline>
-  // Arriving from a situation page: fill in what changed, so nobody retypes it.
+  // Arriving with context: fill in what changed, so nobody retypes it. The context itself travels
+  // in hidden fields, added by the site-wide script in the layout.
   (function () {
-    var sit = new URLSearchParams(location.search).get("situation");
+    var q = new URLSearchParams(location.search);
+    var sit = q.get("situation"), dec = q.get("decision");
     var ta = document.querySelector('form textarea[name="changed"]');
-    if (sit && ta && !ta.value) ta.value = sit + ": ";
+    var lead = [sit, dec].filter(Boolean).join(" · ");
+    if (ta && lead && !ta.value) ta.value = lead + ": ";
   })();
 </script>
 

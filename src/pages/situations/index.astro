@@ -10,6 +10,7 @@ const bySlug = (slug: string) => situations.find((s) => s.slug === slug)!;
       <div class="eyebrow">What's changing</div>
       <h1>Start from what changed.</h1>
       <p class="lede">Name the life event, pressure, or uncertainty. Neighborhoods and inventory come later.</p>
+      <a class="btn" href="/belonging">Not sure? Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
     </header>
 
     {situationGroups.map((g) => (
@@ -22,7 +23,7 @@ const bySlug = (slug: string) => situations.find((s) => s.slug === slug)!;
               <>
                 <span class="k">Situation</span>
                 <span class="t">{s.name}</span>
-                <span class="m">{s.ready ? "Read" : "Coming soon"}</span>
+                <span class="m">{s.ready ? "Open" : "Coming soon"}</span>
                 <span class="d">{s.blurb}</span>
               </>
             );

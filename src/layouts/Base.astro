@@ -8,8 +8,10 @@ interface Props {
   title: string;
   description: string;
   mainClass?: string;
+  // What this page is about. Read by the context script so links from here carry it forward.
+  context?: { situation?: string; area?: string; building?: string };
 }
-const { title, description, mainClass } = Astro.props;
+const { title, description, mainClass, context } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -28,10 +30,52 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap" />
     <slot name="head" />
   </head>
-  <body>
+  <body data-ctx-situation={context?.situation} data-ctx-area={context?.area} data-ctx-building={context?.building}>
     <Icons />
     <Header />
     <main class={mainClass}><slot /></main>
     <Footer />
+    <script is:inline>
+      // Site-wide context. The URL is the source of truth: each page reads what it was given, adds what
+      // it is about (situation, area, building) when nothing is set yet, and passes every value on to
+      // the links and forms it shows. A value already on a link is never overwritten, and a page with no
+      // context passes nothing, so browsing stays free.
+      (function () {
+        var KEYS = ["situation", "decision", "building", "area", "from"];
+        var here = new URL(location.href);
+        var ctx = {};
+        KEYS.forEach(function (k) { var v = here.searchParams.get(k); if (v) ctx[k] = v; });
+        var body = document.body.dataset;
+        var about = { situation: body.ctxSituation, area: body.ctxArea, building: body.ctxBuilding };
+        Object.keys(about).forEach(function (k) { if (about[k] && !ctx[k]) ctx[k] = about[k]; });
+
+        // Only the four journey keys count as context. `from` records where the journey began.
+        var journey = ["situation", "decision", "building", "area"].some(function (k) { return ctx[k]; });
+        if (journey && !ctx.from) ctx.from = location.pathname;
+        if (!journey) return;
+
+        function carry(href) {
+          if (!href || href.charAt(0) === "#" || /^(https?:|mailto:|tel:|sms:)/.test(href)) return href;
+          var u = new URL(href, location.href);
+          if (u.origin !== location.origin || u.pathname.indexOf("/api/") === 0) return href;
+          Object.keys(ctx).forEach(function (k) { if (!u.searchParams.has(k)) u.searchParams.set(k, ctx[k]); });
+          return u.pathname + u.search + u.hash;
+        }
+
+        document.querySelectorAll("a[href]").forEach(function (a) {
+          var next = carry(a.getAttribute("href"));
+          if (next !== a.getAttribute("href")) a.setAttribute("href", next);
+        });
+
+        document.querySelectorAll("main form").forEach(function (f) {
+          Object.keys(ctx).forEach(function (k) {
+            if (f.querySelector('input[name="' + k + '"]')) return;
+            var i = document.createElement("input");
+            i.type = "hidden"; i.name = k; i.value = ctx[k];
+            f.appendChild(i);
+          });
+        });
+      })();
+    </script>
   </body>
 </html>

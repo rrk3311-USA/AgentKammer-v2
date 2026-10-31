@@ -1,0 +1,210 @@
+---
+import Base from "../../layouts/Base.astro";
+// NOTE: height 290 feet and completion 2019 per CTBUH Skyscraper Center. Floor count conflicts (25 there, 30 in listings), so it is left off.
+// MISSING: photo source and licence
+---
+<Base title="565 Broome | Agent Kammer" description="Architectural minimalism in the heart of downtown." context={{ building: "565 Broome" }}>
+  <div class="lh">
+    <div class="card">
+      <div class="inner">
+        <div class="sub-eb top-eb">Building report · West Chelsea</div>
+        <h1>565 Broome</h1>
+        <p class="dek">Architectural minimalism in the heart of downtown.</p>
+
+        <div class="hero-unit">
+          <div class="photo"><img src="/images/565-broome.jpg" width="1100" height="733" alt="565 Broome" /></div>
+        </div>
+
+        <dl class="facts">
+        <div><dt>Address</dt><dd>565 Broome Street, New York</dd></div>
+        <div><dt>Neighborhood</dt><dd>SoHo and Hudson Square</dd></div>
+        <div><dt>Architect</dt><dd>Renzo Piano Building Workshop</dd></div>
+        <div><dt>Interiors</dt><dd>RDAI</dd></div>
+        <div><dt>Developer</dt><dd>Bizzi and Partners</dd></div>
+        <div><dt>Residences</dt><dd>115</dd></div>
+        <div><dt>Completion</dt><dd>2019</dd></div>
+        <div><dt>Height</dt><dd>290 feet</dd></div>
+        </dl>
+
+        <h3>Who it suits</h3>
+        <div class="tint">
+          <div class="fit">
+            <div><b>Good fit</b>Design conscious downtown professionals who want SoHo's restaurants, galleries and retail.</div>
+            <div><b>Possible</b>Buyers who want a more intimate downtown building.</div>
+            <div><b>Poor fit</b>Buyers who want traditional residential character or a large amenity campus.</div>
+          </div>
+        </div>
+
+        <h3>The read</h3>
+        <ul class="plain">
+          <li>Renzo Piano's first New York residential project, with a curved, low iron glass façade.</li>
+          <li>Two connected glass structures, designed to maximize natural light and views.</li>
+          <li>A 55 foot indoor pool, a fitness center, a spa with sauna and steam rooms, a library and a wet bar.</li>
+        </ul>
+
+        <h3>What you give up</h3>
+        <ul class="plain">
+          <li>Less direct High Line access than West Chelsea alternatives.</li>
+          <li>A downtown lifestyle, without Hudson Yards' concentrated amenity ecosystem.</li>
+          <li>Glass forward architecture may not appeal to buyers who want traditional character.</li>
+        </ul>
+
+        <h3>Compared with</h3>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Building</th><th>How it differs</th><th>Choose it if</th></tr></thead>
+            <tbody>
+              <tr><td class="n" data-label="Building">One High Line</td><td data-label="How it differs">Amenity driven and resort like</td><td data-label="Choose it if">You want the amenities to be the point</td></tr>
+              <tr><td class="n" data-label="Building">Lantern House</td><td data-label="How it differs">Design led, with more character</td><td data-label="Choose it if">You want architecture first</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Commute</h3>
+        <p>SoHo sits downtown, a short distance from much of Lower Manhattan.</p>
+
+        <p class="verdict-note">Buyer verdicts depend on who you are, how you want to live and what you need from a purchase. <a href="/contact?intent=property&building=565%20Broome">Request a Property Assessment</a> for a verdict built around your situation.</p>
+
+        <p class="fine">Educational only. Not an offer, advice or appraisal.</p>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .lh {
+    padding: clamp(16px, 2.4vw, 24px) max(16px, env(safe-area-inset-left, 0px)) 40px;
+    background-color: #E3E2DE;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .52 0 0 0 .5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    --deep: #161C28;
+    --label: #4A5058;
+    --meta: #5F6672;
+    --sep: rgba(22, 28, 40, 0.2);
+    --grad: linear-gradient(135deg, #7E858C 0%, #C9CED3 26%, #EEF0F2 46%, #9AA1A8 68%, #7E858C 84%, #C9CED3 100%);
+    color: #2F3136;
+  }
+  .card {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    background: #FBFBFA;
+    border-radius: 22px;
+    padding: clamp(16px, 3vw, 26px) clamp(16px, 3vw, 26px) clamp(18px, 2.6vw, 26px);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 2px 4px rgba(22, 28, 40, 0.08), 0 18px 40px rgba(22, 28, 40, 0.16);
+    border: 2px solid rgba(47, 49, 54, 0.5);
+  }
+  .inner { padding: clamp(20px, 4vw, 40px) clamp(14px, 3vw, 30px) 0; }
+  .sub-eb {
+    text-align: center;
+    font: 600 10px/1.4 var(--sans, Inter, system-ui, sans-serif);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--label);
+  }
+  .top-eb { margin-top: -44px; margin-bottom: 18px; }
+  h1 {
+    font: 400 clamp(34px, 5vw, 56px) / 1.04 var(--serif, "Cormorant Garamond", Georgia, serif);
+    margin: 38px 0 8px;
+    color: var(--deep);
+  }
+  h3 {
+    font: 500 clamp(24px, 2.6vw, 30px) / 1.15 var(--serif, "Cormorant Garamond", Georgia, serif);
+    letter-spacing: 0;
+    -webkit-text-stroke: 0.5px var(--deep);
+    color: var(--deep);
+    margin: 34px 0 12px;
+    position: relative;
+  }
+  h3::after {
+    content: "";
+    display: block;
+    height: 2px;
+    margin-top: 12px;
+    background: linear-gradient(90deg, #4A5058 0%, #9AA1A8 35%, #C9CED3 70%, #EEF0F2 100%);
+  }
+  .tint h3::after { display: none; }
+  p { margin: 0; }
+  .dek {
+    font: italic 400 clamp(20px, 2.4vw, 26px) / 1.35 var(--serif, "Cormorant Garamond", Georgia, serif);
+    color: #000;
+    -webkit-text-stroke: 0.3px #000;
+    margin: 8px 0 0;
+  }
+  .hero-unit {
+    background: #F4F4F2;
+    border-radius: 14px;
+    padding: 10px 10px 0;
+    box-shadow: 0 1px 3px rgba(22, 28, 40, 0.12), 0 6px 14px rgba(22, 28, 40, 0.08);
+    margin: 20px 0 28px;
+  }
+  .photo { margin: 0; }
+  .photo img { width: 100%; height: auto; display: block; border-radius: 6px; }
+  .pick {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin: 14px -10px 0;
+    border-top: 1px solid #D9DDE1;
+    border-radius: 0 0 12px 12px;
+    background: #FFFFFF;
+    padding: 18px 20px 22px;
+  }
+  .pick > div { min-width: 0; }
+  .lab { font: 600 11px/1.3 var(--sans, Inter, system-ui, sans-serif); letter-spacing: 0.2em; text-transform: uppercase; color: var(--deep); }
+  .val { font: 600 24px/1.1 var(--sans, Inter, system-ui, sans-serif); color: var(--deep); margin-top: 4px; }
+  .chip {
+    display: inline-block;
+    white-space: nowrap;
+    font: 600 11px/1 var(--sans, Inter, system-ui, sans-serif);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    color: #F5F2EB;
+    background: linear-gradient(135deg, #3B4A5E, #2A3447 60%, #1E2636);
+    border: 1px solid #161C28;
+    border-radius: 999px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  .tint {
+    background: rgba(42, 52, 71, 0.07);
+    border: 1px solid rgba(47, 49, 54, 0.22);
+    border-radius: 14px;
+    padding: 18px 18px 20px;
+    margin-top: 12px;
+  }
+  .fit { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .fit div { font: 400 15px/1.5 var(--sans, Inter, system-ui, sans-serif); }
+  .fit b { display: block; font: 600 clamp(17px, 1.8vw, 20px) / 1.2 var(--sans, Inter, system-ui, sans-serif); color: var(--deep); margin-bottom: 8px; }
+  ul.plain { margin: 0; padding-left: 18px; }
+  ul.plain li { margin: 0 0 6px; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 12px 10px 12px 0; border-bottom: 1px solid var(--sep); vertical-align: top; }
+  th { font: 600 12px/1.3 var(--sans, Inter, system-ui, sans-serif); letter-spacing: 0.12em; text-transform: uppercase; color: var(--deep); background: rgba(42, 52, 71, 0.07); padding: 12px 12px; }
+  td.n { font: 600 17px/1.2 var(--sans, Inter, system-ui, sans-serif); color: var(--deep); white-space: nowrap; }
+  .fine { font-size: 12px; color: #000; line-height: 1.6; margin-top: 18px; text-align: center; }
+  @media (max-width: 640px) {
+    .fit { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .top-eb { margin-top: -18px; letter-spacing: 0.16em; font-size: 9px; }
+    .pick + .tint { margin-top: 30px; }
+    table, tbody, tr, td { display: block; width: 100%; }
+    thead { display: none; }
+    tr { border-bottom: 1px solid var(--sep); padding: 22px 0; }
+    td { border: 0; padding: 2px 0; white-space: normal; line-height: 1.5; font-size: 15px; }
+    td.n { font: 600 21px/1.2 var(--sans, Inter, system-ui, sans-serif); letter-spacing: -0.01em; color: var(--deep); margin-bottom: 14px; }
+    td[data-label]::before { content: attr(data-label); display: block; font: 600 10px/1.4 var(--sans, Inter, system-ui, sans-serif); letter-spacing: 0.16em; text-transform: uppercase; color: var(--label); margin-top: 12px; margin-bottom: 4px; }
+    .pick { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px 16px 18px; }
+    .chip { font-size: 10px; letter-spacing: 0.14em; padding: 8px 12px; }
+    .val { font-size: 22px; }
+  }
+  .verdict-note { margin: 28px 0 0; font: 400 15px/1.6 var(--sans, Inter, system-ui, sans-serif); color: var(--deep); }
+  .verdict-note a { text-decoration: underline; text-underline-offset: 3px; }
+
+  .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; margin: 22px 0 0; }
+  .facts dt { font: 600 10px/1.4 var(--sans, Inter, system-ui, sans-serif); letter-spacing: 0.16em; text-transform: uppercase; color: var(--label); }
+  .facts dd { margin: 2px 0 0; font: 400 15px/1.5 var(--sans, Inter, system-ui, sans-serif); color: var(--deep); }
+  @media (max-width: 600px) { .facts { grid-template-columns: 1fr; } }
+</style>

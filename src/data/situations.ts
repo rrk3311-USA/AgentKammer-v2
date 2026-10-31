@@ -159,9 +159,8 @@ export const decisionChoices = [
   { label: "Sell", value: "Sell" },
   { label: "Rent", value: "Rent" },
   { label: "Renew lease", value: "Renew lease" },
-  { label: "Stay put", value: "Wait / stay put" },
-  { label: "Wait", value: "Wait / stay put" },
+  { label: "Stay put or wait", value: "Wait / stay put" },
   { label: "Renovate", value: "Renovate" },
   { label: "Refinance", value: "Refinance" },
-  { label: "Sell or keep", value: "Rent current home" },
+  { label: "Sell or keep", value: "Sell or keep" },
 ];

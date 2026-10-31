@@ -8,8 +8,9 @@ interface Props {
   decide: string[];
   recommendation: string;
   cta: { href: string; label: string };
+  banner?: { src: string; alt: string };
 }
-const { crumbs, eyebrow, title, lead, decide, recommendation, cta } = Astro.props;
+const { crumbs, eyebrow, title, lead, decide, recommendation, cta, banner } = Astro.props;
 ---
 <article class="wrap nb gd">
   <nav class="crumb" aria-label="Breadcrumb">
@@ -20,6 +21,11 @@ const { crumbs, eyebrow, title, lead, decide, recommendation, cta } = Astro.prop
       </>
     ))}
   </nav>
+  {banner && (
+    <figure style="margin: 28px 0 28px">
+      <img src={banner.src} alt={banner.alt} width="2000" height="1250" style="display: block; width: 100%; height: auto; aspect-ratio: 2000 / 625; object-fit: cover" decoding="async" />
+    </figure>
+  )}
   <header>
     <div class="eyebrow">{eyebrow}</div>
     <h1>{title}</h1>

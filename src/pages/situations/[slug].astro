@@ -18,7 +18,7 @@ const related = kind === "s" ? s.related.map((x: string) => situations.find((y) 
 const title = kind === "n" ? `${n.name} | Agent Kammer` : kind === "g" ? `${g.title} | Agent Kammer` : `${s.title} | Agent Kammer`;
 const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
 ---
-<Base title={title} description={description}>
+<Base title={title} description={description} context={kind === "n" ? { area: n.name } : kind === "s" ? { situation: s.name } : {}}>
   {kind === "n" ? (
     <article class="wrap nb">
       <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#neighborhoods">Resource Hub</a><i aria-hidden="true">/</i><a href="/guides#neighborhoods">Neighborhoods</a></nav>
@@ -138,7 +138,7 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
         <h2 id="sp">What decision are you facing?</h2>
         <ul>
           {decisionChoices.map((d) => (
-            <li><a href={`/contact?situation=${encodeURIComponent(s.name)}&decision=${encodeURIComponent(d.value)}`}>{d.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
+            <li><a href={`/belonging?situation=${encodeURIComponent(s.name)}&decision=${encodeURIComponent(d.value)}`}>{d.label}<svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
           ))}
         </ul>
       </section>

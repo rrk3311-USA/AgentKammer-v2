@@ -4,14 +4,15 @@ import GuideBody from "../../components/GuideBody.astro";
 import { propertyAssessments } from "../../data/propertyAssessments";
 
 export function getStaticPaths() {
-  const slugs = ["one-high-line", "individual-buildings"];
+  const slugs = ["individual-buildings"];
   return slugs.map((slug) => ({ params: { slug }, props: { g: propertyAssessments[slug] } }));
 }
 const { g } = Astro.props as any;
 ---
 <Base title={`${g.title} | Agent Kammer`} description={g.blurb}>
   <GuideBody
-    crumbs={[{ label: "Resource Hub", href: "/guides" }, { label: "Property assessments", href: "/guides#field-guides" }, { label: g.title }]}
+    crumbs={[{ label: "Resource Hub", href: "/guides" }, { label: "Building profiles", href: "/guides#field-guides" }, { label: g.title }]}
     eyebrow={g.eyebrow} title={g.title} lead={g.lead} decide={g.decide} recommendation={g.recommendation}
-    cta={{ href: "/contact?intent=property", label: "Request a Property Assessment" }} />
+    cta={{ href: "/contact?intent=property", label: "Request a Property Assessment" }}
+    banner={{ src: "/images/buildings-banner.jpg", alt: "Looking up at a tall glass tower in black and white" }} />
 </Base>
