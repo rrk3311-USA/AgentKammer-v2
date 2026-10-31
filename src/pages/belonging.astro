@@ -39,6 +39,15 @@ import Base from "../layouts/Base.astro";
   </section>
 </Base>
 
+<script is:inline>
+  // Arriving from a situation page: fill in what changed, so nobody retypes it.
+  (function () {
+    var sit = new URLSearchParams(location.search).get("situation");
+    var ta = document.querySelector('form textarea[name="changed"]');
+    if (sit && ta && !ta.value) ta.value = sit + ": ";
+  })();
+</script>
+
 <style>
   .sa { background: var(--stone-blue); color: var(--ivory); padding: clamp(56px, 8vw, 96px) 0; }
   .col { box-sizing: border-box; max-width: 880px; margin: 0 auto; padding: 0 clamp(16px, 6vw, 72px); display: flex; flex-direction: column; gap: 28px; text-align: left; }

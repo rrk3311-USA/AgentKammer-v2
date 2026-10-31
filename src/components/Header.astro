@@ -1,9 +1,8 @@
 ---
-import { primaryNav, guidance, mobileNav, openSectionFor } from "../data/nav";
+import { primaryNav, guidance, mobileNav } from "../data/nav";
 
 const path = Astro.url.pathname;
-const isOn = (href: string) => (href === "/" ? path === "/" : path === href || path.startsWith(href + "/"));
-const openId = openSectionFor(path);
+const isOn = (item: { match: string }) => path === item.match || path.startsWith(item.match + "/");
 ---
 <header class="bar head">
   <div class="wrap hd">
@@ -12,39 +11,14 @@ const openId = openSectionFor(path);
       <span>Agent Kammer</span>
     </a>
     <nav class="pill" aria-label="Primary">
-      {primaryNav.map((l) => <a href={l.href} class={isOn(l.href) ? "on" : undefined} aria-current={isOn(l.href) ? "page" : undefined}>{l.label}</a>)}
+      {primaryNav.map((l) => <a href={l.href} class={isOn(l) ? "on" : undefined} aria-current={isOn(l) ? "page" : undefined}>{l.label}</a>)}
     </nav>
     <a class="gbtn" href={guidance.href}>{guidance.label}</a>
-    <!-- Phone and tablet menu, same as the live field menu. Built from <details>, so no JavaScript:
-         sections sharing a name open one at a time. -->
+    <!-- Phone and tablet menu. Built from <details>, so no JavaScript. -->
     <details class="mnav">
       <summary aria-label="Menu"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></summary>
       <nav aria-label="Field">
-        {mobileNav.map((s) =>
-          s.children ? (
-            <details class="sec" name="mnav-sec" open={s.id === openId}>
-              <summary>{s.label}</summary>
-              <div class="kids">
-                {s.children.map((c) =>
-                  "children" in c && c.children ? (
-                    <details class="br">
-                      <summary>{c.label}</summary>
-                      <div class="leaf">
-                        <a href={c.href}>All {c.label}</a>
-                        {c.children.map((n) => <a href={n.href}>{n.label}</a>)}
-                      </div>
-                    </details>
-                  ) : (
-                    <a href={c.href}>{c.label}</a>
-                  )
-                )}
-              </div>
-            </details>
-          ) : (
-            <a class="top" href={s.href}>{s.label}</a>
-          )
-        )}
-        <a class="mgbtn" href={guidance.href}>{guidance.label}</a>
+        {mobileNav.map((l) => <a class="top" href={l.href}>{l.label}</a>)}
       </nav>
     </details>
   </div>

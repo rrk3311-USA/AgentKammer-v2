@@ -52,7 +52,7 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
       <div class="gcta">
         <p>Ready for a read on your own situation?</p>
         <div class="btns">
-          <a class="btn" href="/contact">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+          <a class="btn" href="/belonging">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
           <a class="btn ghost" href="/guides#neighborhoods">All neighborhoods <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
         </div>
       </div>
@@ -108,7 +108,7 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
       <div class="gcta">
         <p>Want a read on your own building?</p>
         <div class="btns">
-          <a class="btn" href="/contact?decision=Situation%20Assessment">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+          <a class="btn" href="/belonging">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
           <a class="btn ghost" href="/guides#field-guides">All field guides <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
         </div>
       </div>
@@ -157,7 +157,7 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
       <div class="gcta">
         <p>Ready for a read on your own situation?</p>
         <div class="btns">
-          <a class="btn" href={`/contact?situation=${encodeURIComponent(s.name)}&decision=${encodeURIComponent("Situation Assessment")}`}>Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+          <a class="btn" href={`/belonging?situation=${encodeURIComponent(s.name)}`}>Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
           <a class="btn ghost" href="/situations">All situations <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
         </div>
       </div>

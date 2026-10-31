@@ -1,5 +1,5 @@
 ---
-import { closeCtas, footerNav } from "../data/nav";
+import { footerNav } from "../data/nav";
 ---
 <footer class="bar foot">
   <div class="wrap fw">
@@ -10,9 +10,6 @@ import { closeCtas, footerNav } from "../data/nav";
         <div class="tag">Private Housing Advisory</div>
       </div>
     </div>
-    <nav class="fcta" aria-label="Start">
-      {closeCtas.map((c, i) => <a class={i === 1 ? "on" : ""} href={c.href}>{c.label}</a>)}
-    </nav>
   </div>
 </footer>
 <div class="legal">

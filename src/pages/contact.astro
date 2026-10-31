@@ -13,8 +13,8 @@ const nexts = ["Guidance", "Situation Assessment", "Property Assessment", "Livab
       <h1>Tell us the next step.</h1>
       <p class="lede">Share what is changing and which step you want: Guidance, Situation Assessment, Property Assessment, or a Livability Score.</p>
       <ul class="alt">
-        <li><a href="/#guide">Prefer Guidance? Open the Guidance Advisor <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
-        <li><a href="/calculator">Prefer the Situation Assessment? Request one <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
+        <li><a href="/guides">Prefer to read first? Open the Resource Hub <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
+        <li><a href="/belonging">Prefer the Situation Assessment? Request one <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a></li>
       </ul>
     </section>
 
@@ -46,19 +46,31 @@ const nexts = ["Guidance", "Situation Assessment", "Property Assessment", "Livab
 </Base>
 
 <script is:inline>
-  // Arriving from a situation page: fill in what changed and the decision, so nobody retypes it.
+  // Arriving from a page with context: fill in what changed, the decision and the next step, so nobody retypes them.
+  // decision = the choice on the table. next = the step they want. intent=property comes from building pages.
   (function () {
     var q = new URLSearchParams(location.search);
-    var sit = q.get("situation"), dec = q.get("decision");
     var form = document.querySelector("form");
     if (!form) return;
+    var sit = q.get("situation"), dec = q.get("decision"), building = q.get("building");
+    var intent = q.get("intent");
+    var nextFor = { Guidance: "Guidance", "Situation Assessment": "Situation Assessment", Property: "Property Assessment", "Property Assessment": "Property Assessment" };
+    var next = nextFor[q.get("next")] || (intent === "property" ? "Property Assessment" : "");
+
     if (dec) {
       var sel = form.querySelector('select[name="decision"]');
       if (sel) [].forEach.call(sel.options, function (o) { if (o.text === dec) sel.value = o.value || o.text; });
     }
-    if (sit) {
-      var ta = form.querySelector('textarea[name="changed"]');
-      if (ta && !ta.value) ta.value = sit + ": ";
+    if (next) {
+      var nextSel = form.querySelector('select[name="next"]');
+      if (nextSel && !nextSel.value) nextSel.value = next;
     }
+    if (intent === "property") {
+      var formName = form.querySelector('input[name="form"]');
+      if (formName) formName.value = "Property Inquiry";
+    }
+    var ta = form.querySelector('textarea[name="changed"]');
+    var lead = building || sit;
+    if (ta && lead && !ta.value) ta.value = lead + ": ";
   })();
 </script>
