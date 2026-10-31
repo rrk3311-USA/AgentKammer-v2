@@ -1,7 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 ---
-<Base title="Lantern House | Agent Kammer" description="One of the rare Manhattan buildings where the design is the argument.">
+<Base title="Lantern House | Agent Kammer" description="One of the rare Manhattan buildings where the design is the argument." context={{ building: "Lantern House" }}>
   <div class="lh">
     <div class="card">
       <div class="inner">
@@ -11,23 +11,18 @@ import Base from "../../layouts/Base.astro";
 
         <div class="hero-unit">
           <div class="photo"><img src="/images/lantern-house.jpg" width="1024" height="682" alt="Lantern House, West Chelsea" /></div>
-          <div class="pick">
-            <div>
-              <div class="lab">Verdict · placeholder</div>
-              <div class="val">Consider</div>
-            </div>
-            <span class="chip">Placeholder</span>
-          </div>
         </div>
 
+        <h3>Who it suits</h3>
         <div class="tint">
-          <h3>Who it suits</h3>
           <div class="fit">
             <div><b>Good fit</b>Professionals who care about design, founders and people who want a home with character.</div>
             <div><b>Possible</b>Finance professionals and international buyers, with more to weigh.</div>
             <div><b>Poor fit</b>Buyers who want value above all, or complete privacy.</div>
           </div>
         </div>
+
+                <p class="verdict-note">Buyer verdicts depend on who you are, how you want to live and what you need from a purchase. <a href="/contact?intent=property&building=Lantern%20House">Request a Property Assessment</a> for a verdict built around your situation.</p>
 
         <h3>The read</h3>
         <ul class="plain">
@@ -58,7 +53,7 @@ import Base from "../../layouts/Base.astro";
         <h3>Commute</h3>
         <p>Hudson Yards, Flatiron, Midtown and the Financial District are all within easy reach.</p>
 
-        <p class="fine">Educational only. Not an offer, advice or appraisal. The verdict is a placeholder.</p>
+        <p class="fine">Educational only. Not an offer, advice or appraisal. Not an offer, advice or appraisal.</p>
       </div>
     </div>
   </div>
@@ -160,12 +155,12 @@ import Base from "../../layouts/Base.astro";
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
   .tint {
-    background: none;
-    border: 0;
-    padding: 0;
-    margin-top: 30px;
+    background: rgba(42, 52, 71, 0.07);
+    border: 1px solid rgba(47, 49, 54, 0.22);
+    border-radius: 14px;
+    padding: 18px 18px 20px;
+    margin-top: 12px;
   }
-  .tint h3 { margin-top: 16px; }
   .fit { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .fit div { font: 400 15px/1.5 var(--sans, Inter, system-ui, sans-serif); }
   .fit b { display: block; font: 600 clamp(17px, 1.8vw, 20px) / 1.2 var(--sans, Inter, system-ui, sans-serif); color: var(--deep); margin-bottom: 8px; }
@@ -193,4 +188,6 @@ import Base from "../../layouts/Base.astro";
     .chip { font-size: 10px; letter-spacing: 0.14em; padding: 8px 12px; }
     .val { font-size: 22px; }
   }
+  .verdict-note { margin: 28px 0 0; font: 400 15px/1.6 var(--sans, Inter, system-ui, sans-serif); color: var(--deep); }
+  .verdict-note a { text-decoration: underline; text-underline-offset: 3px; }
 </style>

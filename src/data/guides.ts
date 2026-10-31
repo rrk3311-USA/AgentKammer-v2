@@ -17,7 +17,7 @@ export interface GuideItem {
 export const guideTabs: { type: GuideType; label: string; hash: string }[] = [
   { type: "f", label: "Field Guides", hash: "field-guides" },
   { type: "n", label: "Neighborhoods", hash: "neighborhoods" },
-  { type: "a", label: "Property Assessments", hash: "assessments" },
+  { type: "a", label: "Building Profiles", hash: "assessments" },
 ];
 
 export interface Neighborhood {
@@ -142,5 +142,8 @@ export const guideItems: GuideItem[] = [
   { type: "a", topic: "West Chelsea", title: "Lantern House", text: "One of the rare Manhattan buildings where the design is the argument.", meta: "14 min", href: "/building-reports/lantern-house", ready: true },
   { type: "a", topic: "West Chelsea", title: "One High Line", text: "What happens when a luxury tower is designed around the park beside it.", meta: "13 min", href: "/building-reports/one-high-line", ready: true },
   { type: "a", topic: "Reports", title: "2026 Executive Housing Report", text: "Manhattan modern residences for executives relocating.", meta: "Report", href: "/insights/reports/2026-executive-housing-report", ready: true },
+  { type: "a", topic: "Building profile", title: "565 Broome", text: "A minimalist building in SoHo, positioned around privacy.", meta: "Profile", href: "/building-reports/565-broome", ready: true },
+  { type: "a", topic: "Building profile", title: "35 Hudson Yards", text: "A corporate positioning, with large-scale amenities and a service-heavy operation.", meta: "Profile", href: "/building-reports/35-hudson-yards", ready: true },
+  { type: "a", topic: "Building profile", title: "The Cortland", text: "A family oriented waterfront building, with less direct High Line access.", meta: "Profile", href: "/building-reports/the-cortland", ready: true },
   { type: "a", topic: "Archive", title: "Building Profiles", text: "The address-study archive, with more buildings under study.", meta: "Archive", href: "/building-reports/individual-buildings", ready: true },
 ];
