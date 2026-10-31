@@ -27,7 +27,8 @@ import Base from "../layouts/Base.astro";
       </ol>
       <section class="stamp" aria-labelledby="sa-ask">
         <h2 id="sa-ask">Tell us what changed.</h2>
-        <form method="post">
+        <form method="post" action="/api/contact">
+          <input type="hidden" name="form" value="Situation Assessment" />
           <label>Name<input name="name" autocomplete="name" required /></label>
           <label>Email<input name="email" type="email" autocomplete="email" required /></label>
           <label class="full">What changed<textarea name="changed" rows="3"></textarea></label>
@@ -53,8 +54,7 @@ import Base from "../layouts/Base.astro";
 
 <style>
   .sa { background: var(--stone-blue); color: var(--ivory); padding: clamp(56px, 8vw, 96px) 0; }
-  .col { box-sizing: border-box; max-width: 880px; margin: 0 auto; padding: 0 clamp(16px, 6vw, 72px); display: flex; flex-direction: column; gap: 28px; text-align: left; }
-  .sa-head { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
+  .col { box-sizing: border-box; max-width: 880px; margin: 0 auto; padding: 0 clamp(16px, 6vw, 72px); display: flex; flex-direction: column; gap: 28px; text-align: left; }  .sa-head { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
   .icon { display: block; flex: 0 0 auto; width: 56px; height: 56px; }
   h1 { margin: 0; font: 500 clamp(40px, 5.2vw, 64px)/1 var(--serif); color: var(--ivory); white-space: nowrap; }
   .lede { margin: 0; font-size: 19px; line-height: 1.55; color: var(--ivory); max-width: 56ch; }

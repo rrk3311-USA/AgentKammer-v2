@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Icons from "../components/Icons.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import Guide from "../components/Guide.astro";
 
 interface Props {
   title: string;
@@ -35,6 +36,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <Header />
     <main class={mainClass}><slot /></main>
     <Footer />
+    <Guide />
     <script is:inline>
       // Site-wide context. The URL is the source of truth: each page reads what it was given, adds what
       // it is about (situation, area, building) when nothing is set yet, and passes every value on to

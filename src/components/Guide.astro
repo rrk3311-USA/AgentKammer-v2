@@ -1,0 +1,273 @@
+<aside class="guide" id="guide" aria-label="Guide">
+  <button class="launch" type="button" id="guide-launch" aria-expanded="false" aria-controls="guide-panel">Talk with the guide</button>
+
+  <div class="panel" id="guide-panel" hidden>
+    <div class="top">
+      <span class="who">Agent Kammer guide</span>
+      <button class="close" type="button" id="guide-close" aria-label="Minimize the guide">Minimize</button>
+    </div>
+
+    <div class="stage" id="guide-stage" aria-live="polite"></div>
+
+    <div class="log" id="guide-log" role="log" aria-live="polite"></div>
+
+    <form class="form" id="guide-form">
+      <label class="sr" for="guide-input">Your message</label>
+      <input id="guide-input" type="text" maxlength="1000" placeholder="Or type what changed" autocomplete="off" />
+      <button class="send" type="submit" id="guide-send">Send</button>
+    </form>
+    <p class="err" id="guide-err" hidden></p>
+  </div>
+</aside>
+
+<script>
+  // Inside another page's frame (the guide showing a site page), stay out of the way.
+  if (window.top !== window) {
+    document.getElementById("guide")?.remove();
+  } else {
+    const launch = document.getElementById("guide-launch") as HTMLButtonElement;
+    const panel = document.getElementById("guide-panel") as HTMLElement;
+    const close = document.getElementById("guide-close") as HTMLButtonElement;
+    const stage = document.getElementById("guide-stage") as HTMLElement;
+    const log = document.getElementById("guide-log") as HTMLElement;
+    const form = document.getElementById("guide-form") as HTMLFormElement;
+    const input = document.getElementById("guide-input") as HTMLInputElement;
+    const send = document.getElementById("guide-send") as HTMLButtonElement;
+    const err = document.getElementById("guide-err") as HTMLElement;
+
+    type Block =
+      | { type: "text"; text: string }
+      | { type: "slide"; title: string; points: string[]; takeaway?: string }
+      | { type: "page"; path: string; anchor?: string; reason: string }
+      | { type: "choices"; question: string; options: string[] }
+      | { type: "steps"; items: string[] };
+
+    // What the server needs to remember: visitor messages and a plain summary of what was shown.
+    const history: { role: "user" | "assistant"; content: string }[] = [];
+    let busy = false;
+    let opened = false;
+
+    const OPENED_KEY = "guide-opened";
+    const seenThisSession = () => {
+      try {
+        return sessionStorage.getItem(OPENED_KEY) === "1";
+      } catch {
+        return false;
+      }
+    };
+    const markSeen = () => {
+      try {
+        sessionStorage.setItem(OPENED_KEY, "1");
+      } catch {
+        /* private windows can refuse storage; the guide still works */
+      }
+    };
+
+    function setOpen(open: boolean) {
+      panel.hidden = !open;
+      launch.hidden = open;
+      launch.setAttribute("aria-expanded", String(open));
+      if (open) input.focus({ preventScroll: true });
+    }
+
+    function say(role: "user" | "bot", text: string) {
+      const p = document.createElement("p");
+      p.className = `msg ${role}`;
+      p.textContent = text;
+      log.append(p);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function el(tag: string, className: string, text?: string) {
+      const node = document.createElement(tag);
+      node.className = className;
+      if (text) node.textContent = text;
+      return node;
+    }
+
+    // Each visual replaces the stage, so the visitor always sees one thing at a time.
+    function show(block: Block) {
+      stage.replaceChildren();
+      if (block.type === "slide") {
+        const card = el("div", "slide");
+        card.append(el("h3", "", block.title));
+        const list = el("ul", "points");
+        for (const point of block.points) list.append(el("li", "", point));
+        card.append(list);
+        if (block.takeaway) card.append(el("p", "takeaway", block.takeaway));
+        stage.append(card);
+      }
+
+      if (block.type === "page") {
+        const frame = document.createElement("iframe");
+        frame.className = "frame";
+        frame.title = block.reason;
+        frame.src = block.path;
+        frame.addEventListener("load", () => {
+          // Same site, so the guide can tidy the page and scroll to the section it is talking about.
+          const doc = frame.contentDocument;
+          if (!doc) return;
+          doc.querySelectorAll("header, footer").forEach((node) => ((node as HTMLElement).style.display = "none"));
+          if (!block.anchor) return;
+          doc.getElementById(block.anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        const caption = el("p", "caption", block.reason);
+        const open = el("a", "open", "Open this page");
+        open.href = block.path;
+        stage.append(frame, caption, open);
+      }
+
+      if (block.type === "choices") {
+        const wrap = el("div", "choices");
+        wrap.append(el("p", "question", block.question));
+        const row = el("div", "options");
+        for (const option of block.options) {
+          const btn = el("button", "option", option) as HTMLButtonElement;
+          btn.type = "button";
+          btn.addEventListener("click", () => ask(option));
+          row.append(btn);
+        }
+        wrap.append(row);
+        stage.append(wrap);
+      }
+
+      if (block.type === "steps") {
+        const wrap = el("div", "steps");
+        wrap.append(el("p", "question", "Next steps"));
+        const list = el("ol", "");
+        for (const item of block.items) list.append(el("li", "", item));
+        wrap.append(list);
+        stage.append(wrap);
+      }
+    }
+
+    // Plays a reply in order: spoken lines go to the log, each visual takes the stage in turn.
+    // Slides and pages hold on screen long enough to read before the guide moves on.
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    async function play(blocks: Block[]) {
+      for (const block of blocks) {
+        if (block.type === "text") {
+          await wait(500);
+          say("bot", block.text);
+        } else {
+          show(block);
+          if (block.type === "slide" || block.type === "page") await wait(4500);
+        }
+      }
+    }
+
+    function pageContext() {
+      const q = new URLSearchParams(location.search);
+      const keys = ["situation", "decision", "building", "area"] as const;
+      return Object.fromEntries(keys.map((k) => [k, q.get(k) ?? ""]).filter(([, v]) => v));
+    }
+
+    async function request(messages: typeof history, opening: boolean) {
+      if (busy) return;
+      busy = true;
+      send.disabled = true;
+      err.hidden = true;
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ messages, opening, page: location.pathname, context: pageContext() }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? "Something went wrong.");
+        await play(data.blocks as Block[]);
+        history.push({ role: "assistant", content: data.summary || "[replied]" });
+      } catch (error) {
+        err.textContent = error instanceof Error ? error.message : "Something went wrong.";
+        err.hidden = false;
+      } finally {
+        busy = false;
+        send.disabled = false;
+      }
+    }
+
+    // The guide opens the conversation on its own, once per session.
+    function open() {
+      if (opened) return;
+      opened = true;
+      markSeen();
+      setOpen(true);
+      request([], true);
+    }
+
+    function ask(text: string) {
+      if (busy) return;
+      history.push({ role: "user", content: text });
+      say("user", text);
+      request([...history], false);
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      ask(text);
+    });
+
+    launch.addEventListener("click", () => {
+      if (!opened) open();
+      else setOpen(true);
+    });
+    close.addEventListener("click", () => setOpen(false));
+
+    // Proactive: start after a short read, or once the visitor has scrolled into the page.
+    if (!seenThisSession()) {
+      const timer = window.setTimeout(open, 12000);
+      const onScroll = () => {
+        const depth = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
+        if (depth > 0.35) {
+          window.clearTimeout(timer);
+          window.removeEventListener("scroll", onScroll);
+          open();
+        }
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
+  }
+</script>
+
+<style is:global>
+  #guide { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 60; font-family: var(--sans); }
+  #guide .launch { height: 48px; padding: 0 20px; border: 1px solid var(--stone-blue); background: var(--stone-blue); color: var(--ivory); font: 500 14px/1 var(--sans); cursor: pointer; box-shadow: 0 10px 24px rgba(42, 52, 71, 0.25); }
+  #guide .launch:hover { opacity: 0.9; }
+  #guide .panel { width: min(420px, calc(100vw - 32px)); max-height: min(640px, calc(100vh - 32px)); display: flex; flex-direction: column; background: var(--ivory); border: 1px solid var(--limestone); box-shadow: 0 18px 40px rgba(42, 52, 71, 0.28); color: var(--charcoal); }
+  #guide .panel[hidden] { display: none; }
+  #guide .top { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--stone-blue); color: var(--ivory); }
+  #guide .who { font: 500 11px/1 var(--sans); letter-spacing: 0.2em; text-transform: uppercase; }
+  #guide .close { border: 0; background: transparent; color: var(--ivory); font: 500 13px/1 var(--sans); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  #guide .stage { min-height: 220px; max-height: 320px; overflow: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid var(--limestone); }
+  #guide .stage:empty::before { content: "Starting the conversation..."; color: var(--titanium); font-size: 14px; }
+  #guide .slide { background: #fff; border: 1px solid var(--limestone); padding: 16px 18px; }
+  #guide .slide h3 { margin: 0 0 10px; font: 500 24px/1.15 var(--serif); color: var(--stone-blue); }
+  #guide .points { margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.5; }
+  #guide .takeaway { margin: 12px 0 0; font-size: 14px; color: var(--titanium); }
+  #guide .frame { width: 100%; height: 240px; border: 1px solid var(--limestone); background: #fff; }
+  #guide .caption { margin: 0; font-size: 14px; color: var(--charcoal); }
+  #guide .open { font-size: 13px; color: var(--stone-blue); text-decoration: underline; text-underline-offset: 3px; align-self: flex-start; }
+  #guide .question { margin: 0 0 10px; font: 500 17px/1.3 var(--serif); color: var(--stone-blue); }
+  #guide .options { display: flex; flex-wrap: wrap; gap: 8px; }
+  #guide .option { padding: 10px 14px; border: 1px solid var(--stone-blue); background: #fff; color: var(--stone-blue); font: 500 14px/1.2 var(--sans); cursor: pointer; }
+  #guide .option:hover { background: var(--stone-blue); color: var(--ivory); }
+  #guide .steps ol { margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.5; }
+  #guide .log { min-height: 0; max-height: 150px; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  #guide .log:empty { display: none; }
+  #guide .msg { margin: 0; max-width: 88%; padding: 8px 12px; font-size: 14px; line-height: 1.45; border: 1px solid var(--limestone); background: #fff; }
+  #guide .msg.user { align-self: flex-end; background: var(--stone-blue); color: var(--ivory); border-color: var(--stone-blue); }
+  #guide .form { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 12px 16px 16px; }
+  #guide .form input { min-width: 0; padding: 11px 12px; border: 1px solid #8E949B; background: #fff; font: 400 15px/1.3 var(--sans); color: var(--charcoal); }
+  #guide .send { height: 44px; padding: 0 18px; border: 0; background: var(--stone-blue); color: var(--ivory); font: 500 14px/1 var(--sans); cursor: pointer; }
+  #guide .send:disabled { opacity: 0.5; cursor: wait; }
+  #guide .err { margin: 0 16px 12px; color: #8a2a2a; font-size: 13px; }
+  #guide .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  @media (max-width: 600px) {
+    #guide { left: 0; right: 0; bottom: 0; padding: 0 max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); display: flex; justify-content: flex-end; }
+    #guide .panel { width: 100%; max-height: 82vh; }
+    #guide .stage { max-height: 40vh; }
+  }
+</style>
