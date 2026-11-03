@@ -23,47 +23,12 @@ const sources = [
 ];
 ---
 <Base title="Rapid Match | Agent Kammer" description="A free sample of an ideal property match, built from off-market and MLS sources. Answer a few questions to see one.">
-  <section class="hero">
-    <div class="wrap">
-      <div class="eyebrow">Free sample</div>
-      <h1>See an ideal match in three minutes.</h1>
-      <p class="lede">We read off-market, MLS and public records together, then score them against a few answers from you. This preview uses sample listings. Nothing here is a live feed yet.</p>
-
-      <figure class="feeds" aria-label="Three data sources feed one match engine, which returns one match">
-        <div class="rail">
-          {sources.map((s, i) => (
-            <div class={`line line-${i + 1}`}>
-              <span class="tag">{s.name}</span>
-              <span class="note">{s.note}</span>
-            </div>
-          ))}
-        </div>
-        <svg class="track" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
-          <path class="rail-path" d="M0 30 C 300 30, 340 110, 600 110" />
-          <path class="rail-path" d="M0 110 L 600 110" />
-          <path class="rail-path" d="M0 190 C 300 190, 340 110, 600 110" />
-          <path class="pulse pa" d="M0 30 C 300 30, 340 110, 600 110" />
-          <path class="pulse pb" d="M0 110 L 600 110" />
-          <path class="pulse pc" d="M0 190 C 300 190, 340 110, 600 110" />
-        </svg>
-        <div class="engine">
-          <img class="eng-q" src="/images/quick-match-q.webp" alt="" width="124" height="124" />
-          <span class="core">Match engine</span>
-          <span class="sub">scores every listing</span>
-        </div>
-        <div class="result">
-          <span class="core">Your match</span>
-          <span class="sub">one property, with reasons</span>
-        </div>
-      </figure>
-    </div>
-  </section>
-
   <section class="wrap bento8 b8" aria-labelledby="b8-h">
     <div class="b8-hd">
-      <div class="eyebrow">Under the hood</div>
-      <h2 id="b8-h">Three feeds, one <em>match</em> in minutes.</h2>
-      <p class="b8-lede">A look at how a match comes together. These diagrams are illustrations, not a live feed.</p>
+      <div class="eyebrow">Free sample</div>
+      <h1 id="b8-h">See an ideal <em>match</em> in three minutes.</h1>
+      <p class="b8-lede">We read off-market, MLS and public records together, then score them against a few answers from you. Here is how it works, then try it below. The diagrams are illustrations and the listings are samples, not a live feed.</p>
+      <a class="btn" href="#quiz">Try it now <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
     </div>
     <div class="b8-grid">
       <div class="b8-fr b8-wide"><i class="b8-c tl"></i><i class="b8-c tr"></i><i class="b8-c bl"></i><i class="b8-c br"></i>
@@ -80,8 +45,8 @@ const sources = [
               <g><rect x="20" y="24" width="110" height="28" rx="3" class="nd" style="stroke:#B08D57;fill:#F8F2E6"/><circle cx="31" cy="38" r="3" fill="#B08D57"/><text x="42" y="42">OFF-MARKET</text></g>
               <g><rect x="20" y="74" width="110" height="28" rx="3" class="nd" style="stroke:#5B7494;fill:#EEF1F6"/><circle cx="31" cy="88" r="3" fill="#5B7494"/><text x="42" y="92">MLS</text></g>
               <g><rect x="20" y="124" width="110" height="28" rx="3" class="nd" style="stroke:#2A3447;fill:#E9EBF0"/><circle cx="31" cy="138" r="3" fill="#2A3447"/><text x="42" y="142">PUBLIC RECORDS</text></g>
-              <g><circle cx="320" cy="110" r="46" fill="none" stroke="#F6C98A" stroke-opacity=".4" class="gl"/><circle cx="320" cy="110" r="38" fill="#0B1A44" stroke="#F6C98A" stroke-width="1.8"/><image href="/images/quick-match-q.webp" x="284" y="74" width="72" height="72" preserveAspectRatio="xMidYMid slice" clip-path="circle(36px at 36px 36px)"/><text x="320" y="170" text-anchor="middle" font-size="7.5" style="fill:#F5F2EB">MATCH ENGINE</text></g>
-              <g>
+              <g><circle cx="320" cy="110" r="46" fill="none" stroke="#F6C98A" stroke-opacity=".4" class="gl"/><circle cx="320" cy="110" r="38" fill="#0B1A44" stroke="#F6C98A" stroke-width="1.8"/><image href="/images/quick-match-q-round.webp" x="284" y="74" width="72" height="72" preserveAspectRatio="xMidYMid slice"/><text x="320" y="170" text-anchor="middle" font-size="7.5" style="fill:#F5F2EB">MATCH ENGINE</text></g>
+              <g transform="translate(450,92) scale(.74) translate(-450,-92)">
                 <g transform="translate(474,30)" opacity=".5"><rect width="138" height="102" rx="2" fill="#fff" stroke="#d6d2c8"/></g>
                 <g transform="translate(462,40)" opacity=".75"><rect width="138" height="102" rx="2" fill="#fff" stroke="#d6d2c8"/></g>
                 <g transform="translate(450,50)"><g class="sheet" id="b8-sheet"><rect width="138" height="102" rx="2" fill="#fff" stroke="#d6d2c8"/>
@@ -96,7 +61,7 @@ const sources = [
             <circle r="2.6" class="pk"><animateMotion dur="2.6s" begin=".8s" repeatCount="indefinite" path="M130,138 C200,138 235,110 282,110"/></circle>
             <circle r="2.6" class="pk"><animateMotion dur="2s" repeatCount="indefinite" path="M358,110 C405,110 418,86 450,86"/></circle>
           </svg>
-          <div class="b8-cp"><div><h3>Every feed, read together</h3><p>Off-market, MLS and public records land in one place instead of three tabs.</p></div><div><h3>A match report, ready</h3><p>Your best fit comes back as a short report, with the building research behind it.</p></div></div>
+          <div class="b8-cp"><div><h3>1. Every feed, read together</h3><p>Off-market, MLS and public records land in one place instead of three tabs.</p></div><div><h3>4. A match report, ready</h3><p>Your best fit comes back as a short report, with the building research behind it.</p></div></div>
         </div>
       </div>
       <div class="b8-fr"><i class="b8-c tl"></i><i class="b8-c tr"></i><i class="b8-c bl"></i><i class="b8-c br"></i>
@@ -107,7 +72,7 @@ const sources = [
             <g id="b8-tiles" font-family="Inter,sans-serif" font-size="8" fill="#6b6f76" text-anchor="middle"></g>
             <text id="b8-sync" x="150" y="112" text-anchor="middle" font-size="7" fill="#9a9ea5" font-family="monospace">4 connected</text>
           </svg>
-          <div class="b8-tx"><h3>Sources hub</h3><p>Off-market, MLS, public records and your answers, synced into one match.</p></div>
+          <div class="b8-tx"><h3>2. Your answers join the sources</h3><p>Where, how many bedrooms, budget and must-haves are matched against every feed.</p></div>
         </div>
       </div>
       <div class="b8-fr"><i class="b8-c tl"></i><i class="b8-c tr"></i><i class="b8-c bl"></i><i class="b8-c br"></i>
@@ -123,7 +88,7 @@ const sources = [
             <circle id="b8-dot" r="3.4" fill="#fff" stroke="#B08D57" stroke-width="2"/>
             <g id="b8-tip"><rect x="-30" y="-11" width="60" height="15" rx="2" fill="#2A3447"/><text id="b8-tt" x="0" y="-1" text-anchor="middle" font-size="7.5" fill="#F5F2EB" font-family="monospace"></text></g>
           </svg>
-          <div class="b8-tx"><h3>Match score</h3><p>An example of how listings score against your answers. Move across the chart to scrub.</p></div>
+          <div class="b8-tx"><h3>3. Every listing is scored</h3><p>Closer fits rise to the top, and you see the best one with the reasons. Move across the chart to scrub.</p></div>
         </div>
       </div>
     </div>
@@ -359,6 +324,8 @@ ch.addEventListener("pointerleave",function(){at(vals.length-1,false);});
   .b8 { padding-top: 56px; padding-bottom: 8px; }
   .b8-hd { display: grid; gap: 10px; justify-items: start; margin-bottom: 28px; }
   .b8-hd h2 { margin: 0; font: 500 clamp(28px, 4vw, 40px)/1.1 var(--serif); color: var(--stone-blue); }
+  .b8-hd h1 { margin: 0; font: 500 clamp(36px, 5.2vw, 60px)/1.05 var(--serif); color: #F5F2EB; text-wrap: balance; } .b8-hd h1 em { font-style: italic; color: #F6C98A; }
+  .b8-hd .btn { margin-top: 8px; background: #F5F2EB; color: #2A3447; border-color: #F6C98A; }
   .b8-hd h2 em { font-style: italic; color: var(--champagne); }
   .b8-lede { margin: 0; max-width: 60ch; font-size: 16px; line-height: 1.6; color: var(--charcoal); }
   .b8-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 28px; background-color: var(--ivory); background-image: repeating-linear-gradient(135deg, rgba(42,52,71,.05) 0 1px, transparent 1px 10px); border: 1px solid rgba(42,52,71,.12); }
@@ -408,4 +375,25 @@ ch.addEventListener("pointerleave",function(){at(vals.length-1,false);});
   .b8 svg > rect:first-of-type { fill: none; }
   .b8 svg circle[fill="#5B7494"] { fill: #9FB3D1; } .b8 svg circle[fill="#2A3447"] { fill: #D5D8DD; }
   .b8 #b8-tiles circle { filter: none; }
+
+  /* Quiz and week plan share the navy glass look of the top section */
+  main section.quiz.wrap, main section.week.wrap { max-width: none; width: 100%; margin: 0; background: radial-gradient(circle at 18% 0%, #2a3f78 0%, #17306A 38%, #0B1A44 100%); color: #C3CBE0; padding-inline: max(clamp(16px, 5vw, 56px), calc((100% - 1120px) / 2)); border-bottom: 1px solid rgba(95,134,208,.45); }
+  main section.quiz.wrap { padding-top: 64px; padding-bottom: 72px; }
+  main section.week.wrap { padding-top: 64px; padding-bottom: 72px; border-bottom: 0; }
+  main section.quiz.wrap .eyebrow, main section.week.wrap .eyebrow { color: #F6C98A; }
+  main section.quiz.wrap h2, main section.week.wrap h2 { color: #F5F2EB !important; }
+  main section.quiz.wrap legend { color: #C3CBE0; }
+  main section.quiz.wrap .opt span { background: rgba(245,242,235,.07); border-color: rgba(160,185,235,.35); color: #F5F2EB; }
+  main section.quiz.wrap .opt:hover span { border-color: #F6C98A; }
+  main section.quiz.wrap .opt input:checked + span, main section.quiz.wrap .opt input:focus-visible + span { background: #F5F2EB; color: #2A3447; border-color: #F6C98A; }
+  main section.quiz.wrap .btn { background: #F5F2EB; color: #2A3447; border-color: #F6C98A; }
+  main section.quiz.wrap .small, main section.week.wrap .week-lede { color: #C3CBE0; }
+  main section.week.wrap .gantt { border-color: rgba(160,185,235,.28); border-top: 2px solid #F6C98A; border-radius: 10px; background: rgba(245,242,235,.07); overflow: hidden; }
+
+  /* Larger diagram and chart labels */
+  .b8 svg text { font-size: 9.5px; letter-spacing: .5px; }
+  .b8 #b8-tiles { font-size: 10px; } .b8 #b8-sync { font-size: 9px; fill: #C3CBE0; }
+  .b8 #b8-tip text, .b8 #b8-tt { font-size: 9px; }
+  .b8 #b8-sheet text { font-size: 8px; }
+  .b8-cd h3 { font-size: 15px; } .b8-cd p { font-size: 14px; color: #C9D1E6; }
 </style>

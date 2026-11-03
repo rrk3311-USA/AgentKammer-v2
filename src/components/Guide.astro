@@ -374,7 +374,8 @@
         #guide .launch-text { display: grid; gap: 3px; text-align: left; padding-left: 12px; border-left: 1px solid rgba(245, 242, 235, 0.55); }
   #guide .launch-text b { font: 500 15px/1 var(--serif); letter-spacing: 0.12em; text-transform: uppercase; color: #F5F2EB; }
   #guide .launch-text small { display: none; }
-  #guide[data-style="royal"] .launch-avatar { top: -26px; right: 6px; width: 32px; height: 42px; }
+  #guide[data-style="royal"] .launch-avatar { top: 50%; bottom: auto; right: 8px; width: 30px; height: 30px; margin-top: -15px; overflow: hidden; border-radius: 50%; background: linear-gradient(180deg, #E9E4D8, #CFC8B8); box-shadow: 0 0 0 1px rgba(176, 141, 87, 0.7); }
+  #guide[data-style="royal"] .launch-avatar img { width: 120%; height: 120%; margin: 10% 0 0 -6%; object-fit: cover; object-position: 50% 12%; filter: none; }
   #guide[data-style="royal"] .dot { width: 9px; height: 9px; box-shadow: 0 0 6px #4FA86A; }
   #guide[data-style="royal"] .panel { width: min(340px, calc(100vw - 32px)); border-radius: 18px; }
   #guide[data-style="royal"] .top { border-radius: 17px 17px 0 0; }
@@ -482,7 +483,7 @@
   #guide .send:disabled { opacity: 0.5; cursor: wait; }
   /* Liquid metal send button: a brushed-steel rim that drifts, a dark body and a sheen on hover. */
   #guide .send, .nm-form button[type="submit"] { position: relative; isolation: isolate; overflow: hidden; border: 0; border-radius: 10px; padding: 0 20px; background: linear-gradient(180deg, #2b3138, #14181d); color: #EEF0F2; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 6px 14px rgba(20, 24, 29, 0.35); }
-  #guide .send::before, .nm-form button[type="submit"]::before { content: ""; position: absolute; inset: 0; z-index: -2; border-radius: inherit; background: conic-gradient(from var(--lm, 0deg), #f4f6f8, #7b8590, #d9dde1, #4a525b, #f4f6f8 40%, #8d97a1, #e9ecef, #5b636c, #f4f6f8); animation: lm-spin 6s linear infinite; }
+  #guide .send::before, .nm-form button[type="submit"]::before { content: ""; position: absolute; inset: 0; z-index: -2; border-radius: inherit; background: conic-gradient(from var(--lm, 0deg), #f4f6f8, #7b8590, #d9dde1, #4a525b, #f4f6f8 40%, #8d97a1, #e9ecef, #5b636c, #f4f6f8); animation: lm-spin 18s linear infinite; }
   #guide .send::after, .nm-form button[type="submit"]::after { content: ""; position: absolute; inset: 1.5px; z-index: -1; border-radius: 8.5px; background: linear-gradient(180deg, #2b3138, #14181d); }
   #guide .send span, .nm-form button[type="submit"] span { position: relative; }
   #guide .send:hover:not(:disabled), .nm-form button[type="submit"]:hover { filter: brightness(1.12); transform: translateY(-1px); }
@@ -498,4 +499,31 @@
     #guide .panel { width: 100%; max-height: 84vh; }
     #guide .stage { max-height: 38vh; }
   }
+
+  /* Dark navy panel, the same glass as the Quick match page. */
+  #guide[data-style="royal"] { --g-ink: #F5F2EB; --g-body: #0B1A44; --g-paper: radial-gradient(circle at 18% 0%, #2a3f78 0%, #17306A 38%, #0B1A44 100%); --g-accent: #F6C98A; --g-rule: rgba(246, 201, 138, 0.7); --g-soft: rgba(160, 185, 235, 0.3); --g-glow: rgba(5, 10, 30, 0.55); --g-head-ink: #F5F2EB; }
+  #guide[data-style="royal"] .panel { border-color: rgba(160, 185, 235, 0.45); }
+  #guide[data-style="royal"] .title { color: #F5F2EB; }
+  #guide[data-style="royal"] .close { color: #C3CBE0; border-bottom-color: rgba(195, 203, 224, 0.6); }
+  #guide[data-style="royal"] .close:hover { color: #F6C98A; border-bottom-color: #F6C98A; }
+  #guide[data-style="royal"] .names strong { color: #F5F2EB; }
+  #guide[data-style="royal"] .status, #guide[data-style="royal"] .label { color: #C3CBE0; }
+  #guide[data-style="royal"] .stage, #guide[data-style="royal"] .log { background: rgba(245, 242, 235, 0.07); box-shadow: inset 0 0 0 1px rgba(160, 185, 235, 0.28); border-radius: 8px; }
+  #guide[data-style="royal"] .msg, #guide[data-style="royal"] .stage p, #guide[data-style="royal"] .points li { color: #D7DDEE; }
+  #guide[data-style="royal"] .msg.user { color: #F6C98A; }
+  #guide[data-style="royal"] .form input { border: 1px solid rgba(160, 185, 235, 0.45); border-radius: 8px; background: rgba(245, 242, 235, 0.08); color: #F5F2EB; }
+  #guide[data-style="royal"] .form input::placeholder { color: #9AA6C4; }
+  #guide[data-style="royal"] .form input:focus-visible { border-color: #F6C98A; box-shadow: 0 0 0 3px rgba(246, 201, 138, 0.18); }
+  #guide .note { color: #9AA6C4; }
+  #guide .err { color: #F4A3A3; }
+  #guide[data-style="royal"] .who .avatar { display: none; }
+
+  /* Launcher avatar: a glowing orb with blinking eyes (plain CSS port of the React avatar, in the navy and champagne palette). */
+  #guide[data-style="royal"] .launch-avatar { width: 24px; height: 24px; margin-top: -12px; right: 10px; background: radial-gradient(circle at 50% 45%, #050d26 0%, #0B1A44 45%, #17306A 78%, #2a3f78 100%); box-shadow: none; display: flex; align-items: center; justify-content: center; gap: 3px; }
+  #guide[data-style="royal"] .launch-avatar img { display: none; }
+  #guide[data-style="royal"] .launch-avatar::before, #guide[data-style="royal"] .launch-avatar::after { content: ""; width: 3px; height: 7px; margin-top: -1px; border-radius: 999px; background: linear-gradient(135deg, #F5F2EB 0%, #F6C98A 100%); animation: guide-blink 5.4s ease-in-out infinite; }
+  #guide[data-style="royal"] .launch-avatar::after { animation-delay: 60ms; }
+  #guide[data-style="royal"] .launch-avatar { background-image: radial-gradient(ellipse at 30% 24%, rgba(160, 185, 235, 0.35) 0%, rgba(160, 185, 235, 0.06) 50%, transparent 70%), radial-gradient(circle at 50% 45%, #050d26 0%, #0B1A44 45%, #17306A 78%, #2a3f78 100%); }
+  @keyframes guide-blink { 0%, 88%, 100% { transform: scaleY(1); } 93%, 97% { transform: scaleY(0.07); } }
+  @media (prefers-reduced-motion: reduce) { #guide[data-style="royal"] .launch-avatar::before, #guide[data-style="royal"] .launch-avatar::after { animation: none; } }
 </style>

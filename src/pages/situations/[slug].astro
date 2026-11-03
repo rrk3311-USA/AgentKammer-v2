@@ -21,7 +21,6 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
 <Base title={title} description={description} context={kind === "n" ? { area: n.name } : kind === "s" ? { situation: s.name } : {}}>
   {kind === "n" ? (
     <article class="wrap nb">
-      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#neighborhoods">Resource Hub</a><i aria-hidden="true">/</i><a href="/guides#neighborhoods">Neighborhoods</a></nav>
       <header>
         <div class="eyebrow">NYC neighborhood</div>
         <h1>{n.name}</h1>
@@ -56,10 +55,11 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
           <a class="btn ghost" href="/guides#neighborhoods">All neighborhoods <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
         </div>
       </div>
+    
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#neighborhoods">Insights</a><i aria-hidden="true">/</i><a href="/guides#neighborhoods">Neighborhoods</a></nav>
     </article>
   ) : kind === "g" ? (
     <article class="wrap nb gd">
-      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#field-guides">Resource Hub</a><i aria-hidden="true">/</i><a href="/guides#field-guides">Field Guides</a></nav>
       <header>
         <div class="eyebrow">Field guide</div>
         <h1>{g.title}</h1>
@@ -103,7 +103,6 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
         </section>
       )}
 
-      <p class="gd-note">General information, not legal, tax or financial advice. Confirm details with your attorney.</p>
 
       <div class="gcta">
         <p>Want a read on your own building?</p>
@@ -112,10 +111,13 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
           <a class="btn ghost" href="/guides#field-guides">All field guides <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
         </div>
       </div>
+    
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#field-guides">Insights</a><i aria-hidden="true">/</i><a href="/guides#field-guides">Field Guides</a></nav>
+    
+      <p class="gd-note">General information, not legal, tax or financial advice. Confirm details with your attorney.</p>
     </article>
   ) : (
     <article class="wrap nb sit">
-      <nav class="crumb" aria-label="Breadcrumb"><a href="/situations">What's changing</a><i aria-hidden="true">/</i><span>{s.name}</span></nav>
       <header>
         <div class="eyebrow">What's changing</div>
         <h1>{s.title}</h1>
@@ -152,7 +154,6 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
         </section>
       )}
 
-      <p class="gd-note">General information, not legal, tax or financial advice.</p>
 
       <div class="gcta">
         <p>Ready for a read on your own situation?</p>
@@ -161,6 +162,10 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
           <a class="btn ghost" href="/situations">All situations <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
         </div>
       </div>
+    
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/situations">What's changing</a><i aria-hidden="true">/</i><span>{s.name}</span></nav>
+    
+      <p class="gd-note">General information, not legal, tax or financial advice.</p>
     </article>
   )}
 </Base>

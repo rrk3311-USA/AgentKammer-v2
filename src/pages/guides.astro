@@ -5,11 +5,11 @@ import { guideItems, guideTabs } from "../data/guides";
 const topics = (type: string) => [...new Set(guideItems.filter((g) => g.type === type).map((g) => g.topic))];
 const count = (type: string) => guideItems.filter((g) => g.type === type).length;
 ---
-<Base title="Resource Hub | Agent Kammer" description="Neighborhoods, field guides and property assessments in one place. Search all of it.">
+<Base title="Insights | Agent Kammer" description="Neighborhoods, field guides and property assessments in one place. Search all of it.">
   <div class="wrap gh">
-    <h1 class="gh-sr">Resource Hub</h1>
+    <h1 class="gh-sr">Insights</h1>
     <figure class="gh-banner">
-      <img src="/images/guides-banner.webp" width="2000" height="588" alt="Curved glass tower against a clear teal sky" fetchpriority="high" decoding="async" />
+      <img src="/images/insights-banner-arch.jpg" width="2000" height="1500" alt="Looking up through a curved perforated panel arch in black and white" fetchpriority="high" decoding="async" />
       <div class="gtabs" role="tablist" aria-label="Guide types">
         {guideTabs.map((t, i) => (
           <button class="gtab" role="tab" type="button" data-t={t.type} data-hash={t.hash} aria-selected={i === 0 ? "true" : "false"}>

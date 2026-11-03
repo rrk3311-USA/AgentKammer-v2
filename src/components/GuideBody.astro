@@ -9,28 +9,42 @@ interface Props {
   recommendation: string;
   cta: { href: string; label: string };
   banner?: { src: string; alt: string };
+  cards?: { name: string; hood: string; type: string; href: string; img: string }[];
 }
-const { crumbs, eyebrow, title, lead, decide, recommendation, cta, banner } = Astro.props;
+const { crumbs: rawCrumbs, eyebrow, title, lead, decide, recommendation, cta, banner, cards } = Astro.props;
+// Drop a middle crumb that repeats the page name.
+const last = rawCrumbs[rawCrumbs.length - 1];
+const crumbs = rawCrumbs.filter((c, i) => i === rawCrumbs.length - 1 || c.label.toLowerCase() !== last.label.toLowerCase());
 ---
-<article class="wrap nb gd">
-  <nav class="crumb" aria-label="Breadcrumb">
-    {crumbs.map((c, i) => (
-      <>
-        {c.href ? <a href={c.href}>{c.label}</a> : <span>{c.label}</span>}
-        {i < crumbs.length - 1 && <i aria-hidden="true">/</i>}
-      </>
-    ))}
-  </nav>
+<article class={`wrap nb gd${banner ? " has-banner" : ""}`}>
   {banner && (
-    <figure style="margin: 28px 0 28px">
-      <img src={banner.src} alt={banner.alt} width="2000" height="1250" style="display: block; width: 100%; height: auto; aspect-ratio: 2000 / 625; object-fit: cover" decoding="async" />
+    <figure class="gh-banner gb-banner">
+      <img src={banner.src} alt={banner.alt} width="2000" height="1250" fetchpriority="high" decoding="async" />
+      <div class="gtabs" role="presentation"><span class="gtab" aria-selected="true">{title}</span></div>
     </figure>
   )}
   <header>
-    <div class="eyebrow">{eyebrow}</div>
+    {!banner && <div class="eyebrow">{eyebrow}</div>}
     <h1>{title}</h1>
     <p class="lede">{lead}</p>
   </header>
+
+  {cards && cards.length > 0 && (
+    <section class="bcards" aria-labelledby="gb-c">
+      <h2 id="gb-c">Explore the buildings</h2>
+      <ul>
+        {cards.map((c) => (
+          <li>
+            <a href={c.href}>
+              <img src={c.img} alt={c.name} width="600" height="400" loading="lazy" decoding="async" />
+              <span class="bc-meta"><b>{c.name}</b><span>{c.hood}</span><em>{c.type}</em></span>
+              <span class="bc-go">View profile <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   <section class="nb-decide" aria-labelledby="gb-d">
     <h2 id="gb-d">Decide first</h2>
@@ -42,7 +56,6 @@ const { crumbs, eyebrow, title, lead, decide, recommendation, cta, banner } = As
     <p>{recommendation}</p>
   </section>
 
-  <p class="gd-note">General information, not legal, tax or financial advice. Confirm details with your attorney.</p>
 
   <div class="gcta">
     <p>Want a read on your own situation?</p>
@@ -51,4 +64,14 @@ const { crumbs, eyebrow, title, lead, decide, recommendation, cta, banner } = As
       <a class="btn ghost" href="/guides">All guides <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
     </div>
   </div>
-</article>
+  <nav class="crumb" aria-label="Breadcrumb">
+    {crumbs.map((c, i) => (
+      <>
+        {c.href ? <a href={c.href}>{c.label}</a> : <span>{c.label}</span>}
+        {i < crumbs.length - 1 && <i aria-hidden="true">/</i>}
+      </>
+    ))}
+  </nav>
+
+  <p class="gd-note">General information, not legal, tax or financial advice. Confirm details with your attorney.</p>
+    </article>

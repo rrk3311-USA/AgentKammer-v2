@@ -2,6 +2,9 @@
 import Base from "../layouts/Base.astro";
 ---
 <Base title="Situation Assessment | Agent Kammer" description="Figure out your situation. Tell us what changed, and we send back a personal profile of where you stand.">
+  <figure class="sa-banner">
+    <img src="/images/assessment-banner.jpg" width="2000" height="1333" alt="A Manhattan tower with a lit rooftop frame at dusk, the downtown skyline beyond" fetchpriority="high" decoding="async" />
+  </figure>
   <section class="sa">
     <div class="col">
       <div class="sa-head">
@@ -53,6 +56,9 @@ import Base from "../layouts/Base.astro";
 </script>
 
 <style>
+  .sa-banner { margin: 0; line-height: 0; background: var(--stone-blue); }
+  .sa-banner img { display: block; width: 100%; height: clamp(220px, 30vw, 440px); object-fit: cover; object-position: center 42%; }
+  @media (max-width: 640px) { .sa-banner img { height: 180px; } }
   .sa { background: var(--stone-blue); color: var(--ivory); padding: clamp(56px, 8vw, 96px) 0; }
   .col { box-sizing: border-box; max-width: 880px; margin: 0 auto; padding: 0 clamp(16px, 6vw, 72px); display: flex; flex-direction: column; gap: 28px; text-align: left; }  .sa-head { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
   .icon { display: block; flex: 0 0 auto; width: 56px; height: 56px; }

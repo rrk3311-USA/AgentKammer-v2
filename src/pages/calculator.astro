@@ -13,6 +13,10 @@ const fields = [
 ---
 <Base mainClass="pp" title="Calculator | Agent Kammer" description="What does this home cost each month? Mortgage, tax and common charges. Educational, not a pre-approval.">
   <div class="wrap calc">
+    <div class="print-head" aria-hidden="true">
+      <span class="ph-brand"><svg class="mk" aria-hidden="true"><use href="#ak" /></svg>Agent Kammer</span>
+      <span class="ph-meta">Monthly carry estimate · <span id="print-date"></span></span>
+    </div>
     <section class="top">
       <div>
         <div class="eyebrow">Calculator</div>
@@ -82,6 +86,7 @@ const fields = [
         $(id).addEventListener("input", run);
         if (id === "price" || id === "tax" || id === "cc") $(id).addEventListener("blur", function () { this.value = num(id).toLocaleString("en-US"); });
       });
+      var pd = $("print-date"); if (pd) pd.textContent = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
       $("pdf").addEventListener("click", function () { window.print(); });
       run();
     })();

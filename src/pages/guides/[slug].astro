@@ -10,7 +10,7 @@ const { g } = Astro.props as any;
 ---
 <Base title={`${g.title} | Agent Kammer`} description={g.blurb}>
   <GuideBody
-    crumbs={[{ label: "Resource Hub", href: "/guides" }, { label: "Field guides", href: "/guides#field-guides" }, { label: g.title }]}
+    crumbs={[{ label: "Insights", href: "/guides" }, { label: "Field guides", href: "/guides#field-guides" }, { label: g.title }]}
     eyebrow={g.eyebrow} title={g.title} lead={g.lead} decide={g.decide} recommendation={g.recommendation}
     cta={{ href: "/belonging", label: "Request a Situation Assessment" }} />
 </Base>

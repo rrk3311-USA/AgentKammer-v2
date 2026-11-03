@@ -8,11 +8,18 @@ export function getStaticPaths() {
   return slugs.map((slug) => ({ params: { slug }, props: { g: propertyAssessments[slug] } }));
 }
 const { g } = Astro.props as any;
+const cards = [
+  { name: "Lantern House", hood: "West Chelsea", type: "Condominium", href: "/building-reports/lantern-house", img: "/images/lantern-house.jpg" },
+  { name: "One High Line", hood: "West Chelsea", type: "Condominium", href: "/building-reports/one-high-line", img: "/images/one-high-line.jpg" },
+  { name: "The Cortland", hood: "West Chelsea", type: "Condominium", href: "/building-reports/the-cortland", img: "/images/the-cortland.jpg" },
+  { name: "35 Hudson Yards", hood: "Hudson Yards", type: "Condominium", href: "/building-reports/35-hudson-yards", img: "/images/35-hudson-yards.jpg" },
+  { name: "565 Broome", hood: "SoHo and Hudson Square", type: "Condominium", href: "/building-reports/565-broome", img: "/images/565-broome.jpg" },
+];
 ---
 <Base title={`${g.title} | Agent Kammer`} description={g.blurb}>
-  <GuideBody
-    crumbs={[{ label: "Resource Hub", href: "/guides" }, { label: "Building profiles", href: "/guides#field-guides" }, { label: g.title }]}
+  <GuideBody cards={cards}
+    crumbs={[{ label: "Insights", href: "/guides" }, { label: "Building profiles", href: "/guides#field-guides" }, { label: g.title }]}
     eyebrow={g.eyebrow} title={g.title} lead={g.lead} decide={g.decide} recommendation={g.recommendation}
     cta={{ href: "/contact?intent=property", label: "Request a Property Assessment" }}
-    banner={{ src: "/images/buildings-banner.jpg", alt: "Looking up at a tall glass tower in black and white" }} />
+    banner={{ src: "/images/buildings-banner-dark.jpg", alt: "Black vertical-slat facade with grey glass windows" }} />
 </Base>

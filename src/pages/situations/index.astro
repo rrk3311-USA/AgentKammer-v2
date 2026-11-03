@@ -6,34 +6,41 @@ const bySlug = (slug: string) => situations.find((s) => s.slug === slug)!;
 ---
 <Base title="What's changing | Agent Kammer" description="Start from what changed. Pick the life event closest to yours.">
   <div class="wrap gh sh">
+    <figure class="gh-banner gb-banner">
+      <img src="/images/situations-banner-windows.jpg" width="2000" height="1168" alt="Tall steel-framed windows glowing with warm light on a brick facade" fetchpriority="high" decoding="async" />
+      <div class="gtabs" role="presentation"><span class="gtab" aria-selected="true">What's changing</span></div>
+    </figure>
+    <div class="pk-band">
     <header class="gh-head">
-      <div class="eyebrow">What's changing</div>
       <h1>Start from what changed.</h1>
-      <p class="lede">Name the life event, pressure, or uncertainty. Neighborhoods and inventory come later.</p>
-      <a class="btn" href="/belonging">Not sure? Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
     </header>
 
-    {situationGroups.map((g) => (
-      <section class="sh-group" aria-labelledby={`g-${g.title.replace(/\W+/g, "-").toLowerCase()}`}>
-        <h2 id={`g-${g.title.replace(/\W+/g, "-").toLowerCase()}`}>{g.title}</h2>
-        <div class="glist">
-          {g.slugs.map((slug) => {
-            const s = bySlug(slug);
-            const inner = (
-              <>
-                <span class="k">Situation</span>
-                <span class="t">{s.name}</span>
-                <span class="m">{s.ready ? "Open" : "Coming soon"}</span>
-                <span class="d">{s.blurb}</span>
-              </>
-            );
-            return s.ready
-              ? <a class="grow" href={`/situations/${s.slug}`}>{inner}</a>
-              : <div class="grow soon">{inner}</div>;
-          })}
-        </div>
-      </section>
-    ))}
+    <section class="pk" aria-labelledby="pk-q">
+      <div class="pk-pick">
+        <h2 id="pk-q">What is closest to your situation?</h2>
+        {situationGroups.map((g) => (
+          <div class="pk-grp">
+            <div class="pk-k">{g.title}</div>
+            <div class="pk-chips">
+              {g.slugs.map((slug) => {
+                const s = bySlug(slug);
+                return s.ready
+                  ? <a class="pk-chip" href={`/situations/${s.slug}`} data-name={s.name} data-group={g.title} data-blurb={s.blurb} data-recommend={s.recommendation ?? ""} aria-pressed="false">{s.name}</a>
+                  : <span class="pk-chip soon">{s.name} <em>Soon</em></span>;
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      <aside class="pk-pv" id="pk-pv" aria-live="polite">
+        <span class="pk-k" id="pk-pg">Pick a situation</span>
+        <h3 id="pk-pn">Start with what changed.</h3>
+        <p id="pk-pb">Choose the life event closest to yours and we show what that page covers.</p>
+        <p class="pk-rec" id="pk-pr" hidden></p>
+        <a class="pk-go" id="pk-pa" href="/belonging" hidden>Read this situation <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+      </aside>
+    </section>
+    </div>
 
     <div class="gcta">
       <h2>Not sure which one is yours?</h2>
@@ -42,3 +49,25 @@ const bySlug = (slug: string) => situations.find((s) => s.slug === slug)!;
     </div>
   </div>
 </Base>
+
+<script is:inline>
+  (function () {
+    var chips = document.querySelectorAll(".pk-chip[data-name]");
+    if (!chips.length) return;
+    var g = function (i) { return document.getElementById(i); };
+    function show(c) {
+      Array.prototype.forEach.call(chips, function (x) { x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
+      g("pk-pg").textContent = c.dataset.group;
+      g("pk-pn").textContent = c.dataset.name;
+      g("pk-pb").textContent = c.dataset.blurb;
+      var r = g("pk-pr"); r.textContent = c.dataset.recommend; r.hidden = !c.dataset.recommend;
+      var a = g("pk-pa"); a.href = c.getAttribute("href"); a.hidden = false;
+      document.getElementById("pk-pv").classList.add("on");
+    }
+    Array.prototype.forEach.call(chips, function (c) {
+      c.addEventListener("click", function (e) { e.preventDefault(); show(c); });
+    });
+    show(chips[0]);
+  })();
+</script>
+
