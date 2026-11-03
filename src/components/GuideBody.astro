@@ -9,9 +9,10 @@ interface Props {
   recommendation: string;
   cta: { href: string; label: string };
   banner?: { src: string; alt: string };
+  intro?: { title: string; text: string };
   cards?: { name: string; hood: string; type: string; href: string; img: string }[];
 }
-const { crumbs: rawCrumbs, eyebrow, title, lead, decide, recommendation, cta, banner, cards } = Astro.props;
+const { crumbs: rawCrumbs, eyebrow, title, lead, decide, recommendation, cta, banner, cards, intro } = Astro.props;
 // Drop a middle crumb that repeats the page name.
 const last = rawCrumbs[rawCrumbs.length - 1];
 const crumbs = rawCrumbs.filter((c, i) => i === rawCrumbs.length - 1 || c.label.toLowerCase() !== last.label.toLowerCase());
@@ -46,10 +47,17 @@ const crumbs = rawCrumbs.filter((c, i) => i === rawCrumbs.length - 1 || c.label.
     </section>
   )}
 
-  <section class="nb-decide" aria-labelledby="gb-d">
+  {intro && (
+    <section class="gb-intro" aria-labelledby="gb-i">
+      <h2 id="gb-i">{intro.title}</h2>
+      <p>{intro.text}</p>
+    </section>
+  )}
+
+  {decide.length > 0 && <section class="nb-decide" aria-labelledby="gb-d">
     <h2 id="gb-d">Decide first</h2>
     <ol>{decide.map((d) => <li>{d}</li>)}</ol>
-  </section>
+  </section>}
 
   <section class="nb-rec" aria-labelledby="gb-r">
     <div class="k" id="gb-r">Recommendation</div>

@@ -17,7 +17,7 @@ const cards = [
 ];
 ---
 <Base title={`${g.title} | Agent Kammer`} description={g.blurb}>
-  <GuideBody cards={cards}
+  <GuideBody cards={cards} intro={g.intro}
     crumbs={[{ label: "Insights", href: "/guides" }, { label: "Building profiles", href: "/guides#field-guides" }, { label: g.title }]}
     eyebrow={g.eyebrow} title={g.title} lead={g.lead} decide={g.decide} recommendation={g.recommendation}
     cta={{ href: "/contact?intent=property", label: "Request a Property Assessment" }}

@@ -22,9 +22,10 @@ export const propertyAssessments: Record<string, GuideDetail & { meta: string }>
     eyebrow: "Building profiles · Archive", title: "Building Profiles",
     blurb: "The address-study archive, with more buildings under study.",
     meta: "Archive",
-    lead: "Study the building before the apartment becomes the conversation. Each profile reads a building for its design, its rules and its daily life.",
-    decide: ["Start with the building, then the apartment.", "Compare buildings on their rules and finances, and on price.", "Ask for a read on an address you are considering."],
-    recommendation: "Read the building profile first. Then request an assessment for the address you are considering.",
+    lead: "Study the building before the apartment becomes the conversation. Each profile examines its design, rules, finances, and daily life.",
+    intro: { title: "Start with the building", text: "Understand how a building operates, what it costs to own, and the rules that shape daily life. Compare buildings before narrowing your search to individual apartments. Then request an assessment of any address you're considering." },
+    decide: [],
+    recommendation: "Read the building profile first. Then request an assessment of the specific property.",
   },
   "2026-executive-housing-report": {
     eyebrow: "Report · Executive housing", title: "2026 Executive Housing Report",
