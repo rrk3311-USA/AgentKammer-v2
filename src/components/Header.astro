@@ -1,5 +1,5 @@
 ---
-import { primaryNav, guidance, mobileNav } from "../data/nav";
+import { primaryNav, guidance, mobileNav, navPanels } from "../data/nav";
 
 const path = Astro.url.pathname;
 const isOn = (item: { match: string }) => path === item.match || path.startsWith(item.match + "/");
@@ -10,10 +10,46 @@ const isOn = (item: { match: string }) => path === item.match || path.startsWith
       <svg class="mk" aria-hidden="true"><use href="#ak" /></svg>
       <span>Agent Kammer</span>
     </a>
-    <nav class="pill" aria-label="Primary">
-      {primaryNav.map((l) => <a href={l.href} class={isOn(l) ? "on" : undefined} aria-current={isOn(l) ? "page" : undefined}>{l.label}</a>)}
+    <nav class="pill nm" aria-label="Primary">
+      {primaryNav.map((l, i) => (
+        <a href={l.href} class={isOn(l) ? "on" : undefined} aria-current={isOn(l) ? "page" : undefined} data-nm={navPanels[l.label] ? i : undefined} aria-haspopup={navPanels[l.label] ? "true" : undefined} aria-expanded={navPanels[l.label] ? "false" : undefined} aria-controls={navPanels[l.label] ? `nm-${i}` : undefined}>{l.label}</a>
+      ))}
+      <button type="button" class="nm-live" data-nm={primaryNav.length} aria-haspopup="true" aria-expanded="false" aria-controls={`nm-${primaryNav.length}`}><i aria-hidden="true"></i>Live guide</button>
+      <div class="nm-ind" aria-hidden="true"></div>
+      <div class="nm-vp" hidden>
+        <div class="nm-in">
+          {primaryNav.map((l, i) => navPanels[l.label] && (
+            <div class="nm-panel" id={`nm-${i}`} data-panel={i} hidden>
+              <p class="nm-title">{navPanels[l.label].title}</p>
+              <p class="nm-note">{navPanels[l.label].note}</p>
+              <div class="nm-cols">
+                {navPanels[l.label].groups.map((g) => (
+                  <div class="nm-grp">
+                    {g.title && <p class="nm-gt">{g.title}</p>}
+                    {g.items.map((it) => <a href={it.href}>{it.label}</a>)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          <div class="nm-panel nm-chat" id={`nm-${primaryNav.length}`} data-panel={primaryNav.length} hidden>
+            <p class="nm-title">Ask the live guide</p>
+            <p class="nm-note">Tell us what is changing. The guide answers on this page.</p>
+            <div class="nm-chips">
+              <button type="button" data-ask="I am relocating to Manhattan for work. Where do I start?">Relocating for work</button>
+              <button type="button" data-ask="I am buying my first home in Manhattan. What should I know?">First home</button>
+              <button type="button" data-ask="Which building should I look at?">Choose a building</button>
+            </div>
+            <form class="nm-form" autocomplete="off">
+              <input type="text" name="q" maxlength="300" placeholder="Ask me anything..." aria-label="Ask the live guide" />
+              <button type="submit">Ask</button>
+            </form>
+            <p class="nm-fine">AI guide. Our team reads chats you choose to save.</p>
+          </div>
+        </div>
+      </div>
     </nav>
-    <a class="gbtn" href={guidance.href}>{guidance.label}</a>
+    <a class="gbtn" href="/rapid-match"><img src="/images/quick-match-q.webp" alt="" width="28" height="28" />Quick match</a>
     <!-- Phone and tablet menu. Built from <details>, so no JavaScript. -->
     <details class="mnav">
       <summary aria-label="Menu"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></summary>
@@ -23,3 +59,101 @@ const isOn = (item: { match: string }) => path === item.match || path.startsWith
     </details>
   </div>
 </header>
+
+<script>
+  // Radix-style navigation menu: hover or focus opens a panel in one shared viewport that resizes to fit,
+  // a small indicator marks the open trigger, and the content slides in the direction you moved.
+  const nav = document.querySelector<HTMLElement>(".nm");
+  if (nav) {
+    const triggers = [...nav.querySelectorAll<HTMLElement>("[data-nm]")];
+    const vp = nav.querySelector<HTMLElement>(".nm-vp")!;
+    const inner = nav.querySelector<HTMLElement>(".nm-in")!;
+    const ind = nav.querySelector<HTMLElement>(".nm-ind")!;
+    const panels = [...nav.querySelectorAll<HTMLElement>(".nm-panel")];
+    let current = -1;
+    let openTimer = 0;
+    let closeTimer = 0;
+
+    const close = () => {
+      current = -1;
+      vp.classList.remove("on");
+      ind.classList.remove("on");
+      triggers.forEach((t) => t.setAttribute("aria-expanded", "false"));
+      window.setTimeout(() => { if (current === -1) { vp.hidden = true; panels.forEach((p) => (p.hidden = true)); } }, 180);
+    };
+
+    const open = (i: number) => {
+      const t = triggers.find((x) => x.dataset.nm === String(i));
+      const panel = panels.find((x) => x.dataset.panel === String(i));
+      if (!t || !panel) return;
+      const dir = current === -1 ? 0 : Number(i) > current ? 1 : -1;
+      vp.hidden = false;
+      panels.forEach((p) => {
+        p.hidden = p !== panel;
+        p.dataset.dir = String(dir);
+      });
+      triggers.forEach((x) => x.setAttribute("aria-expanded", String(x === t)));
+      const nr = nav.getBoundingClientRect();
+      const tr = t.getBoundingClientRect();
+      const w = Math.min(panel.scrollWidth, window.innerWidth - 32);
+      vp.style.width = w + "px";
+      vp.style.height = panel.offsetHeight + "px";
+      const left = Math.max(-nr.left + 16, Math.min(tr.left - nr.left + tr.width / 2 - w / 2, window.innerWidth - nr.left - w - 16));
+      vp.style.left = left + "px";
+      ind.style.width = tr.width + "px";
+      ind.style.left = tr.left - nr.left + "px";
+      ind.classList.add("on");
+      requestAnimationFrame(() => vp.classList.add("on"));
+      current = i;
+    };
+
+    const schedule = (i: number) => {
+      window.clearTimeout(closeTimer);
+      window.clearTimeout(openTimer);
+      openTimer = window.setTimeout(() => open(i), current === -1 ? 120 : 0);
+    };
+    const leave = () => {
+      window.clearTimeout(openTimer);
+      window.clearTimeout(closeTimer);
+      closeTimer = window.setTimeout(close, 200);
+    };
+
+    triggers.forEach((t) => {
+      const i = Number(t.dataset.nm);
+      t.addEventListener("pointerenter", () => schedule(i));
+      t.addEventListener("focus", () => open(i));
+      t.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowDown") { e.preventDefault(); open(i); panels.find((p) => p.dataset.panel === String(i))?.querySelector("a")?.focus(); }
+        if (e.key === "Escape") { close(); t.focus(); }
+      });
+    });
+    nav.addEventListener("pointerleave", leave);
+    vp.addEventListener("pointerenter", () => window.clearTimeout(closeTimer));
+    nav.addEventListener("focusout", (e) => { if (!nav.contains((e as FocusEvent).relatedTarget as Node)) close(); });
+    nav.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && current !== -1) {
+        const i = current;
+        close();
+        triggers.find((t) => t.dataset.nm === String(i))?.focus();
+      }
+    });
+    document.addEventListener("click", (e) => { if (!nav.contains(e.target as Node)) close(); });
+
+    // The live guide panel hands the question to the chat on this same page.
+    const ask = (text: string) => {
+      const q = text.trim();
+      if (!q) return;
+      close();
+      window.dispatchEvent(new CustomEvent("guide:ask", { detail: q }));
+    };
+    nav.querySelectorAll<HTMLButtonElement>("[data-ask]").forEach((b) => b.addEventListener("click", () => ask(b.dataset.ask || "")));
+    nav.querySelector<HTMLFormElement>(".nm-form")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = (e.currentTarget as HTMLFormElement).elements.namedItem("q") as HTMLInputElement;
+      const q = input.value;
+      input.value = "";
+      ask(q);
+    });
+    triggers.filter((t) => t.tagName === "BUTTON").forEach((t) => t.addEventListener("click", () => open(Number(t.dataset.nm))));
+  }
+</script>

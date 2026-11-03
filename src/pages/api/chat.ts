@@ -18,6 +18,16 @@ const MAX_TURNS = 12;
 const MAX_CHARS = 1000;
 const MAX_STEPS = 6;
 
+// Building research reports the guide may offer on a slide. Only these can be linked from a card.
+const BUILDING_REPORTS = [
+  "/building-reports/individual-buildings",
+  "/building-reports/lantern-house",
+  "/building-reports/35-hudson-yards",
+  "/building-reports/565-broome",
+  "/building-reports/the-cortland",
+  "/building-reports/one-high-line",
+] as const;
+
 // The only pages the guide may open. Anything else is refused by the schema.
 const PAGES = [
   "/belonging",
@@ -25,12 +35,7 @@ const PAGES = [
   "/guides",
   "/calculator",
   "/contact",
-  "/building-reports/individual-buildings",
-  "/building-reports/lantern-house",
-  "/building-reports/35-hudson-yards",
-  "/building-reports/565-broome",
-  "/building-reports/the-cortland",
-  "/building-reports/one-high-line",
+  ...BUILDING_REPORTS,
   "/guides/international-buyer-hub",
   ...situations.filter((s) => s.ready).map((s) => `/situations/${s.slug}`),
   ...neighborhoods.map((n) => `/situations/${n.slug}`),
@@ -51,6 +56,7 @@ Rules for every reply:
 - Keep spoken text to one or two short sentences. The screen carries the detail.
 - Always show something: a slide, a page, choices or next steps. Never reply with text alone.
 - Use at most one show_page per reply. Pages come only from the allowed list.
+- When the visitor is weighing a specific building, add an offer to one show_slide: a short label such as "Read the building report", linking to that building's report. Offer only the reports on the allowed list, and never state a price or promise a purchase.
 - Never give personalized financial, legal or tax advice. Say so and suggest a licensed professional when it matters.
 - Ask for a name and email only when the visitor wants the team to follow up. Save with save_contact only after they agree. Use add_note for a new development about someone already saved.
 - You cannot look up records. Never claim you looked something up or changed something you did not write with a tool.`;
@@ -60,7 +66,7 @@ type Context = Partial<Record<"situation" | "decision" | "building" | "area", st
 
 export type Block =
   | { type: "text"; text: string }
-  | { type: "slide"; title: string; points: string[]; takeaway?: string }
+  | { type: "slide"; title: string; points: string[]; takeaway?: string; offer?: { label: string; path: string } }
   | { type: "page"; path: string; anchor?: string; reason: string }
   | { type: "choices"; question: string; options: string[] }
   | { type: "steps"; items: string[] };
@@ -128,6 +134,10 @@ export const POST: APIRoute = async ({ request }) => {
       title: z.string().min(1).max(90),
       points: z.array(z.string().min(1).max(160)).min(1).max(4),
       takeaway: z.string().max(160).optional(),
+      offer: z.object({
+        label: z.string().min(1).max(40),
+        path: z.enum(BUILDING_REPORTS),
+      }).optional().describe("A building research report to offer on this card, if the visitor is weighing that building."),
     })),
     show_page: visual("page", "Open one page of this site on screen and scroll to a section.", z.object({
       path: z.enum(PAGES),
@@ -191,7 +201,10 @@ export const POST: APIRoute = async ({ request }) => {
       if (step.text.trim()) blocks.push({ type: "text", text: step.text.trim() });
       for (const call of step.toolCalls) {
         const input = call.input as Record<string, any>;
-        if (call.toolName === "show_slide") blocks.push({ type: "slide", title: input.title, points: input.points, takeaway: input.takeaway });
+        if (call.toolName === "show_slide") {
+          const offer = input.offer && pageSet.has(input.offer.path) ? input.offer : undefined;
+          blocks.push({ type: "slide", title: input.title, points: input.points, takeaway: input.takeaway, offer });
+        }
         if (call.toolName === "show_choices") blocks.push({ type: "choices", question: input.question, options: input.options });
         if (call.toolName === "show_next_steps") blocks.push({ type: "steps", items: input.items });
         if (call.toolName === "show_page" && pageSet.has(input.path)) {

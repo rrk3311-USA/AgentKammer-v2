@@ -1,11 +1,11 @@
-// Site navigation. Four destinations in the header: Start Here, Buildings, Guides & Insights, Contact.
+// Site navigation. Four destinations in the header: Start Here, Buildings, Insights, Contact.
 // Each one leads into a journey (situation, property, research or direct); see the flow notes in the Codex brief.
 
 // `match` is the path prefix that marks a header link as the current section.
 export const primaryNav = [
   { label: "Start Here", href: "/situations", match: "/situations" },
   { label: "Buildings", href: "/building-reports/individual-buildings", match: "/building-reports" },
-  { label: "Guides & Insights", href: "/guides", match: "/guides" },
+  { label: "Insights", href: "/guides", match: "/guides" },
 ];
 
 export const guidance = { label: "Contact", href: "/contact", match: "/contact" };
@@ -44,3 +44,42 @@ export const footerNav = [
 
 // Phone and tablet menu: the same four destinations as the header, as a flat list.
 export const mobileNav = [...primaryNav, guidance];
+
+// Dropdown panels for the desktop header menu, keyed by the primaryNav label.
+export const navPanels: Record<string, { title: string; note: string; groups: { title?: string; items: { label: string; href: string }[] }[] }> = {
+  "Start Here": {
+    title: "What is changing for you?",
+    note: "Pick the change and we open the plan.",
+    groups: whatsChangingGroups,
+  },
+  Buildings: {
+    title: "Building reports",
+    note: "Research on the buildings people ask about most.",
+    groups: [
+      {
+        items: [
+          { label: "Lantern House", href: "/building-reports/lantern-house" },
+          { label: "35 Hudson Yards", href: "/building-reports/35-hudson-yards" },
+          { label: "565 Broome", href: "/building-reports/565-broome" },
+          { label: "The Cortland", href: "/building-reports/the-cortland" },
+          { label: "One High Line", href: "/building-reports/one-high-line" },
+          { label: "All buildings", href: "/building-reports/individual-buildings" },
+        ],
+      },
+    ],
+  },
+  "Insights": {
+    title: "Guides and insights",
+    note: "Plain-language reading before you decide.",
+    groups: [
+      {
+        items: [
+          { label: "All guides", href: "/guides" },
+          { label: "International buyer hub", href: "/guides/international-buyer-hub" },
+          { label: "Condo vs co-op", href: "/situations/condo-vs-coop" },
+          { label: "Calculator", href: "/calculator" },
+        ],
+      },
+    ],
+  },
+};
