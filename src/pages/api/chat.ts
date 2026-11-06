@@ -225,7 +225,10 @@ export const POST: APIRoute = async ({ request }) => {
       .join("\n");
 
     return json({ blocks, summary });
-  } catch {
+  } catch (err) {
+    // Log the cause (never the key) so a failed chat can be diagnosed from the Vercel runtime logs.
+    const e = err as { message?: string; statusCode?: number; responseBody?: string };
+    console.error("chat failed", e?.statusCode ?? "", String(e?.message ?? err).slice(0, 300), String(e?.responseBody ?? "").slice(0, 300));
     return json({ error: "The guide is unavailable right now." }, 502);
   }
 };
