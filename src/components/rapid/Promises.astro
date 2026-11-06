@@ -1,0 +1,21 @@
+---
+import RapidIcon from "./RapidIcon.astro";
+// Draft promises for review before launch. Process promises only: no numbers, no outcomes.
+const items = [
+  { i: "doc", t: "One clear answer first", d: "Your report opens with where we would start, and why. No questionnaire, and no feed of four hundred listings to sort yourself." },
+  { i: "layers", t: "Four price points, not one", d: "See what each step up in budget buys, and what waiting could cost, side by side." },
+  { i: "sliders", t: "Built around how you live", d: "Tell us your life goals. We turn them into a place, a size and a price band." },
+  { i: "calendar", t: "Three months, plainly projected", d: "We show which homes are likely to come up and when, so you know when to move and when to hold." },
+  { i: "eye", t: "Reasons in plain English", d: "Every ranking says why. If a home is a trade-off, the report says so." },
+  { i: "shield", t: "Nothing disguised", d: "No card. No call unless you ask. A sample is labelled as a sample." },
+];
+---
+<ul class="rv-promises">
+  {items.map((p, i) => (
+    <li class="rv-card" data-spot data-reveal style={`--d:${i * 70}ms`}>
+      <div class="rv-icrow"><span class="rv-icb"><RapidIcon name={p.i} /></span><span class="rv-n">{String(i + 1).padStart(2, "0")}</span></div>
+      <h3>{p.t}</h3>
+      <p>{p.d}</p>
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,20 @@
+---
+import { buildingLibrary } from "../../data/buildingLibrary";
+---
+<div class="rv-scan" data-scan role="img" aria-label="An illustrative run through the Manhattan building library">
+  <div class="rv-scan-hd">
+    <img class="rv-obs" src="/images/obsidian-icon.webp" alt="Obsidian" width="34" height="34" />
+    <span class="rv-scan-ttl"><b>Building library</b><small><span data-scan-state>Reading</span> · kept in Obsidian</small></span>
+    <em>Illustrative run</em>
+  </div>
+  <p class="rv-scan-msg" data-scan-msg>Opening the Manhattan building library</p>
+  <div class="rv-scan-big"><b data-scan-n>0</b><span>of <i>{buildingLibrary.length}</i> buildings read</span></div>
+  <div class="rv-bar"><i data-scan-bar></i></div>
+  <ul class="rv-log" data-scan-log></ul>
+  <dl class="rv-scan-kv">
+    <div><dt>Neighborhoods</dt><dd data-scan-h>0</dd></div>
+    <div><dt>Feeds</dt><dd>6</dd></div>
+    <div><dt>Outlook</dt><dd>3 mo</dd></div>
+  </dl>
+  <p class="rv-scan-foot">Today: {buildingLibrary.length} buildings studied. The goal: every building in Manhattan.</p>
+</div>

@@ -1,0 +1,13 @@
+---
+import { buildingLibrary } from "../../data/buildingLibrary";
+const items = [
+  { n: buildingLibrary.length, l: "Buildings in our reference library" },
+  { n: 10, l: "Neighborhoods covered" },
+  { n: 6, l: "Data feeds read together" },
+  { n: 4, l: "Price points in every report" },
+  { n: 3, l: "Months of availability projected" },
+];
+---
+<ul class="rv-stats" aria-label="Rapid Match at a glance">
+  {items.map((i) => <li data-reveal><b data-count={i.n}>0</b><span>{i.l}</span></li>)}
+</ul>

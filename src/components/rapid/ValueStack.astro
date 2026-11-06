@@ -1,0 +1,50 @@
+---
+import RapidIcon from "./RapidIcon.astro";
+// The pitch for the full report. Proposed deliverables, for sign-off before launch. No pricing shown.
+const items = [
+  { i: "doc", t: "An executive summary", d: "One page. Your best fit, and the reasons it wins." },
+  { i: "layers", t: "A four price point array", d: "Entry, core, stretch and ceiling, each with ranked homes, so you see what every step up buys." },
+  { i: "sliders", t: "A lifestyle fit matrix", d: "Every home scored against your life goals, so the ranking reflects how you want to live." },
+  { i: "calendar", t: "A three month availability outlook", d: "What is likely to open, month by month, so you know when to move and when to hold." },
+  { i: "building", t: "Building dossiers", d: "Rules, finances and daily life for each address, drawn from our reference library." },
+  { i: "compass", t: "A next step plan", d: "Who to see, in what order, and what to ask before you tour." },
+];
+const open = [
+  { i: "eye", t: "Every source named" },
+  { i: "clock", t: "Every date shown" },
+  { i: "shield", t: "Samples labelled as samples" },
+];
+---
+<div class="rv-vs">
+  <ol class="rv-vs-steps">
+    {items.map((x, k) => (
+      <li data-reveal style={`--i:${k};--d:${k * 80}ms`}>
+        <span class="rv-vs-node"><RapidIcon name={x.i} size={24} /></span>
+        <span class="rv-vs-no">{String(k + 1).padStart(2, "0")}</span>
+        <h3>{x.t}</h3>
+        <p>{x.d}</p>
+      </li>
+    ))}
+  </ol>
+  <div class="rv-vs-foot">
+    <div class="rv-vs-cover" data-reveal aria-hidden="true">
+      <div class="rv-vs-pg p3"></div><div class="rv-vs-pg p2"></div>
+      <div class="rv-vs-pg p1">
+        <svg class="rv-vs-mk"><use href="#ak" /></svg>
+        <span class="rv-vs-kicker">Prepared for you</span>
+        <b>Your Kammer Report</b>
+        <span class="rv-vs-sub">Four price points · Three month outlook</span>
+        <i class="rv-vs-sheen"></i>
+      </div>
+    </div>
+    <div class="rv-vs-side">
+      <ul class="rv-vs-open" aria-label="How we work, in the open">
+        {open.map((x) => <li><RapidIcon name={x.i} size={18} />{x.t}</li>)}
+      </ul>
+      <div class="rv-vs-cta">
+        <a class="rv-btn" href="/contact?intent=property">Request my Kammer Report <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+        <a class="rv-btn ghost" href="#quiz">Try the free sample first</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,415 @@
+---
+import Base from "../layouts/Base.astro";
+
+// Sample listings for the free preview. They are illustrative, not live MLS or off-market inventory.
+const listings = [
+  { id: "a", address: "Sample: West Village two-bedroom", hood: "West Village", beds: 2, price: 3800000, lane: "3to6", source: "Off-market", traits: ["Outdoor space", "Quiet street"], why: "Quiet block, two bedrooms, and a private terrace that rarely reaches the market." },
+  { id: "b", address: "Sample: Chelsea one-bedroom", hood: "Chelsea", beds: 1, price: 2200000, lane: "under3", source: "MLS", traits: ["Doorman"], why: "A listed one-bedroom with a full-time doorman, close to the High Line." },
+  { id: "c", address: "Sample: Tribeca loft", hood: "Tribeca", beds: 3, price: 7200000, lane: "6plus", source: "Off-market", traits: ["Outdoor space", "Park view"], why: "Three bedrooms and a park view, with room for a family office at home." },
+  { id: "d", address: "Sample: Upper East Side co-op", hood: "Upper East Side", beds: 2, price: 2600000, lane: "under3", source: "MLS", traits: ["Doorman", "Park view"], why: "A listed two-bedroom near the park, in a building with a full-time staff." },
+];
+const hoods = ["West Village", "Chelsea", "Tribeca", "Upper East Side"];
+const beds = [1, 2, 3];
+const lanes = [
+  { id: "under3", label: "Under $3 million" },
+  { id: "3to6", label: "$3 to $6 million" },
+  { id: "6plus", label: "$6 million and above" },
+];
+const traits = ["Outdoor space", "Doorman", "Quiet street", "Park view"];
+const sources = [
+  { name: "Off-market", note: "Sellers and brokers who have not listed yet" },
+  { name: "MLS", note: "Listings from the regional multiple listing service" },
+  { name: "Public records", note: "Ownership, permits and building history" },
+];
+---
+<Base title="Rapid Match v2A | Agent Kammer" description="A free sample of an ideal property match, built from off-market and MLS sources. Answer a few questions to see one.">
+  <section class="wrap bento8 b8" aria-labelledby="b8-h">
+    <div class="b8-hd">
+      <div class="eyebrow">Free sample</div>
+      <h1 id="b8-h">See an ideal <em>match</em> in three minutes.</h1>
+      <p class="b8-lede">We read off-market, MLS and public records together, then score them against a few answers from you. Here is how it works, then try it below. The diagrams are illustrations and the listings are samples, not a live feed.</p>
+      <a class="btn" href="#quiz">Try it now <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+    </div>
+    <div class="b8-grid">
+      <div class="b8-fr b8-wide"><i class="b8-c tl"></i><i class="b8-c tr"></i><i class="b8-c bl"></i><i class="b8-c br"></i>
+        <div class="b8-cd" style="padding:0;overflow:hidden">
+          <svg viewBox="0 0 640 178" role="img" aria-label="Off-market, MLS and public records flow through the match engine into match reports">
+            <defs>
+              <linearGradient id="b8e" x1="0" x2="1"><stop offset="0" stop-color="#B08D57"/><stop offset="1" stop-color="#2A3447"/></linearGradient>
+              <radialGradient id="b8g" cx="320" cy="110" r="190" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="640" height="178" fill="url(#b8g)"/>
+            <g font-family="Inter,sans-serif" font-size="8" fill="#2F3136" font-weight="600" letter-spacing=".6">
+              <path class="fl d" style="stroke:#B08D57" d="M130,38 C200,38 235,110 282,110"/><path class="fl" style="stroke:#5B7494" d="M130,88 C190,88 240,110 282,110"/><path class="fl d" style="stroke:#2A3447" d="M130,138 C200,138 235,110 282,110"/>
+              <path class="fl" style="stroke:#B08D57" d="M358,110 C405,110 418,86 450,86"/><path class="fl d" style="stroke:#2A3447" d="M358,110 C405,110 418,134 450,134"/>
+              <g><rect x="6" y="24" width="124" height="28" rx="3" class="nd" style="stroke:#B08D57;fill:#F8F2E6"/><circle cx="18" cy="38" r="3" fill="#B08D57"/><text x="30" style="font-size:8.4px;letter-spacing:.3px" y="42">OFF-MARKET</text></g>
+              <g><rect x="6" y="74" width="124" height="28" rx="3" class="nd" style="stroke:#5B7494;fill:#EEF1F6"/><circle cx="18" cy="88" r="3" fill="#5B7494"/><text x="30" style="font-size:8.4px;letter-spacing:.3px" y="92">MLS</text></g>
+              <g><rect x="6" y="124" width="124" height="28" rx="3" class="nd" style="stroke:#2A3447;fill:#E9EBF0"/><circle cx="18" cy="138" r="3" fill="#2A3447"/><text x="30" style="font-size:8.4px;letter-spacing:.3px" y="142">PUBLIC RECORDS</text></g>
+              <g><circle cx="320" cy="110" r="46" fill="none" stroke="#F6C98A" stroke-opacity=".4" class="gl"/><circle cx="320" cy="110" r="38" fill="#0B1A44" stroke="#F6C98A" stroke-width="1.8"/><image href="/images/quick-match-q-round.webp" x="284" y="74" width="72" height="72" preserveAspectRatio="xMidYMid slice"/><text x="320" y="170" text-anchor="middle" font-size="7.5" style="fill:#F5F2EB">MATCH ENGINE</text></g>
+              <g transform="translate(450,92) scale(.74) translate(-450,-92)">
+                <g transform="translate(474,30)" opacity=".5"><rect width="138" height="102" rx="2" fill="#fff" stroke="#d6d2c8"/></g>
+                <g transform="translate(462,40)" opacity=".75"><rect width="138" height="102" rx="2" fill="#fff" stroke="#d6d2c8"/></g>
+                <g transform="translate(450,50)"><g class="sheet" id="b8-sheet"><rect width="138" height="102" rx="2" fill="#fff" stroke="#d6d2c8"/>
+                  <text id="b8-n" x="10" y="16" font-size="7" fill="#7b7b7b" font-family="monospace" font-weight="400" letter-spacing="0">MATCH #128</text>
+                  <rect x="10" y="24" width="64" height="5" rx="1" fill="url(#b8e)"/><rect x="10" y="33" width="92" height="3" rx="1" fill="#e4e0d6"/><rect x="10" y="39" width="80" height="3" rx="1" fill="#e4e0d6"/>
+                  <rect x="12" y="68" width="8" height="18" fill="#B8BBC0"/><rect x="25" y="62" width="8" height="24" fill="#8791A3"/><rect x="38" y="72" width="8" height="14" fill="#5B7494"/><rect x="51" y="58" width="8" height="28" fill="#2A3447"/><rect x="64" y="66" width="8" height="20" fill="#B08D57"/>
+                  <path d="M92 64h34M92 72h28M92 80h32" stroke="#e4e0d6" stroke-width="2.5"/></g></g>
+              </g>
+            </g>
+            <circle r="2.6" class="pk"><animateMotion dur="2.4s" repeatCount="indefinite" path="M130,38 C200,38 235,110 282,110"/></circle>
+            <circle r="2.6" class="pk"><animateMotion dur="2.8s" begin=".4s" repeatCount="indefinite" path="M130,88 C190,88 240,110 282,110"/></circle>
+            <circle r="2.6" class="pk"><animateMotion dur="2.6s" begin=".8s" repeatCount="indefinite" path="M130,138 C200,138 235,110 282,110"/></circle>
+            <circle r="2.6" class="pk"><animateMotion dur="2s" repeatCount="indefinite" path="M358,110 C405,110 418,86 450,86"/></circle>
+          </svg>
+          <div class="b8-cp"><div><h3>1. Every feed, read together</h3><p>Off-market, MLS and public records land in one place instead of three tabs.</p></div><div><h3>4. A match report, ready</h3><p>Your best fit comes back as a short report, with the building research behind it.</p></div></div>
+        </div>
+      </div>
+      <div class="b8-fr"><i class="b8-c tl"></i><i class="b8-c tr"></i><i class="b8-c bl"></i><i class="b8-c br"></i>
+        <div class="b8-cd">
+          <svg viewBox="0 0 300 150" id="b8-hub" role="group" aria-label="Connected sources">
+            <g id="b8-paths"></g>
+            <g transform="translate(133,58)"><rect width="34" height="34" rx="4" class="nd" style="fill:#2A3447;stroke:#B08D57"/><path d="M9 25V9h3.6l8.4 10.6V9h3v16h-3.6L12 14.4V25z" fill="#F5F2EB" transform="scale(.8) translate(2,2)"/></g>
+            <g id="b8-tiles" font-family="Inter,sans-serif" font-size="8" fill="#6b6f76" text-anchor="middle"></g>
+            <text id="b8-sync" x="150" y="112" text-anchor="middle" font-size="7" fill="#9a9ea5" font-family="monospace">4 connected</text>
+          </svg>
+          <div class="b8-tx"><h3>2. Your answers join the sources</h3><p>Where, how many bedrooms, budget and must-haves are matched against every feed.</p></div>
+        </div>
+      </div>
+      <div class="b8-fr"><i class="b8-c tl"></i><i class="b8-c tr"></i><i class="b8-c bl"></i><i class="b8-c br"></i>
+        <div class="b8-cd">
+          <svg viewBox="0 0 300 136" id="b8-chart" style="cursor:crosshair" role="img" aria-label="Illustrative match score chart">
+            <defs>
+              <linearGradient id="b8l" x1="0" x2="1"><stop offset="0" stop-color="#5B7494"/><stop offset="1" stop-color="#B08D57"/></linearGradient>
+              <linearGradient id="b8a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B08D57" stop-opacity=".26"/><stop offset="1" stop-color="#B08D57" stop-opacity="0"/></linearGradient>
+            </defs>
+            <line x1="14" x2="286" y1="32" y2="32" stroke="#e4e0d6"/><line x1="14" x2="286" y1="65" y2="65" stroke="#e4e0d6"/><line x1="14" x2="286" y1="98" y2="98" stroke="#e4e0d6"/>
+            <path id="b8-area" d="" fill="url(#b8a)"/><path id="b8-line" class="ln" pathLength="1" d=""/>
+            <line id="b8-cur" y1="8" y2="116" stroke="#2A3447" stroke-opacity=".35" opacity="0"/>
+            <circle id="b8-dot" r="3.4" fill="#fff" stroke="#B08D57" stroke-width="2"/>
+            <g id="b8-tip"><rect x="-30" y="-11" width="60" height="15" rx="2" fill="#2A3447"/><text id="b8-tt" x="0" y="-1" text-anchor="middle" font-size="7.5" fill="#F5F2EB" font-family="monospace"></text></g>
+          </svg>
+          <div class="b8-tx"><h3>3. Every listing is scored</h3><p>Closer fits rise to the top, and you see the best one with the reasons. Move across the chart to scrub.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap quiz" id="quiz" aria-labelledby="quiz-h">
+    <div class="eyebrow">Four questions</div>
+    <h2 id="quiz-h">Tell us what you need.</h2>
+
+    <form id="match-form">
+      <fieldset>
+        <legend>Where would you live?</legend>
+        <div class="opts">{hoods.map((h) => <label class="opt"><input type="radio" name="hood" value={h} required /><span>{h}</span></label>)}</div>
+      </fieldset>
+      <fieldset>
+        <legend>How many bedrooms?</legend>
+        <div class="opts">{beds.map((b) => <label class="opt"><input type="radio" name="beds" value={b} required /><span>{b === 3 ? "3 or more" : b}</span></label>)}</div>
+      </fieldset>
+      <fieldset>
+        <legend>What is your budget?</legend>
+        <div class="opts">{lanes.map((l) => <label class="opt"><input type="radio" name="lane" value={l.id} required /><span>{l.label}</span></label>)}</div>
+      </fieldset>
+      <fieldset>
+        <legend>What must it have? (optional)</legend>
+        <div class="opts">{traits.map((t) => <label class="opt"><input type="checkbox" name="trait" value={t} /><span>{t}</span></label>)}</div>
+      </fieldset>
+      <button class="btn" type="submit">Show my match <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></button>
+    </form>
+
+    <article id="match" class="match" hidden aria-live="polite"></article>
+    <p class="small">General information only, not legal, tax or financial advice. Free to try, with no card needed.</p>
+  </section>
+
+  <section class="tl-sec" aria-labelledby="tl-h">
+    <div class="wrap">
+      <p class="eyebrow">After the sample</p>
+      <h2 id="tl-h">Your first seven days</h2>
+      <p class="tl-lede">With the team on your side, each source is read on its own rhythm and matched against your answers. This is the plan, not a live feed.</p>
+      <ol class="tl" data-tl>
+        <li data-tl-step>
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-card"><span class="tl-day">Days 1 to 2</span><h3>Off-market scan</h3><p>We ask the private network what is quietly available, and what is about to be.</p><div class="tl-meter" aria-hidden="true"><i style="--w:86%"></i></div><small>Private network · daily</small></div>
+        </li>
+        <li data-tl-step>
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-card"><span class="tl-day">Days 3 to 4</span><h3>MLS match</h3><p>New listings are matched against your answers as they appear, hour by hour.</p><div class="tl-meter" aria-hidden="true"><i style="--w:64%"></i></div><small>New listings · hourly</small></div>
+        </li>
+        <li data-tl-step>
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-card"><span class="tl-day">Days 5 to 6</span><h3>Public records check</h3><p>Ownership, permits and building history are read for every home on the short list.</p><div class="tl-meter" aria-hidden="true"><i style="--w:92%"></i></div><small>Sales, taxes, filings · weekly</small></div>
+        </li>
+        <li data-tl-step>
+          <span class="tl-dot" aria-hidden="true"></span>
+          <div class="tl-card"><span class="tl-day">Day 7</span><h3>Your report, and a tour</h3><p>Your ranked report arrives, and we book a tour of your top match with the team.</p><div class="tl-meter" aria-hidden="true"><i style="--w:100%"></i></div><small>Booked with the team</small></div>
+        </li>
+      </ol>
+      <p class="tl-after">Then the watch continues for three months, so a home that opens next month still finds you.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { initTimeline } from "../scripts/rapid";
+  initTimeline();
+</script>
+
+<script is:inline define:vars={{ listings }}>
+  // Scores each sample listing against the answers. Higher is a closer fit.
+  (function () {
+    var form = document.getElementById("match-form");
+    var out = document.getElementById("match");
+    if (!form || !out) return;
+    var lanesOrder = ["under3", "3to6", "6plus"];
+
+    function score(l, a) {
+      var s = 0;
+      if (l.hood === a.hood) s += 3;
+      if (a.beds === 3 ? l.beds >= 3 : l.beds === a.beds) s += 2;
+      var gap = Math.abs(lanesOrder.indexOf(l.lane) - lanesOrder.indexOf(a.lane));
+      s += gap === 0 ? 2 : gap === 1 ? 1 : 0;
+      a.traits.forEach(function (t) { if (l.traits.indexOf(t) !== -1) s += 1; });
+      return s;
+    }
+
+    function money(n) { return "$" + (n / 1000000).toFixed(n % 1000000 ? 2 : 1).replace(/\.?0+$/, "") + " million"; }
+
+    function el(tag, cls, text) {
+      var n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text != null) n.textContent = text;
+      return n;
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var data = new FormData(form);
+      var a = {
+        hood: data.get("hood"),
+        beds: Number(data.get("beds")),
+        lane: data.get("lane"),
+        traits: data.getAll("trait"),
+      };
+      var ranked = listings
+        .map(function (l) { return { l: l, s: score(l, a) }; })
+        .sort(function (x, y) { return y.s - x.s; });
+      var best = ranked[0].l;
+
+      out.replaceChildren();
+      out.append(
+        el("div", "src", best.source + " · sample"),
+        el("h3", "", best.address),
+        el("p", "why", best.why),
+        el("p", "facts", best.beds + " bedroom" + (best.beds > 1 ? "s" : "") + " · " + best.hood + " · " + money(best.price)),
+        el("p", "note", "Not a live listing. Connect a feed and this card shows the real property, with its source and date.")
+      );
+      var inventory = el("a", "inventory");
+      inventory.href = "/building-reports/individual-buildings";
+      inventory.innerHTML =
+        '<svg class="gem" viewBox="0 0 48 48" aria-hidden="true"><path d="M14 6h20l8 12-18 24L6 18z" fill="#2A3447"/><path d="M14 6h20l8 12H6z" fill="#3D4A60"/><path d="M24 42L14 18h20z" fill="#1E2A3A"/><path d="M6 18h36M14 6l10 12 10-12" fill="none" stroke="#B08D57" stroke-width="1"/></svg>' +
+        '<span><b>Full Manhattan building inventory</b><small>Read the building reports, one address at a time.</small></span>';
+      out.append(inventory);
+
+      out.hidden = false;
+      out.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  })();
+</script>
+
+<script is:inline>
+(function(){
+var n=128,nEl=document.getElementById("b8-n"),sh=document.getElementById("b8-sheet");
+if(!nEl)return;
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches)setInterval(function(){n++;nEl.textContent="MATCH #"+n;sh.style.animation="none";void sh.getBBox();sh.style.animation="";},2800);
+var tools=["Off-market","MLS","Records","You"],cols=["#B08D57","#5B7494","#2A3447","#8C6F3E"],tiles=[[66,34],[66,116],[234,34],[234,116]],NS="http://www.w3.org/2000/svg",P=document.getElementById("b8-paths"),T=document.getElementById("b8-tiles"),sync=document.getElementById("b8-sync"),paths=[];
+tiles.forEach(function(t,i){var dir=t[0]<150?-1:1,d="M"+(150+dir*17)+",75 H"+(150+dir*42)+" V"+t[1]+" H"+(t[0]-dir*15);
+var p=document.createElementNS(NS,"path");p.setAttribute("d",d);p.setAttribute("class","fl");P.appendChild(p);paths.push(d);
+var g=document.createElementNS(NS,"g");g.setAttribute("class","tool");g.setAttribute("tabindex","0");g.style.setProperty("--tc",cols[i]);
+g.innerHTML='<rect x="'+(t[0]-15)+'" y="'+(t[1]-15)+'" width="30" height="30" rx="4" class="nd" style="stroke:'+cols[i]+'66"/><circle cx="'+t[0]+'" cy="'+t[1]+'" r="4.5" fill="'+cols[i]+'"/><text x="'+t[0]+'" y="'+(t[1]+(t[1]<75?-21:28))+'" opacity="0" style="transition:opacity .25s">'+tools[i]+'</text>';
+T.appendChild(g);});
+var pk=document.createElementNS(NS,"circle");pk.setAttribute("r","2.6");pk.setAttribute("class","pk");var am=document.createElementNS(NS,"animateMotion");am.setAttribute("dur","1.1s");am.setAttribute("repeatCount","indefinite");pk.appendChild(am);document.getElementById("b8-hub").appendChild(pk);
+var hov=-1,auto=0;function show(){var on=hov>=0?hov:auto;T.querySelectorAll(".tool").forEach(function(g,i){g.classList.toggle("on",i===on);g.querySelector("text").setAttribute("opacity",i===on?1:0);});
+P.querySelectorAll("path").forEach(function(p,i){p.style.stroke=i===on?cols[i]:cols[i]+"55";p.style.strokeWidth=i===on?1.8:1.2;});am.setAttribute("path",paths[on]);pk.style.fill=cols[on];sync.textContent="syncing · "+tools[on].toLowerCase();}
+T.querySelectorAll(".tool").forEach(function(g,i){g.addEventListener("mouseenter",function(){hov=i;show();});g.addEventListener("mouseleave",function(){hov=-1;show();});g.addEventListener("focus",function(){hov=i;show();});g.addEventListener("blur",function(){hov=-1;show();});});
+show();setInterval(function(){if(hov<0){auto=(auto+1)%4;show();}},1700);
+var vals=[22,26,24,31,29,36,34,41,39,47,52,58],W=300,H=130,pad=14,lo=Math.min.apply(0,vals),hi=Math.max.apply(0,vals),pts=vals.map(function(v,i){return[pad+i/(vals.length-1)*(W-pad*2),H-pad-(v-lo)/(hi-lo)*(H-pad*2)];}),d="";
+pts.forEach(function(q,i){if(!i){d="M"+q[0]+","+q[1];return;}var p=pts[i-1],cx=(p[0]+q[0])/2;d+=" C"+cx+","+p[1]+" "+cx+","+q[1]+" "+q[0]+","+q[1];});
+document.getElementById("b8-line").setAttribute("d",d);document.getElementById("b8-area").setAttribute("d",d+" L"+pts[pts.length-1][0]+",118 L"+pts[0][0]+",118Z");
+var dot=document.getElementById("b8-dot"),tip=document.getElementById("b8-tip"),tt=document.getElementById("b8-tt"),cur=document.getElementById("b8-cur"),ch=document.getElementById("b8-chart");
+function at(i,scrub){var q=pts[i];dot.setAttribute("cx",q[0]);dot.setAttribute("cy",q[1]);var x=Math.max(40,Math.min(W-40,q[0]));tip.setAttribute("transform","translate("+x+","+(q[1]<34?q[1]+22:q[1]-12)+")");var pc=Math.round((vals[i]-vals[0])/vals[0]*100);tt.textContent=(i>=8?"fit ":"step "+(i+1)+" ")+(pc>=0?"+":"")+pc+"%";cur.setAttribute("x1",q[0]);cur.setAttribute("x2",q[0]);cur.setAttribute("opacity",scrub?1:0);}
+at(vals.length-1,false);
+ch.addEventListener("pointermove",function(e){var r=ch.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*300,b=0;pts.forEach(function(q,i){if(Math.abs(q[0]-x)<Math.abs(pts[b][0]-x))b=i;});at(b,true);});
+ch.addEventListener("pointerleave",function(){at(vals.length-1,false);});
+})();
+</script>
+
+<style>
+  .hero { background: radial-gradient(circle at 18% 0%, #2a3f78 0%, #17306A 38%, #0B1A44 100%); color: var(--ivory); padding: clamp(56px, 8vw, 96px) 0; border-bottom: 1px solid rgba(95, 134, 208, 0.45); }
+  .hero .wrap { display: flex; flex-direction: column; gap: 26px; }
+  .hero .eyebrow { color: #F6C98A; }
+  h1 { margin: 0; font: 500 clamp(40px, 5.2vw, 64px)/1.02 var(--serif); color: var(--ivory); text-wrap: balance; }
+  .lede { margin: 0; max-width: 60ch; font-size: 18px; line-height: 1.6; color: var(--ivory); }
+
+  /* Three source lanes run into one engine, then out to a single match. */
+  .feeds { position: relative; margin: 12px 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .rail { display: grid; gap: 10px; }
+  .line { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-left: 2px solid #F6C98A; border-radius: 0 10px 10px 0; background: rgba(245, 242, 235, 0.07); }
+  .line .tag { font: 600 12px/1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--champagne); }
+  .line .note { font-size: 14px; line-height: 1.45; color: var(--ivory); }
+  .track { display: none; }
+  .engine, .result { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border: 1px solid rgba(160, 185, 235, 0.45); border-radius: 10px; background: rgba(245, 242, 235, 0.08); color: var(--ivory); }
+  .engine { align-items: center; text-align: center; border: 0; background: none; box-shadow: none; padding: 0; }
+  .eng-q { width: 124px; height: 124px; border-radius: 50%; object-fit: cover; border: 2px solid #F6C98A; box-shadow: 0 0 0 6px rgba(246, 201, 138, 0.14), 0 0 34px rgba(246, 201, 138, 0.5); animation: eng-glow 2.6s ease-in-out infinite; }
+  @keyframes eng-glow { 50% { box-shadow: 0 0 0 12px rgba(246, 201, 138, 0.06), 0 0 46px rgba(246, 201, 138, 0.7); } }
+  .result { background: var(--ivory); color: var(--stone-blue); border-color: #F6C98A; }
+  .core { font: 500 22px/1.1 var(--serif); }
+  .sub { font: 400 13px/1.4 var(--sans); opacity: 0.85; }
+  .engine .sub { color: #C3CBE0; opacity: 1; }
+
+  @media (min-width: 880px) {
+    /* Desktop: sources on the left, engine and result on the right, with the tracks drawn between. */
+    .feeds { grid-template-columns: minmax(0, 1fr) 220px 200px; align-items: center; column-gap: 0; }
+    .rail { gap: 22px; grid-column: 1; grid-row: 1; }
+    .track { display: block; position: absolute; left: 0; top: 0; width: calc(100% - 420px); height: 100%; pointer-events: none; }
+    .rail-path { fill: none; stroke: rgba(176, 141, 87, 0.55); stroke-width: 2; stroke-dasharray: 2 6; }
+    .pulse { fill: none; stroke: #F8D9A2; filter: drop-shadow(0 0 4px #F6C98A); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 10 260; animation: run 3.2s linear infinite; }
+    .pb { animation-delay: 1.1s; }
+    .pc { animation-delay: 0.5s; }
+    .engine { grid-column: 2; grid-row: 1; }
+    .result { grid-column: 3; grid-row: 1; }
+    .line { position: relative; z-index: 1; }
+  }
+
+  @keyframes run { from { stroke-dashoffset: 270; } to { stroke-dashoffset: -270; } }
+  @media (prefers-reduced-motion: reduce) { .pulse, .eng-q { animation: none; } }
+
+  .quiz { display: flex; flex-direction: column; gap: 22px; padding-top: clamp(48px, 7vw, 80px); padding-bottom: 72px; color: var(--charcoal); }
+  .quiz h2 { margin: 0; font: 500 clamp(32px, 4vw, 44px)/1.1 var(--serif); color: var(--stone-blue); }
+  form { display: flex; flex-direction: column; gap: 26px; max-width: 760px; }
+  fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+  legend { padding: 0; margin-bottom: 12px; font: 600 12px/1.4 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: #4A5058; }
+  .opts { display: flex; flex-wrap: wrap; gap: 10px; }
+  .opt { position: relative; cursor: pointer; }
+  .opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .opt span { display: inline-block; padding: 12px 16px; border: 1px solid #8E949B; background: #fff; font: 500 15px/1.2 var(--sans); }
+  .opt input:checked + span, .opt input:focus-visible + span { background: var(--stone-blue); color: var(--ivory); border-color: var(--stone-blue); }
+  .quiz .btn { align-self: flex-start; }
+
+  .match { display: flex; flex-direction: column; gap: 10px; max-width: 760px; margin-top: 8px; padding: 36px 32px; background: linear-gradient(180deg, #FFFFFF, #F4F5F6); border: 1px solid var(--champagne); }
+  .match[hidden] { display: none; }
+  .match .src { font: 600 11px/1.4 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--champagne); }
+  .match h3 { margin: 0; font: 500 34px/1.1 var(--serif); color: var(--stone-blue); text-wrap: balance; }
+  .match .why { margin: 0; font: italic 400 19px/1.45 var(--serif); color: var(--stone-blue); }
+  .match .facts { margin: 0; font: 500 15px/1.4 var(--sans); color: var(--charcoal); }
+  .match .note, .small { margin: 0; font-size: 14px; line-height: 1.5; color: #4A5058; }
+  .match .inventory { display: flex; align-items: center; gap: 16px; margin-top: 12px; padding: 16px 18px; background: var(--stone-blue); color: var(--ivory); text-decoration: none; }
+  .match .inventory b { display: block; font: 500 18px/1.3 var(--serif); }
+  .match .inventory small { display: block; margin-top: 4px; font: 400 13px/1.4 var(--sans); color: var(--platinum); }
+  .match .gem { flex: 0 0 auto; width: 44px; height: 44px; }
+
+  @media (max-width: 600px) {
+    .match { padding: 26px 20px; }
+    .match h3 { font-size: 28px; }
+    h1 { font-size: 40px; }
+  }
+</style>
+
+<style is:global>
+  .b8 { padding-top: 56px; padding-bottom: 8px; }
+  .b8-hd { display: grid; gap: 10px; justify-items: start; margin-bottom: 28px; }
+  .b8-hd h2 { margin: 0; font: 500 clamp(28px, 4vw, 40px)/1.1 var(--serif); color: var(--stone-blue); }
+  .b8-hd h1 { margin: 0; font: 500 clamp(36px, 5.2vw, 60px)/1.05 var(--serif); color: #F5F2EB; text-wrap: balance; } .b8-hd h1 em { font-style: italic; color: #F6C98A; }
+  .b8-hd .btn { margin-top: 8px; background: #F5F2EB; color: #2A3447; border-color: #F6C98A; }
+  .b8-hd h2 em { font-style: italic; color: var(--champagne); }
+  .b8-lede { margin: 0; max-width: 60ch; font-size: 16px; line-height: 1.6; color: var(--charcoal); }
+  .b8-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 28px; background-color: var(--ivory); background-image: repeating-linear-gradient(135deg, rgba(42,52,71,.05) 0 1px, transparent 1px 10px); border: 1px solid rgba(42,52,71,.12); }
+  .b8-fr { position: relative; min-width: 0; } .b8-wide { grid-column: 1 / -1; }
+  .b8-c { position: absolute; width: 12px; height: 12px; border: 0 solid var(--champagne); transition: transform .35s cubic-bezier(.2,.8,.2,1); pointer-events: none; }
+  .b8-c.tl{top:-6px;left:-6px;border-top-width:1.5px;border-left-width:1.5px} .b8-c.tr{top:-6px;right:-6px;border-top-width:1.5px;border-right-width:1.5px}
+  .b8-c.bl{bottom:-6px;left:-6px;border-bottom-width:1.5px;border-left-width:1.5px} .b8-c.br{bottom:-6px;right:-6px;border-bottom-width:1.5px;border-right-width:1.5px}
+  .b8-fr:hover .tl{transform:translate(-3px,-3px)} .b8-fr:hover .tr{transform:translate(3px,-3px)} .b8-fr:hover .bl{transform:translate(-3px,3px)} .b8-fr:hover .br{transform:translate(3px,3px)}
+  .b8-cd { height: 100%; display: flex; flex-direction: column; gap: 12px; padding: 18px; background: #fff; border: 1px solid rgba(42,52,71,.14); border-top: 2px solid var(--champagne); transition: box-shadow .3s; }
+  .b8-cd:hover { box-shadow: 0 10px 28px -14px rgba(42,52,71,.28); }
+  .b8-cd h3 { margin: 0; font: 600 14px/1.3 var(--sans); color: var(--stone-blue); } .b8-cd p { margin: 4px 0 0; font: 400 13px/1.55 var(--sans); color: #5c616a; max-width: 42ch; }
+  .b8-tx { margin-top: auto; }
+  .b8-cp { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 20px 18px; }
+  .b8 svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .b8 .fl { stroke: #d6d2c8; fill: none; stroke-width: 1.2; } .b8 .fl.d { stroke-dasharray: 3 4; animation: b8dash 1.2s linear infinite; }
+  @keyframes b8dash { to { stroke-dashoffset: -14; } }
+  .b8 .nd { fill: #fff; stroke: #d6d2c8; transition: stroke .3s; } .b8 .tool { cursor: pointer; outline: none; }
+  .b8 .tool:hover .nd, .b8 .tool.on .nd, .b8 .tool:focus-visible .nd { stroke: var(--tc); filter: drop-shadow(0 0 4px var(--tc)); }
+  .b8 .pk { fill: var(--champagne); filter: drop-shadow(0 0 3px rgba(176,141,87,.8)); }
+  .b8 .sheet { animation: b8sheet .7s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes b8sheet { from { opacity: 0; transform: translate(14px,-10px) rotate(4deg); } }
+  .b8 .gl { animation: b8pulse 2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes b8pulse { 50% { opacity: .35; } }
+  .b8 .ln { fill: none; stroke: url(#b8l); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 1; animation: b8draw 2s cubic-bezier(.4,.1,.2,1) .2s forwards; }
+  @keyframes b8draw { to { stroke-dashoffset: 0; } }
+  @media (max-width: 700px) { .b8-grid { grid-template-columns: 1fr; padding: 16px; } .b8-cp { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .b8 .ln { animation: none; stroke-dashoffset: 0; } .b8 .fl.d, .b8 .gl, .b8 .sheet { animation: none; } }
+
+  /* Navy glass theme to match the Q icon */
+  .b8 { background: radial-gradient(circle at 18% 0%, #2a3f78 0%, #17306A 38%, #0B1A44 100%); max-width: none; padding: 64px clamp(16px, 5vw, 56px) 64px; margin: 0; width: 100%; border-block: 1px solid rgba(95,134,208,.45); }
+  .b8-hd, .b8-grid { max-width: 1120px; margin-inline: auto; }
+  .b8-hd h2 { color: #F5F2EB; } .b8-hd h2 em { color: #F6C98A; }
+  .b8-hd .eyebrow { color: #F6C98A; }
+  .b8-lede { color: #C3CBE0; }
+  .b8-grid { background: none; border: 0; padding: 0; margin-top: 8px; }
+  .b8-c { border-color: #F6C98A; }
+  .b8-cd { background: rgba(245,242,235,.07); border: 1px solid rgba(160,185,235,.28); border-top: 2px solid #F6C98A; border-radius: 10px; backdrop-filter: blur(8px); }
+  .b8-cd:hover { border-color: rgba(246,201,138,.6); box-shadow: 0 0 34px rgba(246,201,138,.16); }
+  .b8-cd h3 { color: #F5F2EB; } .b8-cd p { color: #B7C0D8; }
+  .b8 svg text { fill: #F5F2EB; }
+  .b8 #b8-sheet text { fill: #6b6f76; }
+  .b8 .fl { stroke: rgba(160,185,235,.35); }
+  .b8 .nd { fill: rgba(245,242,235,.08) !important; stroke: rgba(160,185,235,.45) !important; }
+  .b8 .tool .nd { stroke: rgba(160,185,235,.4) !important; }
+  .b8 .tool:hover .nd, .b8 .tool.on .nd, .b8 .tool:focus-visible .nd { stroke: var(--tc) !important; }
+  .b8 #b8-tiles { fill: #C3CBE0; } .b8 #b8-sync { fill: #8f9ab8; }
+  .b8 svg > rect:first-of-type { fill: none; }
+  .b8 svg circle[fill="#5B7494"] { fill: #9FB3D1; } .b8 svg circle[fill="#2A3447"] { fill: #D5D8DD; }
+  .b8 #b8-tiles circle { filter: none; }
+
+  /* Quiz and week plan share the navy glass look of the top section */
+  main section.quiz.wrap { max-width: none; width: 100%; margin: 0; background: radial-gradient(circle at 18% 0%, #2a3f78 0%, #17306A 38%, #0B1A44 100%); color: #C3CBE0; padding-inline: max(clamp(16px, 5vw, 56px), calc((100% - 1120px) / 2)); border-bottom: 1px solid rgba(95,134,208,.45); }
+  main section.quiz.wrap { padding-top: 64px; padding-bottom: 72px; }
+  main section.quiz.wrap .eyebrow, .tl-sec .eyebrow { color: #F6C98A; }
+  main section.quiz.wrap h2, .tl-sec h2 { color: #F5F2EB !important; }
+  main section.quiz.wrap legend { color: #C3CBE0; }
+  main section.quiz.wrap .opt span { background: rgba(245,242,235,.07); border-color: rgba(160,185,235,.35); color: #F5F2EB; }
+  main section.quiz.wrap .opt:hover span { border-color: #F6C98A; }
+  main section.quiz.wrap .opt input:checked + span, main section.quiz.wrap .opt input:focus-visible + span { background: #F5F2EB; color: #2A3447; border-color: #F6C98A; }
+  main section.quiz.wrap .btn { background: #F5F2EB; color: #2A3447; border-color: #F6C98A; }
+  main section.quiz.wrap .small { color: #C3CBE0; }
+
+  /* Larger diagram and chart labels */
+  .b8 svg text { font-size: 9.5px; letter-spacing: .5px; }
+  .b8 #b8-tiles { font-size: 10px; } .b8 #b8-sync { font-size: 9px; fill: #C3CBE0; }
+  .b8 #b8-tip text, .b8 #b8-tt { font-size: 9px; }
+  .b8 #b8-sheet text { font-size: 8px; }
+  .b8-cd h3 { font-size: 15px; } .b8-cd p { font-size: 14px; color: #C9D1E6; }
+
+  /* Timeline: a beam follows the scroll down the first seven days */
+  .tl-sec { background: radial-gradient(circle at 18% 0%, #2a3f78 0%, #17306A 38%, #0B1A44 100%); color: #C3CBE0; padding-block: clamp(56px, 8vw, 96px); }
+  .tl-sec .wrap { display: grid; gap: 14px; }
+  .tl-sec h2 { margin: 0; font: 500 clamp(30px, 4vw, 44px)/1.08 var(--serif); }
+  .tl-lede { margin: 0; max-width: 60ch; font-size: 16px; line-height: 1.6; color: #C3CBE0; }
+  .tl { --p: 0; position: relative; list-style: none; margin: clamp(20px, 3vw, 36px) 0 0; padding: 0 0 0 clamp(44px, 6vw, 72px); display: grid; gap: clamp(18px, 3vw, 32px); }
+  .tl::before { content: ""; position: absolute; left: 14px; top: 8px; bottom: 8px; width: 2px; background: rgba(160, 185, 235, 0.22); }
+  .tl::after { content: ""; position: absolute; left: 13px; top: 8px; width: 4px; height: calc((100% - 16px) * var(--p)); background: linear-gradient(180deg, rgba(246, 201, 138, 0), #F6C98A); box-shadow: 0 0 14px rgba(246, 201, 138, 0.7); border-radius: 4px; }
+  .tl li { position: relative; }
+  .tl-dot { position: absolute; left: calc(-1 * clamp(44px, 6vw, 72px) + 6px); top: 22px; width: 18px; height: 18px; border-radius: 50%; background: #0B1A44; border: 2px solid rgba(160, 185, 235, 0.5); transition: border-color 0.4s, box-shadow 0.4s, background 0.4s; z-index: 1; }
+  .tl li.on .tl-dot { border-color: #F6C98A; background: #F6C98A; box-shadow: 0 0 0 6px rgba(246, 201, 138, 0.16), 0 0 18px rgba(246, 201, 138, 0.7); }
+  .tl-card { display: grid; gap: 8px; padding: clamp(18px, 2.4vw, 28px); background: rgba(245, 242, 235, 0.06); border: 1px solid rgba(160, 185, 235, 0.28); border-left: 3px solid rgba(160, 185, 235, 0.4); opacity: 0.4; transform: translateX(14px); transition: opacity 0.6s, transform 0.6s, border-color 0.4s; }
+  .tl li.on .tl-card { opacity: 1; transform: none; border-left-color: #F6C98A; }
+  .tl-day { font: 600 11px/1 var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: #F6C98A; }
+  .tl-card h3 { margin: 0; font: 500 clamp(24px, 2.6vw, 32px)/1.1 var(--serif); color: #F5F2EB; }
+  .tl-card p { margin: 0; max-width: 56ch; font-size: 15px; line-height: 1.6; color: #D5DAE6; }
+  .tl-card small { font: 600 10px/1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: #8F9AB8; }
+  .tl-meter { height: 4px; background: rgba(245, 242, 235, 0.1); overflow: hidden; margin-top: 4px; }
+  .tl-meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #7B8590, #F6C98A); transition: width 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s; }
+  .tl li.on .tl-meter i { width: var(--w); }
+  .tl-after { margin: clamp(8px, 2vw, 20px) 0 0 clamp(44px, 6vw, 72px); font: italic 400 clamp(18px, 2vw, 22px)/1.5 var(--serif); color: #F5F2EB; }
+  @media (prefers-reduced-motion: reduce) { .tl-card, .tl-meter i, .tl-dot { transition: none; } }
+</style>

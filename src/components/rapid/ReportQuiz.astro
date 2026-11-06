@@ -1,0 +1,32 @@
+---
+import RapidIcon from "./RapidIcon.astro";
+import { lifeGoals } from "../../data/rapidListings";
+interface Props { mode: "submit" | "live" }
+const { mode } = Astro.props;
+---
+<div class="rq" data-mode={mode}>
+  <form id="rq-form" novalidate>
+    <fieldset>
+      <legend>What do you want your life to look like?<small id="rq-count">Choose up to three</small></legend>
+      <div class="rq-goals">
+        {lifeGoals.map((g) => (
+          <label class="rq-goal">
+            <input type="checkbox" name="goal" value={g.id} />
+            <span class="rq-goal-c">
+              <span class="rv-icb"><RapidIcon name={g.icon} size={22} /></span>
+              <b>{g.label}</b>
+              <em>{g.note}</em>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+    <div class="rq-actions">
+      <button class="rq-btn" type="submit" id="rq-submit">{mode === "live" ? "Jump to my answer" : "Tell me the answer"}</button>
+    </div>
+  </form>
+  <div class="rq-side">
+    {mode === "live" && <p id="rq-hint" class="rq-hint">Choose a goal and your answer builds itself here.</p>}
+    <article id="rq-out" class="rq-out" hidden aria-live="polite"></article>
+  </div>
+</div>

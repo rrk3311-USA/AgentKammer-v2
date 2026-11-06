@@ -329,11 +329,11 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--stone-blu
 .qtxt a { text-decoration: underline; text-decoration-color: var(--platinum); text-underline-offset: 3px; }
 .six { margin-bottom: 8px; }
 .six li { padding: 10px 0; font-size: 16px; }
-.ahead { display: grid; grid-template-columns: minmax(0, 1fr) clamp(220px, 28vw, 340px); gap: clamp(28px, 5vw, 72px); align-items: end; }
+.ahead { display: grid; grid-template-columns: minmax(0, 1fr) clamp(150px, 18vw, 220px); gap: clamp(28px, 5vw, 72px); align-items: end; }
 .portrait { margin: 0; }
 .portrait img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border: 2px solid transparent; background: linear-gradient(135deg, #7E858C, #C9CED3 26%, #EEF0F2 46%, #9AA1A8 68%, #7E858C 84%, #C9CED3) border-box; box-shadow: 0 8px 24px rgba(22, 28, 40, 0.14); }
 .portrait figcaption { margin-top: 12px; font: 600 11px/1 var(--sans); letter-spacing: 0.24em; text-transform: uppercase; color: var(--titanium); }
-@media (max-width: 760px) { .ahead { grid-template-columns: 1fr; } .portrait { max-width: 280px; } }
+@media (max-width: 760px) { .ahead { grid-template-columns: 1fr; } .portrait { max-width: 200px; } }
 .legal-page.about { max-width: 1080px; }
 .about h1 { font-size: clamp(38px, 4.8vw, 66px); }
 .about .ahead .lede { max-width: 40ch; }
