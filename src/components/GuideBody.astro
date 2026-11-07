@@ -10,7 +10,7 @@ interface Props {
   cta: { href: string; label: string };
   banner?: { src: string; alt: string };
   intro?: { title: string; text: string };
-  cards?: { name: string; hood: string; type: string; href: string; img: string }[];
+  cards?: { name: string; hood: string; type?: string; href: string; img?: string }[];
 }
 const { crumbs: rawCrumbs, eyebrow, title, lead, decide, recommendation, cta, banner, cards, intro } = Astro.props;
 // Drop a middle crumb that repeats the page name.
@@ -37,8 +37,8 @@ const crumbs = rawCrumbs.filter((c, i) => i === rawCrumbs.length - 1 || c.label.
         {cards.map((c) => (
           <li>
             <a href={c.href}>
-              <img src={c.img} alt={c.name} width="600" height="400" loading="lazy" decoding="async" />
-              <span class="bc-meta"><b>{c.name}</b><span>{c.hood}</span><em>{c.type}</em></span>
+              {c.img ? <img src={c.img} alt={c.name} width="600" height="400" loading="lazy" decoding="async" /> : <span class="bc-ph" aria-hidden="true"><i><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l9-1.5V21M14 8h5v13M8.5 8h2m-2 4h2m-2 4h2m6-5h.5m-.5 4h.5M3 21h18"/></svg></i><b>{c.hood}</b></span>}
+              <span class="bc-meta"><b>{c.name}</b><span>{c.hood}</span>{c.type && <em>{c.type}</em>}</span>
               <span class="bc-go">View profile <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></span>
             </a>
           </li>
