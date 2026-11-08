@@ -258,7 +258,7 @@
       }
     }
 
-    // The guide opens the conversation on its own, once per session.
+    // Opens the conversation when the visitor asks for it.
     function open() {
       if (opened) return;
       opened = true;
@@ -300,19 +300,7 @@
     });
     close.addEventListener("click", () => setOpen(false));
 
-    // Proactive: start after a short read, or once the visitor has scrolled into the page.
-    if (!seenThisSession()) {
-      const timer = window.setTimeout(open, 12000);
-      const onScroll = () => {
-        const depth = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
-        if (depth > 0.35) {
-          window.clearTimeout(timer);
-          window.removeEventListener("scroll", onScroll);
-          open();
-        }
-      };
-      window.addEventListener("scroll", onScroll, { passive: true });
-    }
+    // The guide never opens on its own. It opens when the visitor clicks Live Guide or asks from the menu.
   }
 </script>
 
