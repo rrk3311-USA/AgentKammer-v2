@@ -17,7 +17,7 @@ const ph = buildingPhotos[b.slug];
 
         {ph && (
           <div class="hero-unit"><div class="photo"><img src={ph.src} width="1100" height="733" alt={b.name} />
-            <p class="pcredit">Photo: {ph.credit}, <a href={ph.url} target="_blank" rel="noopener">{ph.lic}</a> via Wikimedia Commons</p></div></div>
+            {ph.credit && <p class="pcredit">Photo: {ph.credit}, <a href={ph.url} target="_blank" rel="noopener">{ph.lic}</a> via Wikimedia Commons</p>}</div></div>
         )}
 
         <dl class="facts">
