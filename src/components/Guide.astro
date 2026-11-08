@@ -1,540 +1,175 @@
-<aside class="guide" id="guide" aria-label="Guide">
-  <button class="launch" type="button" id="guide-launch" aria-expanded="false" aria-controls="guide-panel">
-    <span class="launch-avatar" aria-hidden="true"><img src="/images/guide-avatar.webp" alt="" width="64" height="64" /></span><span class="dot" aria-hidden="true"></span><span class="launch-text"><b>Live guide</b><small>Ask · Explore · Get insights</small></span>
-  </button>
+---
+// The guide. One scrolling thread with tap-to-answer choices, no side stage and no page frames.
+// The opening triage is scripted so it never fails. Free-text questions go to /api/chat and fall
+// back to a short answer or a handoff to a person. A request for an assessment posts to /api/contact.
+---
+<script is:inline>
+(function(){
+if(window.top!==window||document.getElementById('ak-guide'))return;
+var BASE='/',ENDPOINT='/api/contact';
+var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+var wait=function(ms){return new Promise(function(r){setTimeout(r,RM?0:ms)})};
+var root=document.createElement('aside');root.id='ak-guide';root.setAttribute('aria-label','Guide');
+root.innerHTML='<button type="button" class="lc" id="akl" aria-expanded="false" aria-controls="akp"><span class="dt"></span><b>Live guide</b><span class="av"><img src="'+BASE+'images/guide-avatar.webp" alt="" width="60" height="60"></span></button>'+
+'<div class="pn" id="akp" role="dialog" aria-label="Your Manhattan Guide" hidden><div class="hd"><span>Agent Kammer</span><button type="button" id="akc">Minimize</button></div>'+
+'<div class="who"><span class="pic"><img src="'+BASE+'images/guide-avatar.webp" alt="" width="60" height="60"></span><div><strong>Your Manhattan Guide</strong><small><i></i>Online now</small></div></div>'+
+'<div class="pg"><div class="tr"><span id="akf"></span></div><p id="aks">Starting the conversation</p></div>'+
+'<div class="lg" id="akg" role="log" aria-live="polite"></div>'+
+'<form class="fm" id="akm"><label class="sr" for="aki" style="position:absolute;left:-9999px">Your message</label><input id="aki" type="text" maxlength="400" placeholder="Ask me anything..." autocomplete="off" enterkeyhint="send"><button type="submit">Send</button></form>'+
+'<p class="nt">AI guide. Our team reads chats you choose to save.</p></div>';
+document.body.appendChild(root);
+var $=function(i){return document.getElementById(i)},L=$('akl'),P=$('akp'),G=$('akg'),I=$('aki'),F=$('akf'),T=$('aks');
+var hist=[],steps=['What changed','Where you stand','Your next step'],cur=-1,started=false,busy=false,ty=null,st={};
+function step(n){if(n<=cur)return;cur=n;F.style.width=((n+1)/3*100)+'%';T.textContent='Step '+(n+1)+' of 3 · '+steps[n]}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function down(){G.scrollTop=G.scrollHeight}
+function say(t,u){var m=el('p','m'+(u?' u':''),t);G.appendChild(m);down();if(t)hist.push({role:u?'user':'assistant',content:t});return m}
+function typing(on){if(on&&!ty){ty=el('p','m ty');ty.setAttribute('aria-label','The guide is typing');ty.innerHTML='<i></i><i></i><i></i>';G.appendChild(ty);down()}else if(!on&&ty){ty.remove();ty=null}}
+async function bot(lines){for(var i=0;i<lines.length;i++){typing(true);await wait(500+Math.min(lines[i].length*9,900));typing(false);var m=say(lines[i].t||lines[i]);if(lines[i].html){m.innerHTML=lines[i].html;hist[hist.length-1].content=m.textContent}await wait(220)}}
+function opts(list,cb){var box=el('div','op');box.setAttribute('role','group');list.forEach(function(o){var b=el('button','',o);b.type='button';b.onclick=function(){if(box.classList.contains('done')||busy)return;box.classList.add('done');b.classList.add('on');setTimeout(function(){say(o,true);cb(o)},180)};box.appendChild(b)});G.appendChild(box);down()}
+function hello(){var h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening'}
+var INS={
+'New job or relocating to NYC':'Relocations tend to turn on one question: how soon you need to be settled. A lease buys you time to learn the city, while a well-chosen purchase can spare you moving twice. Neither is wrong. They simply suit different timelines.',
+'Growing family':'With a growing family, square footage is rarely the whole story. It is how long the home will serve you, and what the building offers, such as storage, service and proximity to schools, so that you are not moving again in three years.',
+'Selling or downsizing':'When a home grows smaller, the best outcome is usually a move that feels like a gain: less upkeep, a building with service, nothing left to manage. How you time the sale against the purchase matters more than most people expect.',
+'Inheritance or new capital':'When capital arrives, the instinct is to act. The advisors I respect counsel the opposite. A property is a long holding, so the first move is deciding what it is for.',
+'Marriage or divorce':'Two lives becoming one, or one becoming two, ask the same of a home: clarity about what is shared, and what each person needs the next place to do.'};
+var AREA={
+'I already have a neighborhood in mind':'Then you have done half the work. The other half is the building: its finances, its board, and how it is likely to treat you in ten years.',
+'I am still getting a feel for the city':'Wise, and quite common. Manhattan is closer to a collection of villages than a single city. Tribeca prizes quiet and light, the Upper West Side the park and a daily routine, and the Financial District a short walk to the office.',
+'I would rather start with the building':'A sound instinct. In New York the building often matters more than the apartment: its reserves, its management, its rules. A handsome unit in a poorly run building tends to disappoint.'};
+var TIME={
+'Within a few weeks':'Then we should be deliberate rather than hurried: a short list of buildings that truly fit, and the paperwork ready before you need it.',
+'Over the next season':'A comfortable window, with time to see the city in its different moods and still act with confidence.',
+'A year or more':'That is a luxury. It allows us to watch the market quietly and wait for the right building rather than the available one.',
+'No fixed date':'Perfectly reasonable. The best decisions are seldom made against a clock.'};
+async function start(){
+ if(started)return;started=true;busy=true;
+ await bot([hello()+', and welcome. I am your Manhattan guide.','Most people who find their way here are not shopping for an apartment. Something has shifted, and a home is part of the answer.',{t:'What is closest to where you find yourself?'}]);
+ busy=false;step(0);ask1()}
+function ask1(){opts(['New job or relocating to NYC','Growing family','Selling or downsizing','Inheritance or new capital','Marriage or divorce','Something else'],pick1)}
+async function pick1(o){busy=true;st.situation=o;step(1);
+ if(INS[o]){await bot([INS[o]])}else{await bot(['Then tell me in your own words, whenever you like. There is no wrong place to begin.']);busy=false;st.free=true;I.placeholder='Tell me what has changed...';I.focus({preventScroll:true});return}
+ await bot(['May I ask how far along you are in thinking about where?']);busy=false;
+ opts(Object.keys(AREA),pick2)}
+async function pick2(o){busy=true;st.area=o;await bot([AREA[o],'And is there a horizon you have in mind?']);busy=false;opts(Object.keys(TIME),pick3)}
+async function pick3(o){busy=true;st.time=o;step(2);
+ await bot([TIME[o],'From what you have shared, I would suggest a Situation Assessment: a short, private profile of where you stand and what I would weigh first. There is no obligation, and a person writes it.']);busy=false;
+ opts(['Yes, please prepare one','Not yet, I would like to keep talking','Show me a few guides'],pick4)}
+async function pick4(o){busy=true;
+ if(o.indexOf('Yes')===0){await bot(['Wonderful. Where may a person send it?']);busy=false;lead()}
+ else if(o.indexOf('Not yet')===0){await bot(['Of course. Ask me anything, or tell me a little more about what has changed. I am in no hurry.']);busy=false;I.focus({preventScroll:true});opts(['What is a Situation Assessment?','Condo or co-op?'],function(q){reply(q)})}
+ else{await bot([{t:'',html:'Three that readers value most: <a href="'+BASE+'guides/how-to-buy-in-nyc.html">How to buy in NYC</a>, <a href="'+BASE+'situations/condo-vs-coop.html">Condo vs Co-op</a>, and <a href="'+BASE+'guides/how-wealth-is-held.html">How wealth is held</a>. They open in this window; the conversation will be waiting.'}]);busy=false;opts(['Prepare my assessment instead','I will keep reading'],function(x){x.indexOf('Prepare')===0?pick4('Yes, please prepare one'):bot(['Very good. I will be here when you want me.'])})}}
+function lead(){
+ var f=el('form','lead');f.innerHTML='<input name="name" autocomplete="name" placeholder="Your name" required aria-label="Your name"><input name="email" type="email" autocomplete="email" placeholder="Email address" required aria-label="Email address"><button type="submit">Send my assessment request</button><small>Private. A person replies, and nothing is shared.</small>';
+ f.onsubmit=async function(e){e.preventDefault();var b=f.querySelector('button');b.disabled=true;b.textContent='Sending';
+  var d=new URLSearchParams({form:'Guide',name:f.name.value.trim(),email:f.email.value.trim(),changed:(st.situation||'Not stated')+(st.free&&st.text?': '+st.text:''),decision:'Situation Assessment',timeline:({'Within a few weeks':'Now / 30 days','Over the next season':'3-6 months','A year or more':'6+ months','No fixed date':'Just exploring'})[st.time]||'Just exploring',next:'Situation Assessment',more:[st.area&&('Where: '+st.area),st.time&&('Horizon: '+st.time),'Via the guide'].filter(Boolean).join('. ')});
+  try{var r=await fetch(ENDPOINT,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded',accept:'application/json'},body:d});if(!r.ok&&r.type!=='opaqueredirect')throw 0;
+   f.remove();await bot(['Thank you, '+f.name.value.trim().split(' ')[0]+'. Your request is with the team, and a person will write to you personally. In the meantime, I am here if you would like to keep talking.'])}
+  catch(x){b.disabled=false;b.textContent='Send my assessment request';var s=f.querySelector('small');s.textContent='That did not go through just now. Please try once more in a moment, or write to us from the Contact page.'}};
+ G.appendChild(f);down();f.name.focus({preventScroll:true})}
+var QA=[[/co-?op|condo/i,'A condominium is owned outright, as real property. A co-op is a share in a corporation with a lease on your apartment, and the board approves each buyer. Condos tend to be more flexible and co-ops often more economical. The right one depends on how you intend to hold it.'],
+[/board|approval/i,'Board approval is part of buying a co-op, and some condos have a right of first refusal. It is a review of finances and references, and good preparation makes it a formality far more often than not.'],
+[/mortgage|financ|loan/i,'Financing in Manhattan has its own habits: co-ops often ask for more liquidity after closing than a lender would, and some buildings limit how much you may borrow. It is worth knowing a building’s rules before you fall for it.'],
+[/assessment/i,'A Situation Assessment is a short, private profile: what changed, where you stand, and what I would weigh first. A person writes it, and it carries no obligation.'],
+[/tribeca|upper west|upper east|chelsea|hudson yards|financial district|soho|village/i,'Each of those neighborhoods has a distinct rhythm, and the right one follows your daily life more than your budget. Tell me how you spend a typical week, and I will point you toward the one that fits.']];
+async function ai(){
+ var res=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:hist.slice(-12),page:location.pathname,context:Object.fromEntries(['situation','decision','building','area'].map(function(k){return [k,new URLSearchParams(location.search).get(k)||'']}).filter(function(x){return x[1]}))})});
+ if(!res.ok)throw 0;var d=await res.json();if(!d.blocks||!d.blocks.length)throw 0;return d.blocks}
+async function reply(t){if(busy)return;say(t,true);busy=true;st.text=st.text||t;
+ if(st.free&&!st.area){st.free=false;I.placeholder='Ask me anything...';await bot(['Thank you for telling me. That is very helpful.','May I ask how far along you are in thinking about where?']);busy=false;opts(Object.keys(AREA),pick2);return}
+ typing(true);var blocks=null;try{blocks=await ai()}catch(x){blocks=null}typing(false);
+ if(blocks){var ch=null,lines=[];blocks.forEach(function(b){if(b.type==='text')lines.push(b.text);else if(b.type==='slide')lines.push([b.title].concat(b.points||[]).join('. ')+(b.takeaway?' '+b.takeaway:''));else if(b.type==='steps')lines.push('Next steps: '+b.items.join(' Then, '));else if(b.type==='choices'){lines.push(b.question);ch=b.options}});
+  await bot(lines);busy=false;if(ch)opts(ch,function(x){reply(x)});return}
+ var a=null;QA.some(function(q){if(q[0].test(t)){a=q[1];return true}});
+ if(a){await bot([a]);busy=false;return}
+ await bot(['That deserves a proper answer, and I would rather you had it from a person than a guess from me. If you leave your email, the team will reply personally.']);busy=false;
+ opts(['Leave my email','Keep exploring'],function(x){x.indexOf('Leave')===0?lead():bot(['Of course. Ask whatever comes to mind.'])})}
+function open(on){P.hidden=!on;L.hidden=on;L.setAttribute('aria-expanded',String(on));if(on){start();setTimeout(function(){I.focus({preventScroll:true})},50)}else L.focus()}
+var sess=Math.random().toString(36).slice(2,10),sent=0;function sendT(){var n=hist.filter(function(h){return h.role==='user'}).length;if(!n||n===sent)return;sent=n;try{navigator.sendBeacon('/api/transcript',JSON.stringify({turns:hist,page:location.pathname,session:sess}))}catch(e){}}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')sendT()});addEventListener('pagehide',sendT);
+L.onclick=function(){open(true)};$('akc').onclick=function(){open(false);sendT()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!P.hidden)open(false)});
+$('akm').onsubmit=function(e){e.preventDefault();var t=I.value.trim();if(!t)return;I.value='';if(!started){start();return}reply(t)};
+window.addEventListener('guide:ask',function(e){var t=String(e.detail||'').trim().slice(0,300);if(!t)return;if(!started){started=true;step(1);bot_hi()}open(true);reply(t)});
+function bot_hi(){say(hello()+', and welcome. I am your Manhattan guide.')}
+if(window.visualViewport){var vv=visualViewport,fit=function(){if(P.hidden)return;var k=Math.max(0,innerHeight-vv.height-vv.offsetTop);root.style.bottom=k>80?(k+8)+'px':'';P.style.height=k>80?Math.max(260,vv.height-16)+'px':'';down()};vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit)}
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(a&&/^\s*live chat\s*$/i.test(a.textContent)){e.preventDefault();open(true)}});
+})();
 
-  <div class="panel" id="guide-panel" hidden>
-    <div class="top">
-      <span class="title">Agent Kammer</span>
-      <button class="close" type="button" id="guide-close" aria-label="Minimize the guide">Minimize</button>
-    </div>
-
-    <div class="who">
-      <span class="avatar" aria-hidden="true">
-        <img class="mark" src="/images/guide-avatar.webp" alt="" width="60" height="60" />
-      </span>
-      <span class="names">
-        <strong>Your Manhattan Guide</strong>
-        <span class="status"><i aria-hidden="true"></i>Online now</span>
-      </span>
-    </div>
-
-    <div class="progress" aria-live="polite">
-      <div class="track" aria-hidden="true"><span id="guide-fill"></span></div>
-      <p class="label" id="guide-step">Starting the conversation</p>
-    </div>
-
-    <div class="stage" id="guide-stage"></div>
-
-    <div class="log" id="guide-log" role="log" aria-live="polite"></div>
-
-    <form class="form" id="guide-form">
-      <label class="sr" for="guide-input">Your message</label>
-      <input id="guide-input" type="text" maxlength="1000" placeholder="Ask me anything..." autocomplete="off" />
-      <button class="send" type="submit" id="guide-send">Send</button>
-    </form>
-    <p class="err" id="guide-err" hidden></p>
-    <p class="note">AI guide. Our team reads chats you choose to save.</p>
-  </div>
-</aside>
-
-<script>
-  // Inside another page's frame (the guide showing a site page), stay out of the way.
-  if (window.top !== window) {
-    document.getElementById("guide")?.remove();
-  } else {
-    const launch = document.getElementById("guide-launch") as HTMLButtonElement;
-    const panel = document.getElementById("guide-panel") as HTMLElement;
-    const close = document.getElementById("guide-close") as HTMLButtonElement;
-    const stage = document.getElementById("guide-stage") as HTMLElement;
-    const log = document.getElementById("guide-log") as HTMLElement;
-    const form = document.getElementById("guide-form") as HTMLFormElement;
-    const input = document.getElementById("guide-input") as HTMLInputElement;
-    const send = document.getElementById("guide-send") as HTMLButtonElement;
-    const err = document.getElementById("guide-err") as HTMLElement;
-    const fill = document.getElementById("guide-fill") as HTMLElement;
-    const stepLabel = document.getElementById("guide-step") as HTMLElement;
-
-    type Block =
-      | { type: "text"; text: string }
-      | { type: "slide"; title: string; points: string[]; takeaway?: string; offer?: { label: string; path: string } }
-      | { type: "page"; path: string; anchor?: string; reason: string }
-      | { type: "choices"; question: string; options: string[] }
-      | { type: "steps"; items: string[] };
-
-    // What the server needs to remember: visitor messages and a plain summary of what was shown.
-    const history: { role: "user" | "assistant"; content: string }[] = [];
-    let busy = false;
-    let opened = false;
-
-    // The triage has three stages, matching the Situation Assessment: what changed, where you stand,
-    // and your next step. Each visual moves the bar forward; it never moves back.
-    const STEPS = ["What changed", "Where you stand", "Your next step"];
-    let reached = -1;
-    function advance(to: number) {
-      if (to <= reached) return;
-      reached = to;
-      fill.style.width = `${((reached + 1) / STEPS.length) * 100}%`;
-      stepLabel.textContent = `Step ${reached + 1} of ${STEPS.length} · ${STEPS[reached]}`;
-    }
-
-    // Preview the looks with ?guide-style=gold|navy|platinum|ivory|night|royal. Royal is the default.
-    const style = new URLSearchParams(location.search).get("guide-style");
-    const aside = document.getElementById("guide") as HTMLElement;
-    aside.dataset.style = style || "royal";
-
-    const OPENED_KEY = "guide-opened";
-    const seenThisSession = () => {
-      try {
-        return sessionStorage.getItem(OPENED_KEY) === "1";
-      } catch {
-        return false;
-      }
-    };
-    const markSeen = () => {
-      try {
-        sessionStorage.setItem(OPENED_KEY, "1");
-      } catch {
-        /* private windows can refuse storage; the guide still works */
-      }
-    };
-
-    function setOpen(open: boolean) {
-      panel.hidden = !open;
-      launch.hidden = open;
-      launch.setAttribute("aria-expanded", String(open));
-      if (open) input.focus({ preventScroll: true });
-    }
-
-    function say(role: "user" | "bot", text: string) {
-      const p = document.createElement("p");
-      p.className = `msg ${role}`;
-      p.textContent = text;
-      log.append(p);
-      log.scrollTop = log.scrollHeight;
-    }
-
-    // Three dots in the log while the guide is "writing", so the visitor sees it is live.
-    let typingNode: HTMLElement | null = null;
-    function typing(on: boolean) {
-      if (on && !typingNode) {
-        typingNode = document.createElement("p");
-        typingNode.className = "msg bot typing";
-        typingNode.setAttribute("aria-label", "The guide is typing");
-        typingNode.innerHTML = "<span></span><span></span><span></span>";
-        log.append(typingNode);
-        log.scrollTop = log.scrollHeight;
-      } else if (!on && typingNode) {
-        typingNode.remove();
-        typingNode = null;
-      }
-    }
-
-    function el(tag: string, className: string, text?: string) {
-      const node = document.createElement(tag);
-      node.className = className;
-      if (text) node.textContent = text;
-      return node;
-    }
-
-    // Each visual replaces the stage, so the visitor always sees one thing at a time.
-    function show(block: Block) {
-      stage.replaceChildren();
-      if (block.type === "choices") advance(0);
-      if (block.type === "page" || block.type === "slide") advance(1);
-      if (block.type === "steps") advance(2);
-
-      if (block.type === "slide") {
-        const card = el("div", "slide");
-        card.append(el("h3", "", block.title));
-        const list = el("ul", "points");
-        for (const point of block.points) list.append(el("li", "", point));
-        card.append(list);
-        if (block.takeaway) card.append(el("p", "takeaway", block.takeaway));
-        if (block.offer) {
-          const offer = el("a", "offer", block.offer.label) as HTMLAnchorElement;
-          offer.href = block.offer.path;
-          card.append(offer);
-        }
-        stage.append(card);
-      }
-
-      if (block.type === "page") {
-        const frame = document.createElement("iframe");
-        frame.className = "frame";
-        frame.title = block.reason;
-        frame.src = block.path;
-        frame.addEventListener("load", () => {
-          // Same site, so the guide can tidy the page and scroll to the section it is talking about.
-          const doc = frame.contentDocument;
-          if (!doc) return;
-          doc.querySelectorAll("header, footer").forEach((node) => ((node as HTMLElement).style.display = "none"));
-          if (!block.anchor) return;
-          doc.getElementById(block.anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
-        const caption = el("p", "caption", block.reason);
-        const open = el("a", "open", "Open this page");
-        open.href = block.path;
-        stage.append(frame, caption, open);
-      }
-
-      if (block.type === "choices") {
-        const wrap = el("div", "choices");
-        wrap.append(el("p", "question", block.question));
-        const row = el("div", "options");
-        for (const option of block.options) {
-          const btn = el("button", "option", option) as HTMLButtonElement;
-          btn.type = "button";
-          btn.addEventListener("click", () => ask(option));
-          row.append(btn);
-        }
-        wrap.append(row);
-        stage.append(wrap);
-      }
-
-      if (block.type === "steps") {
-        const wrap = el("div", "steps");
-        wrap.append(el("p", "question", "Next steps"));
-        const list = el("ol", "");
-        for (const item of block.items) list.append(el("li", "", item));
-        wrap.append(list);
-        stage.append(wrap);
-      }
-    }
-
-    // Plays a reply in order: spoken lines go to the log, each visual takes the stage in turn.
-    // Slides and pages hold on screen long enough to read before the guide moves on.
-    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-    async function play(blocks: Block[]) {
-      for (const block of blocks) {
-        if (block.type === "text") {
-          typing(true);
-          await wait(700);
-          typing(false);
-          say("bot", block.text);
-          await wait(300);
-        } else {
-          show(block);
-          if (block.type === "slide" || block.type === "page") await wait(4500);
-        }
-      }
-    }
-
-    function pageContext() {
-      const q = new URLSearchParams(location.search);
-      const keys = ["situation", "decision", "building", "area"] as const;
-      return Object.fromEntries(keys.map((k) => [k, q.get(k) ?? ""]).filter(([, v]) => v));
-    }
-
-    async function request(messages: typeof history, opening: boolean) {
-      if (busy) return;
-      busy = true;
-      send.disabled = true;
-      err.hidden = true;
-      typing(true);
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ messages, opening, page: location.pathname, context: pageContext() }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "Something went wrong.");
-        typing(false);
-        await play(data.blocks as Block[]);
-        history.push({ role: "assistant", content: data.summary || "[replied]" });
-      } catch (error) {
-        // A visitor never sees a server message. They get a way to reach a person instead.
-        err.textContent = "The guide is unavailable right now. ";
-        const contact = document.createElement("a");
-        contact.href = "/contact";
-        contact.textContent = "Write to the team";
-        err.append(contact, " and a person will reply.");
-        err.hidden = false;
-      } finally {
-        typing(false);
-        busy = false;
-        send.disabled = false;
-      }
-    }
-
-    // Opens the conversation when the visitor asks for it.
-    function open() {
-      if (opened) return;
-      opened = true;
-      markSeen();
-      setOpen(true);
-      request([], true);
-    }
-
-    function ask(text: string) {
-      if (busy) return;
-      history.push({ role: "user", content: text });
-      say("user", text);
-      request([...history], false);
-    }
-
-    // The header menu can hand over a question from the same page.
-    window.addEventListener("guide:ask", (e) => {
-      const text = String((e as CustomEvent).detail || "").trim().slice(0, 300);
-      if (!text) return;
-      if (!opened) {
-        opened = true;
-        markSeen();
-      }
-      setOpen(true);
-      ask(text);
-    });
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = "";
-      ask(text);
-    });
-
-    launch.addEventListener("click", () => {
-      if (!opened) open();
-      else setOpen(true);
-    });
-    close.addEventListener("click", () => {
-      setOpen(false);
-      sendTranscript();
-    });
-
-    // Email the team a transcript when the visitor minimizes or leaves, once per new message.
-    const session = Math.random().toString(36).slice(2, 10);
-    let sentCount = 0;
-    function sendTranscript() {
-      const userCount = history.filter((h) => h.role === "user").length;
-      if (!userCount || userCount === sentCount) return;
-      sentCount = userCount;
-      try {
-        navigator.sendBeacon("/api/transcript", JSON.stringify({ turns: history, page: location.pathname, session }));
-      } catch {
-        /* the transcript is a courtesy copy; the chat itself is unaffected */
-      }
-    }
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") sendTranscript();
-    });
-    window.addEventListener("pagehide", sendTranscript);
-
-    // The guide never opens on its own. It opens when the visitor clicks Live Guide or asks from the menu.
-  }
 </script>
 
 <style is:global>
-  /* Each look is a set of tokens. The markup never changes. Royal is the default. */
-  #guide {
-    --g-ink: #3A2F20;
-    --g-body: #FBF6EA;
-    --g-paper: linear-gradient(180deg, #FFFDF7 0%, #F6EEDB 100%);
-    --g-accent: #5C4424;
-    --g-rule: #B08D57;
-    --g-soft: rgba(176, 141, 87, 0.45);
-    --g-glow: rgba(92, 68, 36, 0.26);
-    --g-head: transparent;
-    --g-head-ink: #5C4424;
-    --g-launch: linear-gradient(180deg, #F7EDD2, #D9B979);
-    --g-launch-ink: #5C4424;
-    --g-launch-rule: #B08D57;
-    --g-choice: transparent;
-    --g-choice-ink: #5C4424;
-    --g-text: #FFFDF7;
-    --g-frame-inset: inset 0 0 0 4px #FBF6EA, inset 0 0 0 5px rgba(176, 141, 87, 0.45);
-    position: fixed;
-    right: max(16px, env(safe-area-inset-right, 0px));
-    bottom: max(16px, env(safe-area-inset-bottom, 0px));
-    z-index: 60;
-    font-family: var(--sans);
-    color: var(--g-ink);
-  }
-  #guide[data-style="navy"] {
-    --g-ink: #2A3447; --g-body: #F5F2EB; --g-paper: #F5F2EB; --g-accent: #2A3447; --g-rule: #8E949B; --g-soft: rgba(42, 52, 71, 0.22); --g-glow: rgba(42, 52, 71, 0.3);
-    --g-head: linear-gradient(115deg, transparent 0%, rgba(245, 242, 235, 0.16) 24%, transparent 44%), repeating-linear-gradient(90deg, rgba(245, 242, 235, 0.07) 0 1px, transparent 1px 6px), #2A3447;
-    --g-head-ink: #F5F2EB; --g-launch: linear-gradient(115deg, transparent 0%, rgba(245, 242, 235, 0.16) 24%, transparent 44%), repeating-linear-gradient(90deg, rgba(245, 242, 235, 0.07) 0 1px, transparent 1px 6px), #2A3447; --g-launch-ink: #F5F2EB; --g-launch-rule: #B08D57;
-    --g-choice: #FFFFFF; --g-choice-ink: #2A3447; --g-frame-inset: none;
-  }
-  #guide[data-style="platinum"] {
-    --g-ink: #2F3136; --g-body: #F7F8F9; --g-paper: #F7F8F9; --g-accent: #2A3447; --g-rule: #8E949B; --g-soft: rgba(110, 116, 124, 0.3); --g-glow: rgba(42, 52, 71, 0.22);
-    --g-head: repeating-linear-gradient(90deg, rgba(42, 52, 71, 0.12) 0 1px, transparent 1px 7px), linear-gradient(180deg, #F6F7F8, #D5D9DE);
-    --g-head-ink: #2A3447; --g-launch: linear-gradient(180deg, #F6F7F8 0%, #D5D9DE 52%, #B9BEC5 100%); --g-launch-ink: #2A3447; --g-launch-rule: #8E949B;
-    --g-choice: #FFFFFF; --g-choice-ink: #2A3447; --g-frame-inset: inset 0 0 0 4px #F7F8F9, inset 0 0 0 5px rgba(160, 166, 174, 0.45);
-  }
-  #guide[data-style="ivory"] {
-    --g-ink: #2F2A22; --g-body: #FBF8F1; --g-paper: #FBF8F1; --g-accent: #2A3447; --g-rule: #D8D1C7; --g-soft: #E7E0D3; --g-glow: rgba(47, 42, 34, 0.14);
-    --g-head: transparent; --g-head-ink: #2A3447; --g-launch: #2A3447; --g-launch-ink: #F5F2EB; --g-launch-rule: #2A3447;
-    --g-choice: transparent; --g-choice-ink: #2A3447; --g-frame-inset: none;
-  }
-  #guide[data-style="night"] {
-    --g-ink: #F5F2EB; --g-body: #1E2636; --g-paper: linear-gradient(180deg, #232D40 0%, #1A2232 100%); --g-accent: #D9B979; --g-rule: #B08D57; --g-soft: rgba(176, 141, 87, 0.4); --g-glow: rgba(0, 0, 0, 0.45);
-    --g-head: transparent; --g-head-ink: #D9B979; --g-launch: linear-gradient(180deg, #2A3447, #161C28); --g-launch-ink: #D9B979; --g-launch-rule: #B08D57;
-    --g-choice: transparent; --g-choice-ink: #D9B979; --g-text: #2A3447; --g-frame-inset: inset 0 0 0 4px #1E2636, inset 0 0 0 5px rgba(176, 141, 87, 0.4);
-  }
-  /* A private concierge: ivory stock, deep navy type, restrained champagne hairlines. No texture. */
-  #guide[data-style="royal"] {
-    --g-ink: #1E2A3A; --g-body: #FBF8F1; --g-paper: linear-gradient(180deg, #FBF8F1 0%, #F3EDE0 100%); --g-accent: #2A3447; --g-rule: #B08D57; --g-soft: rgba(176, 141, 87, 0.35); --g-glow: rgba(30, 42, 58, 0.22);
-    --g-head: transparent; --g-head-ink: #2A3447; --g-launch: linear-gradient(115deg, transparent 0%, rgba(245, 242, 235, 0.16) 24%, transparent 44%), repeating-linear-gradient(90deg, rgba(245, 242, 235, 0.16) 0 1px, transparent 1px 7px), #2A3447; --g-launch-ink: #F5F2EB; --g-launch-rule: #101318;
-    --g-choice: #FFFFFF; --g-choice-ink: #2A3447; --g-text: #FFFFFF; --g-frame-inset: none;
-  }
-  #guide[data-style="royal"] .launch { height: 42px; padding: 0 46px 0 16px; gap: 11px; border: 1px solid rgba(245, 242, 235, 0.3); border-radius: 999px; background: rgba(27, 34, 50, 0.82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); letter-spacing: 0; text-transform: none; box-shadow: 0 10px 22px var(--g-glow); }
-        #guide .launch-text { display: grid; gap: 3px; text-align: left; padding-left: 12px; border-left: 1px solid rgba(245, 242, 235, 0.55); }
-  #guide .launch-text b { font: 500 15px/1 var(--serif); letter-spacing: 0.12em; text-transform: uppercase; color: #F5F2EB; }
-  #guide .launch-text small { display: none; }
-  #guide[data-style="royal"] .launch-avatar { top: 50%; bottom: auto; right: 8px; width: 30px; height: 30px; margin-top: -15px; overflow: hidden; border-radius: 50%; background: linear-gradient(180deg, #E9E4D8, #CFC8B8); box-shadow: 0 0 0 1px rgba(176, 141, 87, 0.7); }
-  #guide[data-style="royal"] .launch-avatar img { width: 120%; height: 120%; margin: 10% 0 0 -6%; object-fit: cover; object-position: 50% 12%; filter: none; }
-  #guide[data-style="royal"] .dot { width: 9px; height: 9px; box-shadow: 0 0 6px #4FA86A; }
-  #guide[data-style="royal"] .panel { width: min(340px, calc(100vw - 32px)); border-radius: 18px; }
-  #guide[data-style="royal"] .top { border-radius: 17px 17px 0 0; }
-  /* Messages read like the rows of a printed card: serif lines on hairline rules, no bubbles. */
-  #guide[data-style="royal"] .msg { max-width: 100%; padding: 10px 0; border: 0; border-bottom: 1px solid var(--g-soft); background: transparent; color: var(--g-ink); font: italic 400 17px/1.4 var(--serif); }
-  #guide[data-style="royal"] .msg.user { align-self: stretch; background: transparent; color: var(--g-accent); border: 0; border-bottom: 1px solid var(--g-soft); font: 500 11px/1.4 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; }
-  #guide[data-style="royal"] .msg.typing { border: 0; }
-  /* Chat cards follow the printed Property Assessment card: cream stock, serif, a cut corner, no window chrome. */
-  #guide[data-style="royal"] .slide { background: linear-gradient(180deg, #FFFFFF 0%, #F8F4EA 100%); border: 1px solid var(--g-rule); padding: 22px 22px 20px; clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%); box-shadow: 0 10px 24px var(--g-glow); }
-  #guide[data-style="royal"] .slide h3 { font: 500 26px/1.1 var(--serif); color: var(--g-accent); }
-  #guide[data-style="royal"] .points { font: italic 400 16px/1.5 var(--serif); color: var(--g-ink); }
-  #guide[data-style="royal"] .question { font: 400 22px/1.2 var(--serif); }
-  #guide[data-style="royal"] .option { background: transparent; border: 1px solid var(--g-rule); color: var(--g-accent); font: 500 10px/1.2 var(--sans); letter-spacing: 0.18em; text-transform: uppercase; }
-  #guide[data-style="royal"] .option:hover { background: var(--g-accent); color: #FBF9F4; }
-  #guide[data-style="royal"] .steps ol { font: italic 400 16px/1.5 var(--serif); color: var(--g-ink); }
+#ak-guide,#ak-guide *{box-sizing:border-box}
+#ak-guide{--ink:#f5f2eb;--soft:#c3cbe0;--dim:#8f9bbd;--champ:#d9b979;--navy:#14246a;--rule:rgba(160,185,235,.28);--card:rgba(255,255,255,.07);
+position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:60;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
+#ak-guide ::selection{background:#f5f2eb;color:#0f1d4c}
+#ak-guide button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#ak-guide .lc{position:relative;display:flex;align-items:center;gap:11px;height:42px;padding:0 50px 0 16px;border-radius:999px;border:1px solid rgba(245,242,235,.3);background:rgba(27,34,50,.86);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 10px 22px rgba(30,42,58,.28);color:var(--ink)}
+#ak-guide .lc:hover{background:rgba(35,44,64,.92)}
+#ak-guide .lc b{font:500 15px/1 "Cormorant Garamond",Georgia,serif;letter-spacing:.12em;text-transform:uppercase;border-left:1px solid rgba(245,242,235,.5);padding-left:12px;white-space:nowrap}
+#ak-guide .lc .dt{width:9px;height:9px;border-radius:50%;background:#4fa86a;box-shadow:0 0 6px #4fa86a}
+#ak-guide .lc .av{position:absolute;right:6px;top:50%;margin-top:-15px;width:30px;height:30px;border-radius:50%;overflow:hidden;background:linear-gradient(#e9e4d8,#cfc8b8);box-shadow:0 0 0 1px rgba(176,141,87,.7)}
+#ak-guide .lc .av img{width:100%;height:100%;padding:12% 8% 0;object-fit:contain;object-position:50% 100%}
+#ak-guide .pn{display:flex;flex-direction:column;width:min(390px,calc(100vw - 24px));height:min(680px,calc(100dvh - 32px));border-radius:18px;border:1px solid var(--rule);overflow:hidden;background:radial-gradient(circle at 15% 0,rgba(70,100,190,.55),transparent 55%),linear-gradient(165deg,#2b3d7b 0%,#1a2b6b 52%,#0e1b49 100%);box-shadow:0 24px 54px rgba(8,16,48,.5)}
+#ak-guide [hidden]{display:none!important}
+#ak-guide .hd{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 0;flex:none}
+#ak-guide .hd span{font:600 11px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase}
+#ak-guide .hd button{background:none;border:0;border-bottom:1px solid var(--soft);padding:4px 0;font:500 10px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+#ak-guide .hd button:hover{color:#fff;border-color:#fff}
+#ak-guide .who{display:flex;align-items:center;gap:13px;padding:12px 18px 12px;flex:none}
+#ak-guide .who .pic{flex:none;width:54px;height:54px;border-radius:50%;overflow:hidden;background:linear-gradient(#e9e4d8,#cfc8b8);box-shadow:0 0 0 1px rgba(217,185,121,.7)}
+#ak-guide .who .pic img{width:100%;height:100%;padding:12% 8% 0;object-fit:contain;object-position:50% 100%}
+#ak-guide .who strong{display:block;font:500 24px/1.1 "Cormorant Garamond",Georgia,serif}
+#ak-guide .who small{display:flex;align-items:center;gap:7px;margin-top:5px;font-size:13px;color:var(--soft)}
+#ak-guide .who small i{width:9px;height:9px;border-radius:50%;background:#4fa86a;animation:akb 2.6s ease-in-out infinite}
+@keyframes akb{0%,100%{transform:scale(.85);box-shadow:0 0 0 0 rgba(79,168,106,.55)}50%{transform:scale(1.1);box-shadow:0 0 0 5px rgba(79,168,106,0)}}
+#ak-guide .pg{padding:0 18px 10px;flex:none}
+#ak-guide .tr{height:2px;background:var(--rule)}
+#ak-guide .tr span{display:block;height:100%;width:0;background:var(--champ);transition:width .6s}
+#ak-guide .pg p{margin:9px 0 0;font:500 10px/1.3 Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+#ak-guide .lg{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0 12px;padding:12px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;border:1px solid var(--rule);border-radius:14px;background:rgba(255,255,255,.04)}
+#ak-guide .lg>*{flex:none}
+#ak-guide .m{margin:0;padding:14px 16px;border-radius:14px;border:1px solid var(--rule);background:var(--card);font:italic 400 18px/1.45 "Cormorant Garamond",Georgia,serif;color:var(--ink);animation:akin .35s ease both}
+#ak-guide .m.u{align-self:flex-end;max-width:88%;padding:10px 14px;font:500 11px/1.4 Inter,sans-serif;font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:#0f1d4c;background:#e9ebf0;border-color:transparent}
+#ak-guide .m a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--champ)}
+#ak-guide .m.ty{display:flex;gap:5px;width:max-content;padding:14px 16px}
+#ak-guide .m.ty i{width:6px;height:6px;border-radius:50%;background:var(--soft);animation:akd 1.1s infinite}
+#ak-guide .m.ty i:nth-child(2){animation-delay:.15s}#ak-guide .m.ty i:nth-child(3){animation-delay:.3s}
+@keyframes akd{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+@keyframes akin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#ak-guide .op{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:14px;background:var(--card);overflow:hidden;animation:akin .35s ease both}
+#ak-guide .op button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;padding:15px 16px;background:none;border:0;border-top:1px solid var(--rule);font:500 11px/1.35 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--champ);transition:background .2s,color .2s}
+#ak-guide .op button:first-child{border-top:0}
+#ak-guide .op button::after{content:"›";font-size:16px;line-height:1;color:var(--dim)}
+#ak-guide .op button:hover,#ak-guide .op button:focus-visible{background:rgba(245,242,235,.12);outline:0}
+#ak-guide .op button:active,#ak-guide .op button.on{background:#f5f2eb;color:#14246a}
+#ak-guide .op button.on::after{color:#14246a}
+#ak-guide .op.done button:not(.on){opacity:.4;pointer-events:none}
+#ak-guide .op.done button.on{pointer-events:none}
+#ak-guide .lead{display:flex;flex-direction:column;gap:9px;padding:14px 16px;border:1px solid var(--rule);border-radius:14px;background:var(--card);animation:akin .35s ease both}
+#ak-guide .lead input{width:100%;height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--rule);background:rgba(8,16,48,.35);color:var(--ink);font:16px Inter,sans-serif}
+#ak-guide .lead input::placeholder{color:var(--dim)}
+#ak-guide .lead input:focus{outline:0;border-color:#f5f2eb}
+#ak-guide .lead button{height:44px;border-radius:10px;border:1px solid #c9ced3;background:linear-gradient(180deg,#f5f2eb,#d8d4ca);color:#14246a;font:600 11px/1 Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+#ak-guide .lead button:disabled{opacity:.6}
+#ak-guide .lead small{font-size:12px;line-height:1.4;color:var(--soft)}
+#ak-guide .fm{display:flex;gap:10px;padding:12px 18px 6px;flex:none}
+#ak-guide .fm input{flex:1;min-width:0;height:46px;padding:0 14px;border-radius:12px;border:1px solid var(--rule);background:rgba(255,255,255,.06);color:var(--ink);font:16px Inter,sans-serif}
+#ak-guide .fm input::placeholder{color:var(--dim)}
+#ak-guide .fm input:focus{outline:0;border-color:#f5f2eb;box-shadow:0 0 0 3px rgba(245,242,235,.14)}
+#ak-guide .fm button{flex:none;height:46px;padding:0 20px;border-radius:12px;border:1px solid #b8bbc0;background:linear-gradient(180deg,#2b303c,#10131b);color:#f5f2eb;font:600 12px/1 Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+#ak-guide .fm button:hover{background:linear-gradient(180deg,#3a4050,#171b25)}
+#ak-guide .fm button:focus-visible{outline:2px solid #f5f2eb;outline-offset:2px}
+#ak-guide .nt{margin:0;padding:4px 18px 14px;font-size:11px;line-height:1.4;color:var(--dim);flex:none}
+@media (max-width:560px){
+#ak-guide{right:8px;left:8px;bottom:max(8px,env(safe-area-inset-bottom,0px))}
+#ak-guide .lc{margin-left:auto}
+#ak-guide .pn{width:100%;height:min(86dvh,calc(100dvh - 16px))}
+#ak-guide .who strong{font-size:22px}
+#ak-guide .m{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){#ak-guide *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{#ak-guide{display:none}}
 
-  #guide .launch { display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; height: 48px; padding: 0 46px 0 22px; border: 1px solid var(--g-launch-rule); background: var(--g-launch); color: var(--g-launch-ink); font: 500 12px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 10px 24px var(--g-glow); }
-  #guide .launch:hover { opacity: 0.9; }
-  #guide .launch { position: relative; }
-  /* The medallion sits on the top right corner of the bar, half over the edge. */
-  #guide .launch-avatar { position: absolute; top: -40px; right: 2px; width: 38px; height: 51px; pointer-events: none; }
-  #guide .launch-avatar img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45)); }
-  #guide .launch[hidden] { display: none; }
-
-  /* Royal conversation: quiet header, a medallion for a face, one hairline above the talk, a composer that does not shout. */
-  #guide[data-style="royal"] .panel { border-color: #2F3136; }
-  #guide[data-style="royal"] .top { border-bottom: 0; padding: 16px 18px 4px; }
-  #guide[data-style="royal"] .title { font-weight: 600; letter-spacing: 0.12em; }
-  #guide[data-style="royal"] .close { height: auto; padding: 3px 0; border: 0; border-bottom: 1px solid #2F3136; background: transparent; color: #2F3136; font: 500 10px/1 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; }
-  #guide[data-style="royal"] .close:hover { background: transparent; color: var(--g-accent); border-bottom-color: var(--g-rule); }
-  #guide[data-style="royal"] .who { gap: 14px; padding: 12px 18px 14px; }
-  #guide[data-style="royal"] .names { gap: 6px; }
-  #guide[data-style="royal"] .names strong { font-size: 22px; }
-  #guide[data-style="royal"] .status { opacity: 1; color: #5C636B; }
-  #guide[data-style="royal"] .progress { padding: 0 18px 10px; }
-  #guide[data-style="royal"] .track { height: 1px; background: var(--g-soft); }
-  #guide[data-style="royal"] .label { letter-spacing: 0.1em; color: #5C636B; }
-  /* The inner chat stays as it was: a recessed silver well with the small square texture and silver text. */
-  #guide[data-style="royal"] .stage,
-  #guide[data-style="royal"] .log { margin: 0 14px; border: 0; background: radial-gradient(rgba(42, 52, 71, 0.05) 1px, transparent 1px) 0 0 / 4px 4px, linear-gradient(135deg, #EEF0F2 0%, #C9CED3 46%, #E4E7EA 100%); box-shadow: inset 0 2px 10px rgba(42, 52, 71, 0.16), inset 0 -2px 10px rgba(42, 52, 71, 0.12); }
-  #guide[data-style="royal"] .msg, #guide[data-style="royal"] .stage p, #guide[data-style="royal"] .points li { color: #5C636B; }
-  #guide[data-style="royal"] .form { padding: 12px 18px 8px; }
-  #guide[data-style="royal"] .form input { border: 1px solid #2F3136; border-radius: 0; background: #FFFFFF; color: var(--g-ink); padding-left: 14px; }
-  #guide[data-style="royal"] .form input::placeholder { color: #7A8088; }
-  #guide[data-style="royal"] .form input:focus-visible { outline: 0; border-color: #1E2A3A; box-shadow: 0 0 0 3px rgba(42, 52, 71, 0.14); }
-  #guide .note { margin: 0; padding: 0 18px 16px; font: 400 11px/1.4 var(--sans); color: #5C636B; }
-  #guide .err a { color: inherit; text-underline-offset: 3px; }
-  #guide .dot { width: 8px; height: 8px; border-radius: 50%; background: #4FA86A; animation: guide-breathe 2.6s ease-in-out infinite; }
-
-  #guide .panel { width: min(420px, calc(100vw - 32px)); max-height: min(660px, calc(100vh - 32px)); display: flex; flex-direction: column; background: var(--g-paper); color: var(--g-ink); border: 1px solid var(--g-rule); box-shadow: var(--g-frame-inset), 0 22px 46px var(--g-glow); overflow: hidden; }
-  #guide .panel[hidden] { display: none; }
-
-  #guide .top { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px 12px; background: var(--g-head); border-bottom: 1px solid var(--g-soft); }
-  #guide .title { font: 500 11px/1 var(--sans); letter-spacing: 0.24em; text-transform: uppercase; color: var(--g-head-ink); white-space: nowrap; }
-  #guide .close { flex: 0 0 auto; height: 26px; padding: 0 12px; border: 1px solid var(--g-rule); background: transparent; color: var(--g-head-ink); font: 500 11px/1 var(--sans); letter-spacing: 0.08em; cursor: pointer; }
-  #guide .close:hover { background: var(--g-accent); color: var(--g-body); }
-
-  #guide .who { display: flex; align-items: center; gap: 12px; padding: 14px 18px; }
-  /* Just the silhouette, cut out and facing left. No circle, no frame. */
-  #guide .avatar { display: block; width: 54px; height: 72px; flex: 0 0 auto; }
-  #guide .mark { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px rgba(30, 42, 58, 0.35)); }
-  #guide .names { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  #guide .names strong { font: 500 19px/1.1 var(--serif); color: var(--g-accent); }
-  #guide .status { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 1.35; color: var(--g-ink); opacity: 0.8; }
-  #guide .status i { width: 8px; height: 8px; border-radius: 50%; background: #4FA86A; flex: 0 0 auto; animation: guide-breathe 2.6s ease-in-out infinite; }
-  @keyframes guide-breathe { 0%, 100% { transform: scale(0.85); box-shadow: 0 0 0 0 rgba(79, 168, 106, 0.55); } 50% { transform: scale(1.15); box-shadow: 0 0 0 5px rgba(79, 168, 106, 0); } }
-  @media (prefers-reduced-motion: reduce) { #guide .status i, #guide .dot { animation: none; } }
-
-  #guide .progress { padding: 0 18px 12px; }
-  #guide .track { height: 4px; background: var(--g-soft); overflow: hidden; }
-  #guide .track span { display: block; height: 100%; width: 0; background: var(--g-accent); transition: width 0.6s ease; }
-  #guide .label { margin: 8px 0 0; font: 500 10px/1.3 var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--g-accent); }
-
-  #guide .stage { min-height: 200px; max-height: 300px; overflow: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--g-soft); border-bottom: 1px solid var(--g-soft); }
-  #guide .stage:empty::before { content: "How can I help you navigate Manhattan?"; color: var(--g-ink); opacity: 0.6; font: italic 400 16px/1.4 var(--serif); }
-  #guide .slide { background: var(--g-choice); border: 1px solid var(--g-rule); padding: 16px 18px; }
-  #guide .slide h3 { margin: 0 0 10px; font: 400 26px/1.1 var(--serif); color: var(--g-accent); }
-  #guide .points { margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.5; }
-  #guide .takeaway { margin: 12px 0 0; font: italic 400 16px/1.4 var(--serif); color: var(--g-accent); }
-  #guide .frame { width: 100%; height: 230px; border: 1px solid var(--g-rule); background: #fff; }
-  #guide .caption { margin: 0; font: italic 400 16px/1.4 var(--serif); color: var(--g-accent); }
-  #guide .open { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--g-accent); text-decoration: underline; text-underline-offset: 4px; align-self: flex-start; }
-  #guide .offer { display: inline-block; margin-top: 16px; font: 500 12px/1 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--g-accent); border: 1px solid var(--g-rule); padding: 11px 16px; text-decoration: none; }
-  #guide .offer:hover { background: var(--g-accent); color: var(--g-body); }
-  #guide .question { margin: 0 0 12px; font: 400 22px/1.2 var(--serif); color: var(--g-accent); }
-  #guide .options { display: flex; flex-wrap: wrap; gap: 8px; }
-  #guide .option { padding: 9px 14px; border: 1px solid var(--g-accent); background: var(--g-choice); color: var(--g-choice-ink); font: 500 11px/1.2 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; }
-  #guide .option:hover { background: var(--g-accent); color: var(--g-body); }
-  #guide .steps ol { margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.5; }
-
-  #guide .log { min-height: 0; max-height: 150px; overflow-y: auto; padding: 12px 18px; display: flex; flex-direction: column; gap: 8px; }
-  #guide .log:empty { display: none; }
-  #guide .msg { margin: 0; max-width: 88%; padding: 9px 13px; font-size: 14px; line-height: 1.45; border: 1px solid var(--g-soft); background: var(--g-choice); color: var(--g-ink); }
-  #guide .msg.user { align-self: flex-end; background: var(--g-accent); color: var(--g-body); border-color: var(--g-accent); }
-  #guide .typing { display: inline-flex; gap: 4px; padding: 11px 13px; }
-  #guide .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--g-accent); animation: guide-blink 1.2s infinite ease-in-out; }
-  #guide .typing span:nth-child(2) { animation-delay: 0.2s; }
-  #guide .typing span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes guide-blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
-
-  #guide .form { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 12px 18px 18px; }
-  #guide .form input { min-width: 0; padding: 11px 12px; border: 1px solid var(--g-rule); background: var(--g-choice); color: var(--g-ink); font: 400 15px/1.3 var(--sans); }
-  #guide .form input:focus-visible { outline: 2px solid var(--g-rule); outline-offset: 2px; }
-  #guide .send { height: 44px; padding: 0 18px; border: 1px solid var(--g-accent); background: var(--g-accent); color: var(--g-body); font: 500 12px/1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; }
-  #guide .send:disabled { opacity: 0.5; cursor: wait; }
-  /* Liquid metal send button: a brushed-steel rim that drifts, a dark body and a sheen on hover. */
-  #guide .send, .nm-form button[type="submit"] { position: relative; isolation: isolate; overflow: hidden; border: 0; border-radius: 10px; padding: 0 20px; background: linear-gradient(180deg, #2b3138, #14181d); color: #EEF0F2; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 6px 14px rgba(20, 24, 29, 0.35); }
-  #guide .send::before, .nm-form button[type="submit"]::before { content: ""; position: absolute; inset: 0; z-index: -2; border-radius: inherit; background: conic-gradient(from var(--lm, 0deg), #f4f6f8, #7b8590, #d9dde1, #4a525b, #f4f6f8 40%, #8d97a1, #e9ecef, #5b636c, #f4f6f8); animation: lm-spin 18s linear infinite; }
-  #guide .send::after, .nm-form button[type="submit"]::after { content: ""; position: absolute; inset: 1.5px; z-index: -1; border-radius: 8.5px; background: linear-gradient(180deg, #2b3138, #14181d); }
-  #guide .send span, .nm-form button[type="submit"] span { position: relative; }
-  #guide .send:hover:not(:disabled), .nm-form button[type="submit"]:hover { filter: brightness(1.12); transform: translateY(-1px); }
-  #guide .send:active:not(:disabled), .nm-form button[type="submit"]:active { transform: translateY(1px); }
-  @property --lm { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
-  @keyframes lm-spin { to { --lm: 360deg; } }
-  @media (prefers-reduced-motion: reduce) { #guide .send::before, .nm-form button[type="submit"]::before { animation: none; } }
-  #guide .err { margin: 0 18px 14px; color: #8a2a2a; font-size: 13px; }
-  #guide .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-
-  @media (max-width: 600px) {
-    #guide { left: 0; right: 0; bottom: 0; padding: 0 max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); display: flex; justify-content: flex-end; }
-    #guide .panel { width: 100%; max-height: 84vh; }
-    #guide .stage { max-height: 38vh; }
-  }
-
-  /* Dark navy panel, the same glass as the Quick match page. */
-  #guide[data-style="royal"] { --g-ink: #F5F2EB; --g-body: #0B1A44; --g-paper: radial-gradient(circle at 18% 0%, #2a3f78 0%, #17306A 38%, #0B1A44 100%); --g-accent: #F6C98A; --g-rule: rgba(246, 201, 138, 0.7); --g-soft: rgba(160, 185, 235, 0.3); --g-glow: rgba(5, 10, 30, 0.55); --g-head-ink: #F5F2EB; }
-  #guide[data-style="royal"] .panel { border-color: rgba(160, 185, 235, 0.45); }
-  #guide[data-style="royal"] .title { color: #F5F2EB; }
-  #guide[data-style="royal"] .close { color: #C3CBE0; border-bottom-color: rgba(195, 203, 224, 0.6); }
-  #guide[data-style="royal"] .close:hover { color: #F6C98A; border-bottom-color: #F6C98A; }
-  #guide[data-style="royal"] .names strong { color: #F5F2EB; }
-  #guide[data-style="royal"] .status, #guide[data-style="royal"] .label { color: #C3CBE0; }
-  #guide[data-style="royal"] .stage, #guide[data-style="royal"] .log { background: rgba(245, 242, 235, 0.07); box-shadow: inset 0 0 0 1px rgba(160, 185, 235, 0.28); border-radius: 8px; }
-  #guide[data-style="royal"] .msg, #guide[data-style="royal"] .stage p, #guide[data-style="royal"] .points li { color: #D7DDEE; }
-  #guide[data-style="royal"] .msg.user { color: #F6C98A; }
-  #guide[data-style="royal"] .form input { border: 1px solid rgba(160, 185, 235, 0.45); border-radius: 8px; background: rgba(245, 242, 235, 0.08); color: #F5F2EB; }
-  #guide[data-style="royal"] .form input::placeholder { color: #9AA6C4; }
-  #guide[data-style="royal"] .form input:focus-visible { border-color: #F6C98A; box-shadow: 0 0 0 3px rgba(246, 201, 138, 0.18); }
-  #guide .note { color: #9AA6C4; }
-  #guide .err { color: #F4A3A3; }
-  #guide[data-style="royal"] .who .avatar { display: none; }
-
-  /* Launcher avatar: a glowing orb with blinking eyes (plain CSS port of the React avatar, in the navy and champagne palette). */
-  #guide[data-style="royal"] .launch-avatar { width: 24px; height: 24px; margin-top: -12px; right: 10px; background: radial-gradient(circle at 50% 45%, #050d26 0%, #0B1A44 45%, #17306A 78%, #2a3f78 100%); box-shadow: none; display: flex; align-items: center; justify-content: center; gap: 3px; }
-  #guide[data-style="royal"] .launch-avatar img { display: none; }
-  #guide[data-style="royal"] .launch-avatar::before, #guide[data-style="royal"] .launch-avatar::after { content: ""; width: 3px; height: 7px; margin-top: -1px; border-radius: 999px; background: linear-gradient(135deg, #F5F2EB 0%, #F6C98A 100%); animation: guide-blink 5.4s ease-in-out infinite; }
-  #guide[data-style="royal"] .launch-avatar::after { animation-delay: 60ms; }
-  #guide[data-style="royal"] .launch-avatar { background-image: radial-gradient(ellipse at 30% 24%, rgba(160, 185, 235, 0.35) 0%, rgba(160, 185, 235, 0.06) 50%, transparent 70%), radial-gradient(circle at 50% 45%, #050d26 0%, #0B1A44 45%, #17306A 78%, #2a3f78 100%); }
-  @keyframes guide-blink { 0%, 88%, 100% { transform: scaleY(1); } 93%, 97% { transform: scaleY(0.07); } }
-  @media (prefers-reduced-motion: reduce) { #guide[data-style="royal"] .launch-avatar::before, #guide[data-style="royal"] .launch-avatar::after { animation: none; } }
-  #guide .launch, #guide[data-style="royal"] .launch { box-shadow: none; filter: none; }
-  #guide .launch-avatar, #guide[data-style="royal"] .launch-avatar { box-shadow: none; filter: none; }
 </style>

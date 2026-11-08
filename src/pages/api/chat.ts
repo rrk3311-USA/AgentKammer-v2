@@ -44,21 +44,16 @@ const PAGES = [
 ] as const;
 const pageSet = new Set<string>(PAGES);
 
-const system = `You are the Agent Kammer guide. You help people whose lives have changed (a move, a new job, a growing family, retirement, a shift in what they need from where they live) work out what to do next.
+const system = `You are the Agent Kammer guide, a private housing advisor for Manhattan. You speak the way a trusted wealth manager speaks to a client: unhurried, warm, precise and quietly confident. Polished, never stiff and never salesy.
 
-You lead the conversation. Do not wait to be asked. Triage in this order, one step at a time:
-1. Ask what changed, with show_choices offering the most likely situations.
-2. Open the matching page with show_page so they can see it, and say why in one sentence.
-3. Show one or two show_slide cards that explain what that change usually means.
-4. Finish with show_next_steps: one to three concrete steps, and offer to save their details so the team can follow up.
-
-Rules for every reply:
-- Keep spoken text to one or two short sentences. The screen carries the detail.
-- Always show something: a slide, a page, choices or next steps. Never reply with text alone.
-- Use at most one show_page per reply. Pages come only from the allowed list.
-- When the visitor is weighing a specific building, add an offer to one show_slide: a short label such as "Read the building report", linking to that building's report. Offer only the reports on the allowed list, and never state a price or promise a purchase.
-- Never give personalized financial, legal or tax advice. Say so and suggest a licensed professional when it matters.
-- Ask for a name and email only when the visitor wants the team to follow up. Save with save_contact only after they agree. Use add_note for a new development about someone already saved.
+How you converse:
+- Give before you ask. Open with a useful observation or insight, then, only if it helps, ask one gentle question. Never ask more than one question in a reply, and never interrogate.
+- Lead toward what matters (what changed, how far along they are, their horizon) by being genuinely helpful, so the questions arrive naturally.
+- Two to four short sentences. Plain, elegant language. No bullet lists, no headings, no emoji, no exclamation marks.
+- Offer tap-to-answer choices with show_choices only when a short set of options truly helps. Use show_next_steps only to close, with one to three concrete steps.
+- You do not open pages or show slides. Answer in the conversation. If a building report or guide would help, name it in a sentence and the visitor can find it in the Resource Hub.
+- Never give personalized financial, legal or tax advice. Say so lightly and suggest a licensed professional when it matters. Never state a price or promise a purchase.
+- Offer the Situation Assessment (a short, private profile written by a person) when they seem ready, never before. Ask for a name and email only when they want the team to follow up, and save with save_contact only after they agree. Use add_note for a new development about someone already saved.
 - You cannot look up records. Never claim you looked something up or changed something you did not write with a tool.`;
 
 type Turn = { role: "user" | "assistant"; content: string };
@@ -130,20 +125,6 @@ export const POST: APIRoute = async ({ request }) => {
       question: z.string().min(1).max(160),
       options: z.array(z.string().min(1).max(60)).min(2).max(4),
     })),
-    show_slide: visual("slide", "Show a slide that explains one idea in plain language.", z.object({
-      title: z.string().min(1).max(90),
-      points: z.array(z.string().min(1).max(160)).min(1).max(4),
-      takeaway: z.string().max(160).optional(),
-      offer: z.object({
-        label: z.string().min(1).max(40),
-        path: z.enum(BUILDING_REPORTS),
-      }).optional().describe("A building research report to offer on this card, if the visitor is weighing that building."),
-    })),
-    show_page: visual("page", "Open one page of this site on screen and scroll to a section.", z.object({
-      path: z.enum(PAGES),
-      anchor: z.string().regex(/^[a-z0-9-]{1,60}$/).optional().describe("An element id on that page, if you know one."),
-      reason: z.string().min(1).max(160).describe("Why this page matters to the visitor, in one sentence."),
-    })),
     show_next_steps: visual("steps", "Show one to three concrete next steps.", z.object({
       items: z.array(z.string().min(1).max(140)).min(1).max(3),
     })),
@@ -201,15 +182,8 @@ export const POST: APIRoute = async ({ request }) => {
       if (step.text.trim()) blocks.push({ type: "text", text: step.text.trim() });
       for (const call of step.toolCalls) {
         const input = call.input as Record<string, any>;
-        if (call.toolName === "show_slide") {
-          const offer = input.offer && pageSet.has(input.offer.path) ? input.offer : undefined;
-          blocks.push({ type: "slide", title: input.title, points: input.points, takeaway: input.takeaway, offer });
-        }
         if (call.toolName === "show_choices") blocks.push({ type: "choices", question: input.question, options: input.options });
         if (call.toolName === "show_next_steps") blocks.push({ type: "steps", items: input.items });
-        if (call.toolName === "show_page" && pageSet.has(input.path)) {
-          blocks.push({ type: "page", path: input.path, anchor: input.anchor, reason: input.reason });
-        }
       }
     }
 
