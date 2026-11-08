@@ -1,5 +1,5 @@
-// Building profiles added from the Desktop zip (agentkammer-v2-local-with-new-buildings). Text only: no photos yet.
-// Facts have not been re-verified against other sources.
+// Building profiles added from the Desktop zip (agentkammer-v2-local-with-new-buildings). Photos live in buildingPhotos.ts.
+// Facts web-checked 2026-11-07 against public sources; where sources disagree the text says so.
 export interface NewBuilding { slug: string; name: string; hood: string; dek: string; facts: [string, string][]; suits: [string, string][]; read: string[]; giveUp: string[]; commute: string; photo?: string }
 export const newBuildings: NewBuilding[] = [
  {
