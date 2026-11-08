@@ -1,9 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
+import { buildingPhotos } from "../data/buildingPhotos";
 import type { NewBuilding } from "../data/newBuildings";
 interface Props { b: NewBuilding }
 const { b } = Astro.props;
 const q = encodeURIComponent(b.name);
+const ph = buildingPhotos[b.slug];
 ---
 <Base title={`${b.name} | Agent Kammer`} description={b.dek} context={{ building: b.name }}>
   <div class="lh">
@@ -13,8 +15,9 @@ const q = encodeURIComponent(b.name);
         <h1>{b.name}</h1>
         <p class="dek">{b.dek}</p>
 
-        {b.photo && (
-          <div class="hero-unit"><div class="photo"><img src={b.photo} width="1100" height="733" alt={b.name} /></div></div>
+        {ph && (
+          <div class="hero-unit"><div class="photo"><img src={ph.src} width="1100" height="733" alt={b.name} />
+            <p class="pcredit">Photo: {ph.credit}, <a href={ph.url} target="_blank" rel="noopener">{ph.lic}</a> via Wikimedia Commons</p></div></div>
         )}
 
         <dl class="facts">
@@ -112,7 +115,9 @@ const q = encodeURIComponent(b.name);
     margin: 20px 0 28px;
   }
   .photo { margin: 0; }
-  .photo img { width: 100%; height: auto; display: block; border-radius: 6px; }
+  .photo img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: center 30%; display: block; border-radius: 6px; }
+  .pcredit { font-size: 11px; color: #6b7280; margin: 6px 2px 8px; }
+  .pcredit a { color: inherit; }
   .pick {
     display: flex;
     justify-content: space-between;

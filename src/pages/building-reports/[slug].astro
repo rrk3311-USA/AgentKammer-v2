@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import GuideBody from "../../components/GuideBody.astro";
 import BuildingProfile from "../../components/BuildingProfile.astro";
 import { propertyAssessments } from "../../data/propertyAssessments";
+import { buildingPhotos } from "../../data/buildingPhotos";
 import { newBuildings } from "../../data/newBuildings";
 
 export function getStaticPaths() {
@@ -19,7 +20,7 @@ const cards = [
   { name: "35 Hudson Yards", hood: "Hudson Yards", type: "Condominium", href: "/building-reports/35-hudson-yards", img: "/images/35-hudson-yards.jpg" },
   { name: "565 Broome", hood: "SoHo and Hudson Square", type: "Condominium", href: "/building-reports/565-broome", img: "/images/565-broome.jpg" },
   // Added from the Desktop zip. Text only for now: no photo, so these cards show a neighborhood tile.
-  ...newBuildings.map((n) => ({ name: n.name, hood: n.hood, type: "", href: `/building-reports/${n.slug}`, img: "" })),
+  ...newBuildings.map((n) => ({ name: n.name, hood: n.hood, type: "", href: `/building-reports/${n.slug}`, img: buildingPhotos[n.slug]?.src ?? "" })),
 ];
 ---
 {b ? <BuildingProfile b={b} /> : (
