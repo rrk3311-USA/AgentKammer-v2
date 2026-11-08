@@ -298,7 +298,28 @@
       if (!opened) open();
       else setOpen(true);
     });
-    close.addEventListener("click", () => setOpen(false));
+    close.addEventListener("click", () => {
+      setOpen(false);
+      sendTranscript();
+    });
+
+    // Email the team a transcript when the visitor minimizes or leaves, once per new message.
+    const session = Math.random().toString(36).slice(2, 10);
+    let sentCount = 0;
+    function sendTranscript() {
+      const userCount = history.filter((h) => h.role === "user").length;
+      if (!userCount || userCount === sentCount) return;
+      sentCount = userCount;
+      try {
+        navigator.sendBeacon("/api/transcript", JSON.stringify({ turns: history, page: location.pathname, session }));
+      } catch {
+        /* the transcript is a courtesy copy; the chat itself is unaffected */
+      }
+    }
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") sendTranscript();
+    });
+    window.addEventListener("pagehide", sendTranscript);
 
     // The guide never opens on its own. It opens when the visitor clicks Live Guide or asks from the menu.
   }
