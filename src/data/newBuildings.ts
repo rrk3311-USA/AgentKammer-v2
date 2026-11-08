@@ -26,15 +26,23 @@ export const newBuildings: NewBuilding[] = [
    ],
    [
     "Completion",
-    "2021–2022"
+    "2022"
    ],
    [
     "Residences",
-    "59"
+    "60 (46 in the tower, 14 in Steinway Hall)"
    ],
    [
     "Height",
     "1,428 feet"
+   ],
+   [
+    "Interiors",
+    "Studio Sofield"
+   ],
+   [
+    "Floors",
+    "91"
    ]
   ],
   "suits": [
@@ -52,16 +60,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "59 condominiums, 14 in Steinway Hall and 45 in the tower.",
-   "About 20,000 square feet of amenities, with a pool, padel court and golf simulator.",
-   "The tower rises from the restored Steinway Hall, built in 1925."
+   "60 condominiums: 46 in the tower, mostly full-floor and duplex homes, and 14 in the restored Steinway Hall.",
+   "An 82-foot pool, a double-height fitness center, private dining room with a catering kitchen, and cabanas.",
+   "The tower rises from Steinway Hall, a landmark built in 1925."
   ],
   "giveUp": [
-   "A narrow tower with few homes per floor and a limited choice of layouts.",
-   "Billionaires’ Row, more tourist and traffic than a residential block.",
-   "Longer trip to Wall Street."
+   "A very narrow tower, so few homes per floor and limited layouts.",
+   "Billionaires’ Row, with more tourists and traffic than a residential block.",
+   "A longer trip to Wall Street."
   ],
-  "commute": "Columbus Circle and the 57th Street stations are close. Door to door times still need checking."
+  "commute": "The 57th Street (F) and 57 St–7 Av (N/Q/R/W) stations are a short walk, and Columbus Circle is about ten minutes on foot. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "125-greenwich",
@@ -83,11 +91,11 @@ export const newBuildings: NewBuilding[] = [
    ],
    [
     "Developer",
-    "Bizzi & Partners and Bilgili"
+    "Fortress Investment Group, Bizzi & Partners and Bilgili Holding"
    ],
    [
     "Completion",
-    "2024"
+    "2025 (sources vary)"
    ],
    [
     "Residences",
@@ -96,6 +104,14 @@ export const newBuildings: NewBuilding[] = [
    [
     "Height",
     "912 feet"
+   ],
+   [
+    "Interiors",
+    "MAWD"
+   ],
+   [
+    "Floors",
+    "88"
    ]
   ],
   "suits": [
@@ -113,16 +129,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "Studios through three-bedrooms, plus penthouses.",
-   "Pool and spa, fitness center, screening room, lounge and terrace with grills.",
-   "Full-time doorman and concierge, with in-unit washer and dryer."
+   "Studios through three-bedrooms, plus penthouses, in an 88-story tower.",
+   "Amenities sit in the top floors, including a lap pool, spa, fitness center and private dining and entertaining rooms.",
+   "More than 27,000 square feet of indoor and outdoor amenity space."
   ],
   "giveUp": [
    "A tall, dense building in a business district.",
    "A neighborhood that is still filling in with shops and daily services.",
-   "The newest building here, with less history to read."
+   "A newer building, so less history to read. The project’s schedule slipped and was restructured, so ask about current sales status."
   ],
-  "commute": "The Financial District subway hubs are close, and the Oculus at the World Trade Center is a short walk. Door to door times still need checking."
+  "commute": "Wall Street (2/3, 4/5), Rector Street (R/W) and the World Trade Center hub, including the Oculus, are all a short walk. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "15-hudson-yards",
@@ -157,10 +173,6 @@ export const newBuildings: NewBuilding[] = [
    [
     "Height",
     "914 feet"
-   ],
-   [
-    "Floors",
-    "88"
    ]
   ],
   "suits": [
@@ -179,15 +191,15 @@ export const newBuildings: NewBuilding[] = [
   ],
   "read": [
    "About 40,000 square feet of amenities, with a 75-foot pool and spa on the 50th floor.",
-   "Club room, private dining suites, screening room and a skytop entertaining suite.",
-   "Residents also receive benefits at nearby Hudson Yards facilities."
+   "A private dining room for up to 18 and a skytop outdoor space, billed as the highest outdoor residential space in the city.",
+   "Residents also get access to the wider Hudson Yards district."
   ],
   "giveUp": [
    "A large master-planned district.",
    "Offices, shops and visitors close by.",
    "A longer trip to Wall Street."
   ],
-  "commute": "The 7 line serves Hudson Yards, and Penn Station is a short walk. Door to door times still need checking."
+  "commute": "The 7 train stops at 34 St–Hudson Yards, and Penn Station is a short walk. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "220-central-park-south",
@@ -221,7 +233,7 @@ export const newBuildings: NewBuilding[] = [
    ],
    [
     "Residences",
-    "118"
+    "About 118 apartments (some reports add villas)"
    ],
    [
     "Height",
@@ -243,16 +255,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "118 apartments, most of them duplexes.",
-   "An 82-foot saltwater pool, athletic club, library and private dining rooms.",
-   "A 54-seat restaurant led by Jean-Georges Vongerichten."
+   "About 118 apartments, most of them duplexes, with wide Central Park views.",
+   "A swimming pool and athletic club, a library and private dining rooms.",
+   "A restaurant led by Jean-Georges Vongerichten (check current operator)."
   ],
   "giveUp": [
    "Billionaires’ Row, with more traffic and tourists than a residential block.",
    "Larger apartments, often at the top of the market.",
    "A longer trip to Wall Street."
   ],
-  "commute": "Columbus Circle is next door, with many subway lines. Door to door times still need checking."
+  "commute": "Columbus Circle is next door, with the A/B/C/D and 1 lines. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "30-park-place",
@@ -287,6 +299,10 @@ export const newBuildings: NewBuilding[] = [
    [
     "Height",
     "926 feet"
+   ],
+   [
+    "Floors",
+    "82"
    ]
   ],
   "suits": [
@@ -304,16 +320,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "157 condominiums on the upper floors, above a 175-room Four Seasons Hotel.",
-   "Residential amenities with a pool, gym, media room and private dining room.",
-   "A double-height conservatory on the 38th floor."
+   "157 condominiums on the upper floors, above a Four Seasons Hotel, with a separate residential entrance.",
+   "About 40,000 square feet of shared space, with a 75-foot pool, fitness center with yoga studio, screening room and private dining room.",
+   "Residents can use the hotel’s services and restaurants."
   ],
   "giveUp": [
    "A hotel shares the tower.",
-   "The oldest of these five, completed in 2016.",
-   "Hotel rules and service structure apply to residents."
+   "Hotel rules and service structure apply to residents.",
+   "Completed in 2016, the oldest building on this list."
   ],
-  "commute": "City Hall and the Financial District subway lines are close. Door to door times still need checking."
+  "commute": "Park Place (2/3), Chambers Street (A/C/E) and the Fulton Street hub are close. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "50-west-street",
@@ -343,11 +359,19 @@ export const newBuildings: NewBuilding[] = [
    ],
    [
     "Height",
-    "778 feet"
+    "About 780 feet"
    ],
    [
     "Floors",
     "64"
+   ],
+   [
+    "Interiors",
+    "Thomas Juul-Hansen"
+   ],
+   [
+    "Completion",
+    "2016–2017"
    ]
   ],
   "suits": [
@@ -365,16 +389,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "191 condominiums in a 64-story glass tower.",
-   "A 60-foot pool with a hot tub, bicycle storage and an observatory.",
-   "Interiors by Thomas Juul-Hansen and Rene Desjardins."
+   "191 condominiums, from one to four bedrooms, in a 64-story curved glass tower, plus a large penthouse.",
+   "Four floors of amenities, with a pool, and a public plaza at street level linking West and Washington Streets.",
+   "Interiors by Thomas Juul-Hansen."
   ],
   "giveUp": [
-   "No garage.",
    "A business district address, with limited street life after hours.",
-   "Details from a 2011 review need checking against the finished building."
+   "No garage.",
+   "Check the amenity list with the sales team, since sources differ on details."
   ],
-  "commute": "Wall Street and Bowling Green subway stops are close, with Battery Park City nearby. Door to door times still need checking."
+  "commute": "Rector Street (R/W), Wall Street (2/3) and Bowling Green (4/5) are close, with Battery Park City nearby. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "520-fifth-avenue",
@@ -396,7 +420,7 @@ export const newBuildings: NewBuilding[] = [
    ],
    [
     "Developer",
-    "Rabina Properties"
+    "Rabina"
    ],
    [
     "Expected completion",
@@ -408,7 +432,11 @@ export const newBuildings: NewBuilding[] = [
    ],
    [
     "Height",
-    "1,001 feet"
+    "1,002 feet"
+   ],
+   [
+    "Floors",
+    "88"
    ]
   ],
   "suits": [
@@ -426,16 +454,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "Roughly 100 residences in a 71-story tower.",
-   "Pool, spa, fitness center and restaurant are confirmed, with more amenities planned.",
-   "Next to Grand Central Terminal and Bryant Park."
+   "About 100 residences, one to four bedrooms, starting on the 42nd floor of an 88-story tower. Floors 9 to 34 are offices.",
+   "A residents-only space in the crown, plus a private members’ club, spa and fitness center at ground level.",
+   "Sales launched in April 2024, and the building is near Bryant Park and the New York Public Library."
   ],
   "giveUp": [
    "Completion is still pending, so details can change.",
    "A commercial district, with little street life after hours.",
-   "Pricing and delivery depend on a project still in progress."
+   "Offices share the tower."
   ],
-  "commute": "Grand Central is a block away, with the 4/5/6, 7 and S shuttle, and Metro-North. Door to door times still need checking."
+  "commute": "The 5 Av–Bryant Park station (7, B/D/F/M) is close and Grand Central Terminal is a short walk east. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "53w53",
@@ -470,6 +498,10 @@ export const newBuildings: NewBuilding[] = [
    [
     "Height",
     "1,050 feet"
+   ],
+   [
+    "Interiors",
+    "Thierry Despont"
    ]
   ],
   "suits": [
@@ -487,16 +519,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "145 condominiums, from one bedroom to four or five.",
-   "About 30,000 square feet of amenities, with a lap pool, spa pool and golf simulator.",
-   "Residents receive MoMA benefactor-level memberships."
+   "145 condominiums, from one bedroom to five.",
+   "A wellness center with a lap pool, cold plunge and hot tub, plus a squash court, golf simulator and private dining room.",
+   "Owners receive a deeded MoMA membership."
   ],
   "giveUp": [
-   "MoMA galleries occupy floors in the base, with separate elevators.",
+   "MoMA galleries occupy floors 2, 4 and 5, with their own elevators.",
    "A Midtown address, busy with visitors.",
    "A longer trip to Wall Street."
   ],
-  "commute": "The 5th Avenue/53rd Street and 53rd Street stations are close. Door to door times still need checking."
+  "commute": "The 5 Av/53 St (E/M) and 47–50 Sts–Rockefeller Center stations are close. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "77-greenwich",
@@ -535,6 +567,10 @@ export const newBuildings: NewBuilding[] = [
    [
     "Height",
     "About 500 feet"
+   ],
+   [
+    "Floors",
+    "42"
    ]
   ],
   "suits": [
@@ -552,16 +588,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "90 condominiums, from one to four bedrooms, in 42 stories.",
-   "A smaller building, with fewer residences per elevator than the large towers nearby.",
-   "Interiors by Deborah Berke Partners."
+   "90 condominiums, from one to four bedrooms, starting on the 15th floor above a public elementary school.",
+   "Interiors by Deborah Berke Partners.",
+   "A smaller building than the supertall towers nearby."
   ],
   "giveUp": [
-   "A shorter building, with less height and fewer views than the supertalls.",
-   "A business district address, quieter on weekends.",
-   "Amenity details still need checking."
+   "A public school occupies the lower floors.",
+   "A shorter building, with fewer views than the supertalls.",
+   "A business district address, quieter on weekends. Confirm the amenity list."
   ],
-  "commute": "Bowling Green and the Wall Street subway stops are within a short walk. Door to door times still need checking."
+  "commute": "Rector Street (R/W), Bowling Green (4/5) and Wall Street (2/3) are within a short walk. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "central-park-tower",
@@ -587,7 +623,7 @@ export const newBuildings: NewBuilding[] = [
    ],
    [
     "Completion",
-    "2020–2021"
+    "2021"
    ],
    [
     "Residences",
@@ -613,16 +649,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "179 condominiums in a 98-story tower.",
-   "The Central Park Club on the 14th floor, with a lounge, theater and a terrace with a pool.",
-   "One block south of Central Park and Columbus Circle."
+   "179 condominiums in a 98-story tower, among the tallest residential buildings in the world.",
+   "The Central Park Club occupies the 100th floor and two lower floors, with an outdoor pool terrace on the 14th floor.",
+   "One block south of Central Park."
   ],
   "giveUp": [
    "A supertall, with long elevator rides to the upper floors.",
    "A Midtown address, busy with visitors.",
    "A longer trip to Wall Street."
   ],
-  "commute": "Columbus Circle and the 57th Street stations are close. Door to door times still need checking."
+  "commute": "The 57 St–7 Av (N/Q/R/W) and 57th Street (F) stations are close, and Columbus Circle is a short walk. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "one-manhattan-square",
@@ -657,6 +693,18 @@ export const newBuildings: NewBuilding[] = [
    [
     "Amenities",
     "About 100,000 sq ft"
+   ],
+   [
+    "Floors",
+    "72 (marketed as 80)"
+   ],
+   [
+    "Height",
+    "847 feet"
+   ],
+   [
+    "Completion",
+    "2019"
    ]
   ],
   "suits": [
@@ -674,16 +722,16 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "815 condominiums, among the largest buildings of the group.",
-   "Four pools, a basketball court, squash court, bowling alley and cinema.",
-   "Outdoor garden, putting green and observatory."
+   "815 condominiums, one of the largest condominium buildings in the city.",
+   "More than 100,000 square feet of amenities, including a 75-foot pool, a hammam with a cold plunge and spa rooms.",
+   "A large outdoor garden and sports amenities."
   ],
   "giveUp": [
    "A very large building, with many neighbors sharing the amenities.",
    "A waterfront site, a little removed from the main subway lines.",
-   "Sources differ on its height and floor count."
+   "Floors are counted two ways: 72 actual, 80 as marketed."
   ],
-  "commute": "The East Broadway and Chambers Street areas are nearby, and the East River is next door. Door to door times still need checking."
+  "commute": "East Broadway (F) and Grand Street (B/D) are the closest stations, with the East River waterfront next door. Door-to-door times from your address are calculated in your Kammer Report."
  },
  {
   "slug": "one-wall-street",
@@ -735,15 +783,15 @@ export const newBuildings: NewBuilding[] = [
    ]
   ],
   "read": [
-   "Landmark Art Deco tower from the early 1930s, converted from offices.",
-   "More than 100,000 square feet of amenities, including an enclosed pool and a roof deck over the harbor.",
-   "About 47 apartments with private terraces."
+   "A landmark Art Deco tower from 1931, converted from offices into 566 residences.",
+   "More than 100,000 square feet of amenities, including a pool and a roof deck over the harbor.",
+   "The base includes ground-floor retail, including a Whole Foods."
   ],
   "giveUp": [
    "A large building, with 566 residences sharing the amenities.",
    "A business district address, quieter on weekends.",
    "Floor plans follow the former office structure."
   ],
-  "commute": "Wall Street is the address. The 2/3 and 4/5 lines stop within a short walk. Door to door times still need checking."
+  "commute": "Wall Street (2/3, 4/5) and Broadway–Nassau (A/C/J/Z) are steps away. Door-to-door times from your address are calculated in your Kammer Report."
  }
 ];
