@@ -35,6 +35,9 @@ export const whatsChangingGroups = [
 
 // Footer: the five destinations kept after the audit.
 export const footerNav = [
+  { label: "Neighborhoods", href: "/neighborhoods" },
+  { label: "Buildings", href: "/building-reports/individual-buildings" },
+  { label: "Insights", href: "/guides" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy", href: "/privacy" },
@@ -77,7 +80,19 @@ export const navPanels: Record<string, { title: string; note: string; groups: { 
           { label: "All guides", href: "/guides" },
           { label: "International buyer hub", href: "/guides/international-buyer-hub" },
           { label: "Condo vs co-op", href: "/situations/condo-vs-coop" },
+          { label: "Closing costs", href: "/guides/closing-costs-manhattan-buyers" },
           { label: "Calculator", href: "/calculator" },
+        ],
+      },
+      {
+        title: "Neighborhoods",
+        items: [
+          { label: "Upper West Side", href: "/situations/upper-west-side-buyers-nyc" },
+          { label: "Upper East Side", href: "/situations/upper-east-side-buyers-nyc" },
+          { label: "Tribeca", href: "/situations/tribeca-buyers-nyc" },
+          { label: "West Village", href: "/situations/west-village-buyers-nyc" },
+          { label: "Chelsea", href: "/situations/chelsea-buyers-nyc" },
+          { label: "All neighborhoods", href: "/neighborhoods" },
         ],
       },
     ],

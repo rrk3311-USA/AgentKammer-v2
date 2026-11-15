@@ -1,0 +1,51 @@
+---
+// Every neighborhood guide on one page, grouped by part of town.
+import Base from "../layouts/Base.astro";
+import { neighborhoods, neighborhoodHref } from "../data/neighborhoods";
+import { breadcrumbSchema } from "../data/seo";
+
+const order = ["Downtown", "West side", "Midtown", "Uptown"] as const;
+const groups = order.map((area) => ({ area, items: neighborhoods.filter((n) => n.area === area) }));
+const list = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Manhattan neighborhood guides for buyers",
+  itemListElement: neighborhoods.map((n, i) => ({ "@type": "ListItem", position: i + 1, name: n.name, url: `https://agentkammer.com${neighborhoodHref(n)}` })),
+};
+---
+<Base title="Manhattan Neighborhood Guides for Buyers | Agent Kammer"
+  description="Independent buyer's guides to Manhattan neighborhoods: what you will find to buy, who each one suits, what you trade, and the buildings we cover there."
+  schema={[breadcrumbSchema([{ name: "Insights", href: "/guides" }, { name: "Neighborhoods", href: "/neighborhoods" }]), list]}>
+  <article class="wrap nb nbi">
+    <header>
+      <div class="eyebrow">Neighborhoods</div>
+      <h1>Manhattan neighborhoods, read for buyers</h1>
+      <p class="lede">Each neighborhood asks something different of an owner. These guides cover what you will find to buy, who it suits, what you trade, and the buildings we cover there. Start with the one closest to how you live.</p>
+    </header>
+
+    {groups.map((g) => (
+      <section class="nb-compare" aria-labelledby={`nbi-${g.area.replace(/\s/g, "-")}`}>
+        <h2 id={`nbi-${g.area.replace(/\s/g, "-")}`}>{g.area}</h2>
+        <ul>
+          {g.items.map((n) => <li><a href={neighborhoodHref(n)}><b>{n.name}</b><span>{n.blurb}</span></a></li>)}
+        </ul>
+      </section>
+    ))}
+
+    <section class="nb-text" aria-labelledby="nbi-how">
+      <h2 id="nbi-how">How to use these guides</h2>
+      <p>Choose the neighborhood before the apartment. Decide what daily life has to include, such as a park, a short commute, a quiet block or a full-service building, and let that narrow the map. Then compare buildings, and only then apartments.</p>
+      <p>Not sure which neighborhood fits? <a href="/situations">Start from what changed</a>, or read <a href="/situations/condo-vs-coop">Condo vs Co-op</a>, since the type of building often decides the neighborhood.</p>
+    </section>
+
+    <div class="gcta">
+      <p>Want a read on where you belong?</p>
+      <div class="btns">
+        <a class="btn" href="/belonging">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+        <a class="btn ghost" href="/building-reports/individual-buildings">Building profiles <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+      </div>
+    </div>
+
+    <nav class="crumb" aria-label="Breadcrumb"><a href="/guides">Insights</a><i aria-hidden="true">/</i><span>Neighborhoods</span></nav>
+  </article>
+</Base>

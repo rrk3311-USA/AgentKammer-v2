@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { neighborhoods } from "../../data/guides";
+import { neighborhoods, neighborhoodTitle, buildingsIn } from "../../data/neighborhoods";
+import { breadcrumbSchema, faqSchema, placeSchema } from "../../data/seo";
 import { situations, decisionChoices } from "../../data/situations";
 import { condoVsCoop, coopTerms } from "../../data/guidePages";
 
@@ -15,17 +16,50 @@ export function getStaticPaths() {
 const { kind, n, s, g } = Astro.props as any;
 const others = kind === "n" ? n.compare.map((x: string) => neighborhoods.find((y) => y.slug === x)!) : [];
 const related = kind === "s" ? s.related.map((x: string) => situations.find((y) => y.slug === x)!) : [];
-const title = kind === "n" ? `${n.name} | Agent Kammer` : kind === "g" ? `${g.title} | Agent Kammer` : `${s.title} | Agent Kammer`;
-const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
+const here = Astro.url.pathname.replace(/\/+$/, "");
+const bld = kind === "n" ? buildingsIn(n) : { profiles: [], library: [] };
+const schema = kind === "n"
+  ? [
+      breadcrumbSchema([{ name: "Insights", href: "/guides" }, { name: "Neighborhoods", href: "/neighborhoods" }, { name: n.name, href: here }]),
+      placeSchema({ name: n.name, description: n.metaDescription, path: here }),
+      faqSchema(n.faq),
+    ]
+  : kind === "s"
+    ? [breadcrumbSchema([{ name: "What's changing", href: "/situations" }, { name: s.name, href: here }])]
+    : [breadcrumbSchema([{ name: "Insights", href: "/guides" }, { name: g.title, href: here }])];
+const title = kind === "n" ? `${neighborhoodTitle(n)} | Agent Kammer` : kind === "g" ? `${g.title} | Agent Kammer` : `${s.title} | Agent Kammer`;
+const description = kind === "n" ? n.metaDescription : kind === "g" ? g.blurb : s.blurb;
 ---
-<Base title={title} description={description} context={kind === "n" ? { area: n.name } : kind === "s" ? { situation: s.name } : {}}>
+<Base title={title} description={description} schema={schema} context={kind === "n" ? { area: n.name } : kind === "s" ? { situation: s.name } : {}}>
   {kind === "n" ? (
     <article class="wrap nb">
       <header>
-        <div class="eyebrow">NYC neighborhood</div>
-        <h1>{n.name}</h1>
+        <div class="eyebrow">Manhattan neighborhood guide</div>
+        <h1>Buying in {n.inName}</h1>
         <p class="lede">{n.lead}</p>
       </header>
+
+      <section class="nb-text" aria-labelledby="nw">
+        <h2 id="nw">Where it is</h2>
+        <p>{n.where}</p>
+        <p><b>Getting around.</b> {n.transit}</p>
+      </section>
+
+      <section class="nb-text" aria-labelledby="ns">
+        <h2 id="ns">What you will find to buy</h2>
+        <ul>{n.stock.map((d: string) => <li>{d}</li>)}</ul>
+      </section>
+
+      <section class="nb-two">
+        <div class="nb-text">
+          <h2>Who it suits</h2>
+          <ul>{n.suits.map((d: string) => <li>{d}</li>)}</ul>
+        </div>
+        <div class="nb-text">
+          <h2>What you trade</h2>
+          <ul>{n.tradeoffs.map((d: string) => <li>{d}</li>)}</ul>
+        </div>
+      </section>
 
       <section class="nb-decide" aria-labelledby="nd">
         <h2 id="nd">Decide first</h2>
@@ -37,6 +71,27 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
       <section class="nb-rec" aria-labelledby="nr">
         <div class="k" id="nr">Recommendation</div>
         <p>{n.recommendation}</p>
+      </section>
+
+      {(bld.profiles.length > 0 || bld.library.length > 0) && (
+        <section class="nb-bld" aria-labelledby="nbb">
+          <h2 id="nbb">Buildings we cover in {n.inName}</h2>
+          {bld.profiles.length > 0 && (
+            <ul class="nb-links">
+              {bld.profiles.map((b: any) => <li><a href={b.href}>{b.name}<span>Building profile</span></a></li>)}
+            </ul>
+          )}
+          {bld.library.length > 0 && (
+            <p class="nb-lib"><b>Also in our reference library:</b> {bld.library.join(", ")}. <a href="/contact?intent=property">Ask for a read on any of them.</a></p>
+          )}
+        </section>
+      )}
+
+      <section class="nb-faq" aria-labelledby="nq">
+        <h2 id="nq">Questions buyers ask about {n.inName}</h2>
+        <dl>
+          {n.faq.map((f: any) => <><dt>{f.q}</dt><dd>{f.a}</dd></>)}
+        </dl>
       </section>
 
       {others.length > 0 && (
@@ -52,11 +107,13 @@ const description = kind === "n" ? n.blurb : kind === "g" ? g.blurb : s.blurb;
         <p>Ready for a read on your own situation?</p>
         <div class="btns">
           <a class="btn" href="/belonging">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
-          <a class="btn ghost" href="/guides#neighborhoods">All neighborhoods <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+          <a class="btn ghost" href="/neighborhoods">All neighborhoods <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
         </div>
       </div>
-    
-      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides#neighborhoods">Insights</a><i aria-hidden="true">/</i><a href="/guides#neighborhoods">Neighborhoods</a></nav>
+
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/guides">Insights</a><i aria-hidden="true">/</i><a href="/neighborhoods">Neighborhoods</a><i aria-hidden="true">/</i><span>{n.name}</span></nav>
+
+      <p class="gd-note">General information, not legal, tax or financial advice.</p>
     </article>
   ) : kind === "g" ? (
     <article class="wrap nb gd">

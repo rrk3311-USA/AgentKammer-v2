@@ -1,0 +1,53 @@
+---
+// A long read: sections of plain text, lists and small tables, then questions and related links.
+import type { Article } from "../data/articles";
+interface Props { a: Article }
+const { a } = Astro.props;
+const reviewed = new Date(a.updated + "T12:00:00Z").toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+---
+<article class="wrap nb gd art">
+  <header>
+    <div class="eyebrow">Insight · {a.topic}</div>
+    <h1>{a.title}</h1>
+    <p class="lede">{a.lead}</p>
+    <p class="art-by">By <a href="/about">Raphael Kammer</a> · Reviewed <time datetime={a.updated}>{reviewed}</time></p>
+  </header>
+
+  {a.sections.map((s) => (
+    <section class="nb-text">
+      <h2>{s.h}</h2>
+      {s.p?.map((t) => <p>{t}</p>)}
+      {s.list && <ul>{s.list.map((t) => <li>{t}</li>)}</ul>}
+      {s.table && (
+        <div class="gd-table art-table"><div class="gd-scroll">
+          <table>
+            <thead><tr>{s.table.head.map((h) => <th scope="col">{h}</th>)}</tr></thead>
+            <tbody>{s.table.rows.map((r) => <tr>{r.map((c, i) => (i === 0 ? <th scope="row">{c}</th> : <td>{c}</td>))}</tr>)}</tbody>
+          </table>
+        </div></div>
+      )}
+    </section>
+  ))}
+
+  <section class="nb-faq" aria-labelledby="aq">
+    <h2 id="aq">Common questions</h2>
+    <dl>{a.faq.map((f) => <><dt>{f.q}</dt><dd>{f.a}</dd></>)}</dl>
+  </section>
+
+  <section class="nb-compare" aria-labelledby="ar-rel">
+    <h2 id="ar-rel">Read next</h2>
+    <ul>{a.related.map((r) => <li><a href={r.href}><b>{r.label}</b></a></li>)}</ul>
+  </section>
+
+  <div class="gcta">
+    <p>Want a read on your own situation?</p>
+    <div class="btns">
+      <a class="btn" href="/belonging">Request a Situation Assessment <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+      <a class="btn ghost" href="/guides#field-guides">All guides <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></a>
+    </div>
+  </div>
+
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/guides">Insights</a><i aria-hidden="true">/</i><span>{a.title}</span></nav>
+
+  <p class="gd-note">General information, not legal, tax or financial advice. Rates and rules change. Confirm details with your attorney.</p>
+</article>

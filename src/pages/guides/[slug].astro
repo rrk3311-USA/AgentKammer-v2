@@ -1,16 +1,31 @@
 ---
 import Base from "../../layouts/Base.astro";
 import GuideBody from "../../components/GuideBody.astro";
+import ArticleBody from "../../components/ArticleBody.astro";
 import { fieldGuides } from "../../data/fieldGuides";
+import { articles } from "../../data/articles";
+import { articleSchema, breadcrumbSchema, faqSchema } from "../../data/seo";
 
 export function getStaticPaths() {
-  return Object.entries(fieldGuides).map(([slug, g]) => ({ params: { slug }, props: { g } }));
+  return [
+    ...Object.entries(fieldGuides).map(([slug, g]) => ({ params: { slug }, props: { g } })),
+    ...articles.map((a) => ({ params: { slug: a.slug }, props: { a } })),
+  ];
 }
-const { g } = Astro.props as any;
+const { g, a } = Astro.props as any;
+const here = Astro.url.pathname.replace(/\/+$/, "");
+const trail = (name: string) => breadcrumbSchema([{ name: "Insights", href: "/guides" }, { name, href: here }]);
 ---
-<Base title={`${g.title} | Agent Kammer`} description={g.blurb}>
+{a ? (
+<Base title={`${a.title} | Agent Kammer`} description={a.metaDescription} ogType="article"
+  schema={[trail(a.title), articleSchema({ title: a.title, description: a.metaDescription, path: here, published: a.published, updated: a.updated }), faqSchema(a.faq)]}>
+  <ArticleBody a={a} />
+</Base>
+) : (
+<Base title={`${g.title} | Agent Kammer`} description={g.blurb} schema={[trail(g.title)]}>
   <GuideBody
     crumbs={[{ label: "Insights", href: "/guides" }, { label: "Field guides", href: "/guides#field-guides" }, { label: g.title }]}
     eyebrow={g.eyebrow} title={g.title} lead={g.lead} decide={g.decide} recommendation={g.recommendation}
     cta={{ href: "/belonging", label: "Request a Situation Assessment" }} />
 </Base>
+)}

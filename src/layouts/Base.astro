@@ -4,6 +4,7 @@ import Icons from "../components/Icons.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Guide from "../components/Guide.astro";
+import { SITE } from "../data/seo";
 
 interface Props {
   title: string;
@@ -11,9 +12,33 @@ interface Props {
   mainClass?: string;
   // What this page is about. Read by the context script so links from here carry it forward.
   context?: { situation?: string; area?: string; building?: string };
+  // Search and sharing. `image` is the share picture, `schema` is extra structured data for this page,
+  // `noindex` keeps a page out of search results, `ogType` is "article" for long reads.
+  image?: string;
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+  ogType?: "website" | "article";
 }
-const { title, description, mainClass, context } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const { title, description, mainClass, context, image = "/images/hero-liberty.jpg", schema = [], noindex = false, ogType = "website" } = Astro.props;
+// One address per page: no trailing slash, to match the links used across the site.
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const canonical = new URL(path, Astro.site);
+const shareImage = new URL(image, Astro.site);
+const org = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${SITE.url}/#organization`,
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.description,
+  logo: `${SITE.url}/apple-touch-icon.png`,
+  image: `${SITE.url}/images/hero-liberty.jpg`,
+  founder: { "@type": "Person", name: SITE.founder, url: `${SITE.url}/about` },
+  areaServed: { "@type": "City", name: "New York", containedInPlace: { "@type": "State", name: "New York" } },
+  knowsAbout: ["Manhattan real estate", "Co-ops and condominiums", "Buying an apartment in New York City", "Manhattan neighborhoods", "Residential building analysis"],
+};
+const website = { "@context": "https://schema.org", "@type": "WebSite", "@id": `${SITE.url}/#website`, name: SITE.name, url: SITE.url, publisher: { "@id": `${SITE.url}/#organization` } };
+const blocks = [org, website, ...schema];
 ---
 <!doctype html>
 <html lang="en">
@@ -23,6 +48,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareImage} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={shareImage} />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    {blocks.map((b) => <script type="application/ld+json" set:html={JSON.stringify(b)} />)}
     <meta name="theme-color" content="#2A3447" />
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

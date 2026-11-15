@@ -20,111 +20,16 @@ export const guideTabs: { type: GuideType; label: string; hash: string }[] = [
   { type: "a", label: "Building Profiles", hash: "assessments" },
 ];
 
-export interface Neighborhood {
-  slug: string;
-  name: string;
-  blurb: string;
-  lead: string;
-  decide: string[];
-  recommendation: string;
-  compare: string[];
-}
-
-// Draft copy for review. The Upper West Side text follows the live page; the rest follows the same pattern.
-export const neighborhoods: Neighborhood[] = [
-  {
-    slug: "upper-west-side-buyers-nyc",
-    name: "Upper West Side",
-    blurb: "Schools, park adjacency, co-op culture, and classic residential rhythm.",
-    lead: "Upper West Side decisions hinge on school convenience, park adjacency, co-op culture, building age, and whether the neighborhood supports the reason for moving.",
-    decide: [
-      "Use school and park logistics to narrow micro-neighborhoods before touring every classic co-op.",
-      "Separate cosmetic apartment issues from board and building constraints early.",
-      "Start with lifestyle and school logistics before comparing every listing.",
-    ],
-    recommendation: "Compare co-op value against condominium ease with a clear residency horizon.",
-    compare: ["upper-east-side-buyers-nyc"],
-  },
-  {
-    slug: "upper-east-side-buyers-nyc",
-    name: "Upper East Side",
-    blurb: "Deep inventory with nuanced co-op boards, service buildings, and family-oriented tradeoffs.",
-    lead: "Upper East Side inventory is deep, so the decision is rarely about finding something. It turns on how each co-op board works, how well a service building is run, and which side street or avenue fits daily life.",
-    decide: [
-      "Learn how the boards in your target buildings actually behave before falling for an apartment.",
-      "Compare service buildings by staffing, rules and upkeep.",
-      "Choose the avenue and side-street rhythm that fits family life.",
-    ],
-    recommendation: "Narrow to a handful of buildings whose boards you understand, then compare apartments.",
-    compare: ["upper-west-side-buyers-nyc"],
-  },
-  {
-    slug: "tribeca-buyers-nyc",
-    name: "Tribeca",
-    blurb: "Low-volume, high-conviction buying shaped by loft scale, privacy, and family floor plans.",
-    lead: "Tribeca is low volume and high conviction. Loft scale, privacy and family floor plans drive the decision, and the architecture still has to hold up as ownership.",
-    decide: [
-      "Decide whether loft scale suits how you live.",
-      "Expect fewer listings and be ready to act on the right one.",
-      "Test privacy, layout and building rules against family needs.",
-    ],
-    recommendation: "Hold the architecture to the same ownership tests as any other building.",
-    compare: ["chelsea-buyers-nyc", "financial-district-buyers-nyc"],
-  },
-  {
-    slug: "chelsea-buyers-nyc",
-    name: "Chelsea",
-    blurb: "Gallery adjacency, West Chelsea new product, High Line access, and design-forward towers.",
-    lead: "Chelsea mixes gallery-district character, West Chelsea new product and High Line access. The towers are design forward, and they still need lifestyle filters.",
-    decide: [
-      "Choose which Chelsea you want: gallery blocks, West Chelsea or the High Line edge.",
-      "Judge a design-forward tower by how daily life works inside it.",
-      "Apply lifestyle filters before the view makes the decision.",
-    ],
-    recommendation: "Pick the Chelsea you want to live in first, then compare buildings.",
-    compare: ["tribeca-buyers-nyc", "hudson-yards-buyers-nyc"],
-  },
-  {
-    slug: "hudson-yards-buyers-nyc",
-    name: "Hudson Yards",
-    blurb: "Amenity-heavy new development that needs commute, carrying-cost and use-case testing.",
-    lead: "Hudson Yards is amenity-heavy new development. It needs commute, carrying-cost and use-case pressure testing, especially against Chelsea and Tribeca alternatives.",
-    decide: [
-      "Pressure test the commute and the carrying costs of an amenity-heavy tower.",
-      "Decide which amenities you will actually use.",
-      "Compare it against Chelsea and Tribeca before committing.",
-    ],
-    recommendation: "Treat Hudson Yards as a question of how you will use it.",
-    compare: ["chelsea-buyers-nyc", "tribeca-buyers-nyc"],
-  },
-  {
-    slug: "financial-district-buyers-nyc",
-    name: "Financial District",
-    blurb: "Commute convenience versus weekend livability across conversions, waterfront stock, and Battery Park City.",
-    lead: "Financial District decisions weigh commute convenience against weekend livability. Conversions, waterfront stock and Battery Park City options each feel different day to day.",
-    decide: [
-      "Weigh the short commute against how the neighborhood feels on a weekend.",
-      "Judge conversions, waterfront stock and Battery Park City by daily life.",
-      "Visit on a Saturday as well as a weekday.",
-    ],
-    recommendation: "Decide how much of your week is the commute, then choose the stock.",
-    compare: ["tribeca-buyers-nyc"],
-  },
-];
-
-const area: Record<string, string> = {
-  "upper-west-side-buyers-nyc": "Uptown",
-  "upper-east-side-buyers-nyc": "Uptown",
-  "chelsea-buyers-nyc": "West side",
-  "hudson-yards-buyers-nyc": "West side",
-  "tribeca-buyers-nyc": "Downtown",
-  "financial-district-buyers-nyc": "Downtown",
-};
+// Neighborhood copy lives in its own file. Re-exported here so older imports keep working.
+import { neighborhoods, type Neighborhood } from "./neighborhoods";
+import { articles } from "./articles";
+export { neighborhoods, type Neighborhood };
 
 const field = (topic: string, title: string, text: string, href: string, meta = "Guide"): GuideItem => ({ type: "f", topic, title, text, meta, href, ready: true });
 
 export const guideItems: GuideItem[] = [
-  ...neighborhoods.map((n): GuideItem => ({ type: "n", topic: area[n.slug], title: n.name, text: n.blurb, meta: "Neighborhood", href: `/situations/${n.slug}`, ready: true })),
+  ...neighborhoods.map((n): GuideItem => ({ type: "n", topic: n.area, title: n.name, text: n.blurb, meta: "Neighborhood", href: `/situations/${n.slug}`, ready: true })),
+  ...articles.map((a) => field(a.topic, a.title, a.blurb, `/guides/${a.slug}`, "Article")),
   field("Ownership", "How Real Estate Ownership Works", "Entities, estates and NYC condo ownership, and who actually holds title.", "/guides/real-estate-ownership"),
   { ...field("Building types", "Condo vs Co-op", "What you own, what you pay, and what to expect from each.", "/situations/condo-vs-coop"), ready: true },
   { ...field("Building types", "Co-op, Condo and Condop Terms", "Where board packages, maintenance and common terms fit together.", "/situations/coop-condo-condop-terms"), ready: true },
