@@ -1,0 +1,14 @@
+---
+// Spam guard for every form that posts to /api/contact: a hidden honeypot, a render timestamp,
+// and a Cloudflare Turnstile widget. Turnstile shows only when PUBLIC_TURNSTILE_SITE_KEY is set in Vercel.
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? process.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+<div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+  <label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+</div>
+<input type="hidden" name="_t" value="" data-spam-t />
+{siteKey && <div class="cf-turnstile" data-sitekey={siteKey} data-theme="light" data-appearance="interaction-only" style="margin:12px 0"></div>}
+{siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+<script is:inline>
+  document.querySelectorAll("[data-spam-t]").forEach(function (el) { el.value = String(Date.now()); });
+</script>

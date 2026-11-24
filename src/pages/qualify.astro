@@ -1,4 +1,5 @@
 ---
+import Spam from "../components/Spam.astro";
 import Base from "../layouts/Base.astro";
 import "../styles/platinum-paper.css";
 
@@ -44,6 +45,7 @@ const steps = ["Situation clarified", "Strategy Session held", "Financing postur
           <select name="purpose" required><option value="">Choose one</option>{purposes.map((d) => <option>{d}</option>)}</select>
         </label>
         <label>Notes (optional)<textarea name="notes" rows="3"></textarea></label>
+        <Spam />
         <button class="btn" type="submit">Save these details <svg class="ic" aria-hidden="true"><use href="#ar" /></svg></button>
       </form>
     </section>

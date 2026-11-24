@@ -4,14 +4,14 @@ export const prerender = false;
 
 // Emails the team a transcript of a guide conversation. The browser sends it when the visitor
 // closes or leaves the guide. Set in Vercel: RESEND_API_KEY. Optional: RESEND_FROM (a verified sender).
-const TO = "raphael@agentkammer.com";
 const MAX_TURNS = 40;
 const MAX_CHARS = 1500;
 
 export const POST: APIRoute = async ({ request }) => {
   const key = import.meta.env.RESEND_API_KEY ?? process.env.RESEND_API_KEY;
   const from = import.meta.env.RESEND_FROM ?? process.env.RESEND_FROM ?? "Agent Kammer <onboarding@resend.dev>";
-  if (!key) return new Response(null, { status: 204 });
+  const to = import.meta.env.CONTACT_TO_EMAIL ?? process.env.CONTACT_TO_EMAIL;
+  if (!key || !to) return new Response(null, { status: 204 });
 
   let body: { turns?: unknown; page?: unknown; session?: unknown };
   try {
@@ -36,7 +36,7 @@ export const POST: APIRoute = async ({ request }) => {
     await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
-      body: JSON.stringify({ from, to: [TO], subject: `Guide chat: ${turns.filter((t) => t.startsWith("VISITOR:")).length} message(s) on ${page || "the site"}`, text }),
+      body: JSON.stringify({ from, to: [to], subject: `Guide chat: ${turns.filter((t) => t.startsWith("VISITOR:")).length} message(s) on ${page || "the site"}`, text }),
     });
   } catch (err) {
     console.error("transcript email failed", String((err as Error)?.message ?? err).slice(0, 200));

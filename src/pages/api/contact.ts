@@ -6,7 +6,8 @@ export const prerender = false;
 // full transcript as a note, and joins the Lead Pipeline list. The team is also emailed through Resend.
 // Set in Vercel: ATTIO_API_KEY, RESEND_API_KEY. Optional: ATTIO_PEOPLE_OBJECT_ID, ATTIO_LEAD_LIST_ID,
 // ATTIO_SYNC_ENABLED (set to "false" to pause), RESEND_FROM (a verified sender).
-const TO = "raphael@agentkammer.com";
+const MIN_FILL_MS = 3000;
+const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const MAX_FIELD = 4000;
 const ATTIO = "https://api.attio.com/v2";
 
@@ -66,17 +67,43 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const apiKey = pick("ATTIO_API_KEY");
   const syncOn = String(pick("ATTIO_SYNC_ENABLED") ?? "true").toLowerCase() !== "false";
   const resendKey = pick("RESEND_API_KEY");
+  const to = pick("CONTACT_TO_EMAIL");
+  const turnstileSecret = pick("TURNSTILE_SECRET_KEY");
   const from = pick("RESEND_FROM") ?? "Agent Kammer <onboarding@resend.dev>";
 
   const cfg: Attio | null = apiKey && syncOn
     ? { apiKey, people: pick("ATTIO_PEOPLE_OBJECT_ID") ?? "people", leadList: pick("ATTIO_LEAD_LIST_ID") ?? "lead_pipeline" }
     : null;
 
-  if (!cfg && !resendKey) {
-    return html("The form is not connected yet. Please email raphael@agentkammer.com directly.", 500);
+  if ((!cfg && !resendKey) || (resendKey && !to)) {
+    return html("The form is not connected yet. Please try again later.", 500);
   }
 
   const data = await request.formData();
+
+  // Spam guard. Bots that trip the honeypot or the timer get a normal-looking thank-you and nothing is sent.
+  const fake = () => html("Thank you. We will read your situation and reply within a day.", 200);
+  if (String(data.get("website") ?? "").trim()) return fake();
+  const t = Number(data.get("_t"));
+  const age = Date.now() - t;
+  if (!Number.isFinite(t) || age < MIN_FILL_MS || age > MAX_AGE_MS) return fake();
+  if (turnstileSecret) {
+    const token = String(data.get("cf-turnstile-response") ?? "");
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+    let ok = false;
+    if (token) {
+      try {
+        const v = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+          method: "POST",
+          body: new URLSearchParams({ secret: turnstileSecret, response: token, ...(ip ? { remoteip: ip } : {}) }),
+        });
+        ok = Boolean(((await v.json()) as any)?.success);
+      } catch {
+        ok = false;
+      }
+    }
+    if (!ok) return html("We could not confirm you are human. Please go back, wait a moment and try again.", 400);
+  }
   const fields: [string, string][] = [];
   for (const [key, value] of data.entries()) {
     if (typeof value !== "string") continue;
@@ -93,7 +120,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   const transcript = fields
-    .filter(([k]) => k !== "form")
+    .filter(([k]) => !["form", "website", "_t", "cf-turnstile-response"].includes(k))
     .map(([k, v]) => `${k}: ${v}`)
     .join("\n");
 
@@ -104,7 +131,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       ? fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: { authorization: `Bearer ${resendKey}`, "content-type": "application/json" },
-          body: JSON.stringify({ from, to: [TO], reply_to: email, subject: `${form}: ${name}`, text: transcript }),
+          body: JSON.stringify({ from, to: [to], reply_to: email, subject: `${form}: ${name}`, text: transcript }),
         })
           .then((r) => r.ok)
           .catch(() => false)
@@ -112,7 +139,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   ]);
 
   if (!savedToAttio && !sentEmail) {
-    return html("We could not send your form. Please try again, or email raphael@agentkammer.com directly.", 502);
+    return html("We could not send your form. Please try again.", 502);
   }
 
   return html("Thank you. We will read your situation and reply within a day.", 200);
